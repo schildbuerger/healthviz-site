@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>healthviz</title>
+    <link>https://healthviz.eu/</link>
+    <description>A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it.</description>
+    <language>en</language>
+    <lastBuildDate>Mon, 26 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://healthviz.eu/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>What Europe spends on health, and who pays</title>
+      <link>https://healthviz.eu/health-spending/</link>
+      <guid isPermaLink="true">https://healthviz.eu/health-spending/</guid>
+      <pubDate>Mon, 26 Oct 2026 00:00:00 +0000</pubDate>
+      <category>Health spending</category>
+      <description>Health spending per person in every European country since 2016: how much people pay out of their own pocket, and what the money goes to, from hospitals to long-term care.</description>
+    </item>
+    <item>
+      <title>Where in Europe you live longest</title>
+      <link>https://healthviz.eu/life-expectancy/</link>
+      <guid isPermaLink="true">https://healthviz.eu/life-expectancy/</guid>
+      <pubDate>Mon, 26 Oct 2026 00:00:00 +0000</pubDate>
+      <category>Life expectancy</category>
+      <description>Life expectancy at birth in every European region since 2002, for women, men and in total, and how far apart regions within one country are.</description>
+    </item>
+  </channel>
+</rss>

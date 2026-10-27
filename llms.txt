@@ -1,0 +1,8 @@
+# healthviz
+
+> A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it. Entries are dated snapshots of public data, mostly from Eurostat; each page states when its data was retrieved and when the source last updated it.
+
+## Entries
+
+- [What Europe spends on health, and who pays](https://healthviz.eu/health-spending/): Current health expenditure for 34 countries in Europe, 2016–2024: per person (PPS and euro), as % of GDP, by who pays (government and compulsory insurance, voluntary insurance, out of pocket) and by function (treatment, long-term care, medicines, lab and transport, administration, prevention), as shares and PPS per person. In 2024 spending per person ranged from 1,969 PPS in Romania to 5,791 PPS in Germany; the EU-27 average was 4,075 PPS. Source: Eurostat hlth_sha11_hf and hlth_sha11_hc, last updated by Eurostat 2026-10-23, retrieved 2026-10-26; licence CC BY 4.0. Data as CSV: https://healthviz.eu/health-spending/data.csv
+- [Where in Europe you live longest](https://healthviz.eu/life-expectancy/): Life expectancy at birth for 292 regions in Europe (NUTS 2), 2002–2023, for women, men and in total, with the EU-27 average and national values. In 2023 (total, EU-27) it ranged from 73.9 years in Severozapaden (Bulgaria) to 86.1 years in Comunidad de Madrid (Spain); the EU-27 average was 81.4. Source: Eurostat demo_r_mlifexp and demo_mlexpec, last updated by Eurostat 2025-06-05, retrieved 2026-10-26; licence CC BY 4.0. Data as CSV: https://healthviz.eu/life-expectancy/data.csv
