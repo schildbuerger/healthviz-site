@@ -1,6 +1,6 @@
 # healthviz
 
-> A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it. Entries are dated snapshots of public data, mostly from Eurostat; each page states when its data was retrieved and when the source last updated it.
+> A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it. Entries are dated snapshots of public data; each page states when its data was retrieved and when the source last updated it.
 
 ## Entries
 
