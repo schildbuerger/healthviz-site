@@ -8,7 +8,7 @@
     <lastBuildDate>Mon, 26 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://healthviz.eu/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>What Europe spends on health, and who pays</title>
+      <title>How much does Europe spend on health, and who pays?</title>
       <link>https://healthviz.eu/health-spending/</link>
       <guid isPermaLink="true">https://healthviz.eu/health-spending/</guid>
       <pubDate>Mon, 26 Oct 2026 00:00:00 +0000</pubDate>
@@ -16,7 +16,7 @@
       <description>Health spending per person in every European country since 2016: how much people pay out of their own pocket, and what the money goes to, from hospitals to long-term care.</description>
     </item>
     <item>
-      <title>Where in Europe you live longest</title>
+      <title>Where in Europe do people live longest?</title>
       <link>https://healthviz.eu/life-expectancy/</link>
       <guid isPermaLink="true">https://healthviz.eu/life-expectancy/</guid>
       <pubDate>Mon, 26 Oct 2026 00:00:00 +0000</pubDate>
