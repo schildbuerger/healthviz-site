@@ -37,7 +37,7 @@
   --surface: #fffdf7;
   --text: #141a3a;
   --text-2: #434865;
-  --muted: #858198;
+  --muted: #68647e;
   --grid: #f1d3cc;
   --axis: #d6a79e;
   --border: rgba(20, 26, 58, 0.16);
@@ -55,7 +55,7 @@
   --ink-soft: rgba(29, 63, 154, 0.14);
   --on-ink: #fff;
   --hl: rgba(255, 204, 0, 0.5);
-  --mark: #d0283a; --mark-soft: rgba(208, 40, 58, 0.12); --alert: #d0283a;
+  --mark: #d0283a; --mark-soft: rgba(208, 40, 58, 0.12); --alert: #d0283a; --on-mark: #fff;
   --flip: #ffcc00; /* accent on an inverted (text-coloured) background */
   --ecg-minor: rgba(222, 72, 72, 0.10);
   --ecg-major: rgba(222, 72, 72, 0.22);
@@ -82,7 +82,7 @@
     --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
     --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
     --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
-    --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --flip: #1d3f9a;
+    --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
     --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
     --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
     --glow: 0 0 10px rgba(80, 255, 150, 0.45);
@@ -100,7 +100,7 @@
   --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
   --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
   --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
-  --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --flip: #1d3f9a;
+  --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
   --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
   --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
   --glow: 0 0 10px rgba(80, 255, 150, 0.45);
@@ -314,8 +314,9 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   margin: 0; font: 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .06em; background: var(--surface);
   border: 1.5px solid var(--text); box-shadow: 6px 6px 0 var(--text); transform: rotate(2.2deg);
 }
-.admission > div { display: flex; justify-content: space-between; gap: 10px; padding: 8px 12px; border-bottom: 1px dashed var(--border); }
-.admission > div:last-child { border-bottom: 0; }
+.admission dl { margin: 0; }
+.admission dl > div, .admission > p { display: flex; justify-content: space-between; gap: 10px; margin: 0; padding: 8px 12px; border-bottom: 1px dashed var(--border); }
+.admission > p:last-child { border-bottom: 0; }
 .admission dt { color: var(--text-2); }
 .admission dd { margin: 0; font-weight: 800; text-align: right; }
 .admission .head { background: var(--text); color: var(--page); font-weight: 800; letter-spacing: .2em; justify-content: center; }
@@ -434,14 +435,16 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
       <h1><span class="kicker">Health across the EU,</span> One question <em>at a time.</em></h1>
       <p class="lede">healthviz is a playground for exploring and presenting open health data from Europe. Each entry takes public data and turns one question into an interactive visualisation.</p>
     </div>
-    <dl class="admission" aria-label="About the patient">
-      <div class="head">Admission sheet</div>
-      <div><dt>Patient</dt><dd>Europe</dd></div>
-      <div><dt>Ward</dt><dd>Open data</dd></div>
-      <div class="big"><dt>Questions<br>answered</dt><dd>02</dd></div>
-      <div><dt>Main source</dt><dd>Eurostat</dd></div>
-      <div class="note-row"><span class="note">Prognosis: curious. Keep under observation.</span></div>
-    </dl>
+    <div class="admission" role="group" aria-labelledby="admission-head">
+      <p class="head" id="admission-head">Admission sheet</p>
+      <dl>
+        <div><dt>Patient</dt><dd>Europe</dd></div>
+        <div><dt>Ward</dt><dd>Open data</dd></div>
+        <div class="big"><dt>Questions<br>answered</dt><dd>02</dd></div>
+        <div><dt>Main source</dt><dd>Eurostat</dd></div>
+      </dl>
+      <p class="note-row"><span class="note">Prognosis: curious. Keep under observation.</span></p>
+    </div>
   </section>
 
   <section id="entries" aria-labelledby="entries-title">

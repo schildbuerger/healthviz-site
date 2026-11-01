@@ -37,7 +37,7 @@
   --surface: #fffdf7;
   --text: #141a3a;
   --text-2: #434865;
-  --muted: #858198;
+  --muted: #68647e;
   --grid: #f1d3cc;
   --axis: #d6a79e;
   --border: rgba(20, 26, 58, 0.16);
@@ -55,7 +55,7 @@
   --ink-soft: rgba(29, 63, 154, 0.14);
   --on-ink: #fff;
   --hl: rgba(255, 204, 0, 0.5);
-  --mark: #d0283a; --mark-soft: rgba(208, 40, 58, 0.12); --alert: #d0283a;
+  --mark: #d0283a; --mark-soft: rgba(208, 40, 58, 0.12); --alert: #d0283a; --on-mark: #fff;
   --flip: #ffcc00; /* accent on an inverted (text-coloured) background */
   --ecg-minor: rgba(222, 72, 72, 0.10);
   --ecg-major: rgba(222, 72, 72, 0.22);
@@ -82,7 +82,7 @@
     --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
     --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
     --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
-    --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --flip: #1d3f9a;
+    --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
     --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
     --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
     --glow: 0 0 10px rgba(80, 255, 150, 0.45);
@@ -100,7 +100,7 @@
   --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
   --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
   --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
-  --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --flip: #1d3f9a;
+  --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
   --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
   --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
   --glow: 0 0 10px rgba(80, 255, 150, 0.45);
@@ -377,7 +377,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .tiles { counter-reset: ch; }
 .tile { counter-increment: ch; }
 .tile .v { font: 700 34px/1.15 var(--mono); letter-spacing: -0.04em; margin: 0; text-shadow: 0 0 12px currentColor; font-variant-numeric: tabular-nums; }
-.tile .v small { font-size: 14px; font-weight: 500; opacity: .75; margin-left: 4px; letter-spacing: 0; }
+.tile .v small { font-size: 14px; font-weight: 500; opacity: .85; margin-left: 4px; letter-spacing: 0; }
 .tile .s { font: 12px/1.5 var(--mono); color: #b9d4c6; opacity: .85; margin: 4px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* Tiles are filled by the script: each line keeps its height from the start (no layout shift). */
 .tile .k, .tile .s { min-height: 1.5em; }
@@ -445,8 +445,8 @@ tbody tr:nth-child(4n+1) td, tbody tr:nth-child(4n+2) td { background: rgba(27, 
 th { position: sticky; top: 0; background: var(--surface); color: var(--text); font-weight: 800; text-transform: uppercase;
   letter-spacing: .06em; font-size: 11px; border-bottom: 1.5px solid var(--text); }
 td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
-tr.hl td { background: var(--mark) !important; color: #fff; }
-tr.hl td button { color: #fff; }
+tr.hl td { background: var(--mark) !important; color: var(--on-mark); }
+tr.hl td button { color: var(--on-mark); }
 td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
 td button:hover { color: var(--ink); }
@@ -719,7 +719,7 @@ td button:hover { color: var(--ink); }
         <p class="map-attrib">© EuroGeographics for the administrative boundaries</p>
         <button type="button" class="zoom-btn" id="zoom"></button>
       </div>
-      <div class="insets" id="insets" aria-label="Outermost regions"></div>
+      <div class="insets" id="insets" role="group" aria-label="Outermost regions"></div>
     </figure>
 
     <aside class="card detail">
@@ -736,7 +736,7 @@ td button:hover { color: var(--ink); }
       <p class="facts" id="d-facts"></p>
       <div class="screen-panel">
         <div class="chart-legend" id="line-legend"></div>
-        <svg id="line" height="210"></svg>
+        <svg id="line" role="img" aria-label="Life expectancy over time: the selected region, its country and the EU-27" height="210"></svg>
       </div>
       <div>
         <p class="small muted" style="margin:0 0 4px" id="gap-title"></p>
