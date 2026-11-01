@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://healthviz.eu/life-expectancy/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Where in Europe do people live longest? · healthviz: preview map">
+<meta property="og:image:alt" content="Where in Europe do people live longest? A healthviz chart of the data on a monitor, on ECG paper.">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Dataset", "name": "Where in Europe do people live longest?", "description": "Life expectancy at birth in every European NUTS 2 region since 2002, for women, men and in total: an interactive map with Eurostat data.", "url": "https://healthviz.eu/life-expectancy/", "keywords": ["life expectancy", "Europe", "NUTS 2", "regional health statistics", "Eurostat", "mortality"], "variableMeasured": "Life expectancy at birth (years), by sex", "temporalCoverage": "2002/2023", "spatialCoverage": {"@type": "Place", "name": "Europe: EU-27, EFTA and candidate countries, NUTS 2 regions"}, "license": "https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree": true, "datePublished": "2026-10-26", "dateModified": "2026-10-26", "isBasedOn": ["https://ec.europa.eu/eurostat/databrowser/view/demo_r_mlifexp/default/table", "https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpec/default/table", "https://ec.europa.eu/eurostat/web/gisco/geodata/statistical-units/territorial-units-statistics"], "creditText": "Eurostat (demo_r_mlifexp, demo_mlexpec); © EuroGeographics for the administrative boundaries", "distribution": {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://healthviz.eu/life-expectancy/data.csv"}, "sourceOrganization": {"@type": "Organization", "name": "Eurostat", "url": "https://ec.europa.eu/eurostat"}, "@id": "https://healthviz.eu/life-expectancy/#dataset"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "healthviz", "item": "https://healthviz.eu/"}, {"@type": "ListItem", "position": 2, "name": "Where in Europe do people live longest?", "item": "https://healthviz.eu/life-expectancy/"}]}]}</script>
@@ -624,6 +624,7 @@ td button:hover { color: var(--ink); }
 .screen-panel::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 5px;
   background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .25) 0 1px, transparent 1px 3px); }
 .screen-panel .chart-legend { color: var(--text-2); }
+.tip.screen { --series-1: #4a78ec; --series-2: #d95926; --muted: #6f8f86; }
 .screen-panel .gridline { stroke-dasharray: none; }
 #line path { filter: drop-shadow(0 0 3px rgba(80, 255, 150, .25)); }
 </style>
@@ -920,7 +921,7 @@ function placeTip(evt) {
   tip.style.top = `${Math.max(8, y)}px`;
 }
 function regionTip(evt, r) {
-  tip.replaceChildren();
+  tip.replaceChildren(); tip.classList.remove("screen");
   const v = val(r);
   html("span", "tv", v == null ? "No data" : `${fmt(v)} years`, tip);
   html("span", "tn", r.name, tip);
@@ -1135,7 +1136,7 @@ function renderLine(r) {
   hit.addEventListener("pointermove", evt => {
     const i = idxAt(evt);
     cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("opacity", 1);
-    tip.replaceChildren();
+    tip.replaceChildren(); tip.classList.add("screen"); // swatches in the monitor's colours
     html("span", "tn", `${YEARS[i]} · ${SEX[state.sex]}`, tip).style.fontWeight = "600";
     for (const s of series) {
       const row = html("span", "row", null, tip);
