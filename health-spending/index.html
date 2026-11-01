@@ -25,32 +25,38 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Dataset", "name": "How much does Europe spend on health, and who pays?", "description": "Health spending in every EU country since 2016: per person, who pays, and what the money goes to. Interactive charts with Eurostat data.", "url": "https://healthviz.eu/health-spending/", "keywords": ["health expenditure", "health spending", "out-of-pocket payments", "long-term care", "Europe", "EU", "System of Health Accounts", "Eurostat"], "variableMeasured": ["Current health expenditure per inhabitant (PPS, EUR)", "Health expenditure as % of GDP", "Share of health expenditure by financing scheme", "Share of health expenditure by function", "Health expenditure per inhabitant by function (PPS)"], "temporalCoverage": "2016/2024", "spatialCoverage": {"@type": "Place", "name": "Europe: EU-27 and other European countries"}, "license": "https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree": true, "datePublished": "2026-10-26", "dateModified": "2026-10-26", "isBasedOn": ["https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hf/default/table", "https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hc/default/table"], "creditText": "Eurostat (hlth_sha11_hf, hlth_sha11_hc)", "distribution": {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://healthviz.eu/health-spending/data.csv"}, "sourceOrganization": {"@type": "Organization", "name": "Eurostat", "url": "https://ec.europa.eu/eurostat"}, "@id": "https://healthviz.eu/health-spending/#dataset"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "healthviz", "item": "https://healthviz.eu/"}, {"@type": "ListItem", "position": 2, "name": "How much does Europe spend on health, and who pays?", "item": "https://healthviz.eu/health-spending/"}]}]}</script>
 <style>
 /* Shared by every healthviz page. Pasted inline at build time.
-   Design: "the patient chart". In light mode every page is a printout on ECG paper
-   (pink millimetre grid, red ink, tractor-feed paper); in dark mode it is a bedside
-   monitor (phosphor green on black, scanlines). Data colours (--series-*, --seq-*)
+   Design: "the patient chart", tilted towards the EU's blue and gold. In light mode every
+   page is a printout on ECG paper (red millimetre grid, tractor-feed paper) written on in
+   blue ballpoint with a gold highlighter; in dark mode it is a bedside monitor (phosphor
+   green on navy black, gold accents, scanlines). --ink is the room's accent (blue / gold);
+   --mark marks the selection inside charts (red in both, apart from the blue data). Data colours (--series-*, --seq-*)
    are the validated palette and stay the same in both: only the room around them changes. */
 :root {
   color-scheme: light;
-  --page: #fbeee8;
+  --page: #f9f0e9;
   --surface: #fffdf7;
-  --text: #1b1626;
-  --text-2: #4b4255;
-  --muted: #8a7e86;
+  --text: #141a3a;
+  --text-2: #434865;
+  --muted: #858198;
   --grid: #f1d3cc;
   --axis: #d6a79e;
-  --border: rgba(27, 22, 38, 0.16);
+  --border: rgba(20, 26, 58, 0.16);
   --land: #efe7e0;
   --out: #ddd4cb;
   --hatch: #c4b8ae;
-  --series-1: #2a78d6;
+  --series-1: #2d58d0;
   --series-2: #eb6834;
   --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4;
-  --wash: rgba(208, 40, 58, 0.07);
-  --seq-1: #9ec5f4; --seq-2: #6da7ec; --seq-3: #3987e5;
-  --seq-4: #256abf; --seq-5: #184f95; --seq-6: #0d366b;
+  --wash: rgba(29, 63, 154, 0.07);
+  --seq-1: #8aa5ee; --seq-2: #6688e6; --seq-3: #4a6dda;
+  --seq-4: #3456c4; --seq-5: #22409e; --seq-6: #142b70;
   /* The room: ink, paper, grid */
-  --ink: #d0283a;
-  --ink-soft: rgba(208, 40, 58, 0.14);
+  --ink: #1d3f9a;
+  --ink-soft: rgba(29, 63, 154, 0.14);
+  --on-ink: #fff;
+  --hl: rgba(255, 204, 0, 0.5);
+  --mark: #d0283a; --mark-soft: rgba(208, 40, 58, 0.12); --alert: #d0283a;
+  --flip: #ffcc00; /* accent on an inverted (text-coloured) background */
   --ecg-minor: rgba(222, 72, 72, 0.10);
   --ecg-major: rgba(222, 72, 72, 0.22);
   --hole: #f3ddd5;
@@ -58,7 +64,7 @@
   --glow: none;
   --paper-shadow: 0 1px 0 rgba(27, 22, 38, .06), 0 14px 30px -18px rgba(90, 20, 30, .35);
   /* The monitor strip (key figures) is a screen in both modes */
-  --screen: #03110a; --bezel: #1c1f22;
+  --screen: #020a12; --bezel: #16213f;
   --ch-1: #3dff8a; --ch-2: #ffd23d; --ch-3: #3fd6ff; --ch-4: #ff6b86;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --serif: ui-serif, "New York", "Iowan Old Style", Charter, Georgia, serif;
@@ -68,36 +74,38 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --page: #030605; --surface: #08110d; --text: #d8ffe8; --text-2: #92d8b0;
-    --muted: #5f8c73; --grid: #122419; --axis: #21402e; --border: rgba(80, 255, 150, 0.18);
-    --land: #0f1a14; --out: #17251d; --hatch: #2d4838;
-    --series-1: #3987e5; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+    --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
+    --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+    --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+    --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
     --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
-    --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5;
-    --seq-4: #6da7ec; --seq-5: #9ec5f4; --seq-6: #cde2fb;
-    --ink: #ff4d61; --ink-soft: rgba(255, 77, 97, 0.16);
+    --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+    --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+    --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+    --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --flip: #1d3f9a;
     --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
     --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
     --glow: 0 0 10px rgba(80, 255, 150, 0.45);
     --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
-    --screen: #000; --bezel: #0d1512;
+    --screen: #01040c; --bezel: #101a36;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: #030605; --surface: #08110d; --text: #d8ffe8; --text-2: #92d8b0;
-  --muted: #5f8c73; --grid: #122419; --axis: #21402e; --border: rgba(80, 255, 150, 0.18);
-  --land: #0f1a14; --out: #17251d; --hatch: #2d4838;
-  --series-1: #3987e5; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+  --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
+  --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+  --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+  --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
   --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
-  --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5;
-  --seq-4: #6da7ec; --seq-5: #9ec5f4; --seq-6: #cde2fb;
-  --ink: #ff4d61; --ink-soft: rgba(255, 77, 97, 0.16);
+  --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+  --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+  --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+  --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --flip: #1d3f9a;
   --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
   --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
   --glow: 0 0 10px rgba(80, 255, 150, 0.45);
   --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
-  --screen: #000; --bezel: #0d1512;
+  --screen: #01040c; --bezel: #101a36;
 }
 
 * { box-sizing: border-box; }
@@ -114,7 +122,7 @@ body {
   font: 15px/1.5 var(--sans);
   overflow-x: clip;
 }
-::selection { background: var(--ink); color: #fff; }
+::selection { background: var(--hl); color: var(--text); }
 main { max-width: 1240px; margin: 0 auto; padding: 8px 24px 48px; position: relative; }
 h1 {
   font-family: var(--mono); font-weight: 800; text-transform: uppercase;
@@ -131,12 +139,12 @@ h2 { font-size: 16px; margin: 0; }
   border: 1.5px solid var(--text); background: var(--surface);
 }
 .eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
-.eyebrow a:hover { background: var(--ink); }
+.eyebrow a:hover { background: var(--ink); color: var(--on-ink); }
 .eyebrow { padding-right: 10px; align-items: center; }
 .lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); }
 .lede strong {
   color: var(--text); font-weight: 700;
-  background: linear-gradient(transparent 58%, var(--ink-soft) 58%, var(--ink-soft) 92%, transparent 92%);
+  background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 94%, transparent 94%);
 }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
@@ -153,12 +161,12 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   display: inline-flex; align-items: center; gap: 10px; text-shadow: var(--glow);
 }
 .brand::before {
-  content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--ink);
-  box-shadow: 0 0 0 3px var(--ink-soft); animation: hv-beat 1.1s infinite;
+  content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--alert);
+  box-shadow: 0 0 0 3px var(--mark-soft); animation: hv-beat 1.1s infinite;
 }
 .brand::after {
-  content: "REC · LIVE DATA"; font: 600 9.5px/1 var(--mono); letter-spacing: .16em; color: var(--ink);
-  border: 1px solid var(--ink); padding: 3px 5px; border-radius: 3px;
+  content: "REC · LIVE DATA"; font: 600 9.5px/1 var(--mono); letter-spacing: .16em; color: var(--alert);
+  border: 1px solid var(--alert); padding: 3px 5px; border-radius: 3px;
 }
 @keyframes hv-beat { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.45); } 24% { transform: scale(.95); } 36% { transform: scale(1.2); } }
 .site-header nav { display: flex; gap: 6px; font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; align-items: center; }
@@ -312,7 +320,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 }
 .seg button:hover { background: var(--wash); }
 .seg button[aria-pressed="true"] {
-  background: var(--ink); color: #fff; border-color: var(--text); transform: translateY(3px); box-shadow: 0 0 0 var(--text);
+  background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(3px); box-shadow: 0 0 0 var(--text);
 }
 select {
   font: 700 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--text); background: var(--surface);
@@ -325,7 +333,7 @@ select {
 }
 .icon-btn {
   width: 34px; height: 34px; flex: none; display: grid; place-items: center; cursor: pointer;
-  border: 2px solid var(--text); border-radius: 50%; background: var(--ink); color: #fff; box-shadow: 0 3px 0 var(--text);
+  border: 2px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 3px 0 var(--text);
 }
 .icon-btn:hover { filter: brightness(1.1); }
 .icon-btn:active { transform: translateY(3px); box-shadow: none; }
@@ -413,7 +421,7 @@ details.card summary::before {
   content: "+"; display: grid; place-items: center; width: 24px; height: 24px; border: 1.5px solid var(--text);
   font-size: 16px; background: var(--page); transition: transform .15s;
 }
-details.card[open] summary::before { content: "−"; background: var(--ink); color: #fff; }
+details.card[open] summary::before { content: "−"; background: var(--ink); color: var(--on-ink); }
 details.card summary::after { content: "· print to screen"; color: var(--muted); font-weight: 500; letter-spacing: .06em; }
 .table-wrap { overflow-x: auto; margin-top: 16px; max-height: 560px; overflow-y: auto; border-top: 2px solid var(--text); }
 table { border-collapse: collapse; width: 100%; font: 12.5px var(--mono); }
@@ -422,7 +430,7 @@ tbody tr:nth-child(4n+1) td, tbody tr:nth-child(4n+2) td { background: rgba(27, 
 th { position: sticky; top: 0; background: var(--surface); color: var(--text); font-weight: 800; text-transform: uppercase;
   letter-spacing: .06em; font-size: 11px; border-bottom: 1.5px solid var(--text); }
 td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
-tr.hl td { background: var(--ink) !important; color: #fff; }
+tr.hl td { background: var(--mark) !important; color: #fff; }
 tr.hl td button { color: #fff; }
 td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
@@ -431,17 +439,17 @@ td button:hover { color: var(--ink); }
 /* Tooltip: embossed label tape */
 .tip {
   position: fixed; z-index: 20; pointer-events: none; opacity: 0; transition: opacity .1s;
-  background: #16120f; color: #f6f1e8; border-radius: 3px; transform: rotate(-1.2deg);
+  background: #1d3f9a; color: #f4f6ff; border-radius: 3px; transform: rotate(-1.2deg);
   box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 -1px 0 rgba(0, 0, 0, .6) inset, 4px 6px 0 rgba(0, 0, 0, .18);
   padding: 9px 12px 9px 16px; font: 600 11.5px/1.55 var(--mono); text-transform: uppercase; letter-spacing: .04em; max-width: 280px;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .8), 0 -1px 0 rgba(255, 255, 255, .25);
-  background-image: radial-gradient(circle at 6px 50%, #2b241f 0 2px, transparent 2.5px);
+  background-image: radial-gradient(circle at 6px 50%, #14306f 0 2px, transparent 2.5px);
 }
 :root[data-theme="dark"] .tip { background-color: #0b2a17; color: #b7ffd4; box-shadow: 0 0 0 1px #3dff8a, 0 0 18px rgba(61, 255, 138, .3); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tip { background-color: #0b2a17; color: #b7ffd4; box-shadow: 0 0 0 1px #3dff8a, 0 0 18px rgba(61, 255, 138, .3); } }
 .tip.on { opacity: 1; }
 .tip .tv { font-size: 15px; font-weight: 800; display: block; letter-spacing: 0; }
-.tip .tn { display: block; color: #ff8a97; }
+.tip .tn { display: block; color: #ffd84d; }
 .tip .tm { display: block; opacity: .82; text-transform: none; font-weight: 500; }
 .tip .row { display: flex; align-items: center; gap: 8px; }
 .tip .row i { width: 12px; height: 3px; border-radius: 1px; flex: none; }
@@ -452,7 +460,7 @@ td button:hover { color: var(--ink); }
   margin-top: 40px; color: var(--text-2); max-width: 96ch; position: relative;
   background: var(--surface); box-shadow: var(--paper-shadow); padding: 34px 34px 26px 92px;
   font: 15px/28px var(--serif);
-  background-image: linear-gradient(90deg, transparent 70px, var(--ink-soft) 70px, var(--ink-soft) 72px, transparent 72px),
+  background-image: linear-gradient(90deg, transparent 70px, var(--mark-soft) 70px, var(--mark-soft) 72px, transparent 72px),
     repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px);
   background-position: 0 0, 0 33px;
   transform: rotate(-.35deg);
@@ -479,7 +487,7 @@ td button:hover { color: var(--ink); }
   .card::before, .card::after { width: 16px; background-size: 16px 22px;
     background-image: radial-gradient(circle at 8px 11px, var(--hole) 0 3.5px, transparent 4px); }
   .notes { padding: 26px 18px 18px 30px; transform: none;
-    background-image: linear-gradient(90deg, transparent 18px, var(--ink-soft) 18px, var(--ink-soft) 20px, transparent 20px),
+    background-image: linear-gradient(90deg, transparent 18px, var(--mark-soft) 18px, var(--mark-soft) 20px, transparent 20px),
       repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
   .notes::before { display: none; }
 }
@@ -561,29 +569,41 @@ td button:hover { color: var(--ink); }
 }
 
 /* Patient-chart styling for this page's chart */
-.row-band { fill: var(--ink); opacity: .1; }
+.row-band { fill: var(--mark); opacity: .1; }
 .row-label { font-family: var(--sans); }
-.row-label.hl { fill: var(--ink); font-weight: 800; }
+.row-label.hl { fill: var(--mark); font-weight: 800; }
 .row-value { font-family: var(--mono); font-size: 11.5px; }
-.row-value.hl { fill: var(--ink); font-weight: 800; }
-.nodata-note { font-family: var(--hand); font-style: normal; font-size: 14px; fill: var(--ink); opacity: .75; }
+.row-value.hl { fill: var(--mark); font-weight: 800; }
+.nodata-note { font-family: var(--hand); font-style: normal; font-size: 14px; fill: var(--mark); opacity: .75; }
 .keys svg { overflow: visible; }
-.eu-line { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 5 3; }
-.eu-label { fill: var(--ink); font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; }
-.quadrant { font-family: var(--hand); font-style: normal; font-size: 15px; fill: var(--ink); opacity: .6; }
-.dot-label.hl { fill: var(--ink); font-weight: 800; }
-.key i.k-line { border-top-color: var(--ink); }
-.eu-dot { stroke: var(--ink); stroke-width: 2.5; }
+.eu-line { stroke: var(--mark); stroke-width: 1.5; stroke-dasharray: 5 3; }
+.eu-label { fill: var(--mark); font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; }
+.quadrant { font-family: var(--hand); font-style: normal; font-size: 15px; fill: var(--mark); opacity: .6; }
+.dot-label.hl { fill: var(--mark); font-weight: 800; }
+.key i.k-line { border-top-color: var(--mark); }
+.eu-dot { stroke: var(--mark); stroke-width: 2.5; }
+.key i.k-shade { background: var(--mark-soft); width: 14px; height: 11px; border-radius: 2px; }
+.reticle { stroke: var(--mark); stroke-width: 1.5; }
+.pay-more { fill: var(--mark-soft); opacity: .35; }
+.dot { stroke: var(--surface); stroke-width: 1.5; fill-opacity: .8; }
+.dot.non-eu { stroke: var(--series-1); }
+.trail { opacity: .8; stroke-width: 2; }
+.arrow { fill: var(--series-1); }
+.arrow.eu { fill: var(--text-2); }
+.pulse { fill: none; stroke: var(--series-1); stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: hv-pulse 1.6s ease-out infinite; }
+@keyframes hv-pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; opacity: 0; } }
+.pbar i { height: 8px !important; border-radius: 4px !important; }
 /* What the money goes to: an itemised bill */
 .fn-card { margin: 26px 0; }
 .fn-cols { font: 700 10.5px/1.3 var(--mono) !important; text-transform: uppercase; letter-spacing: .08em; border-bottom: 2px solid var(--text) !important; }
 .fn-row { border-bottom: 1px dashed var(--border) !important; border-radius: 0 !important; }
-.fn-row[aria-pressed="true"] { background: var(--ink-soft) !important; box-shadow: inset 5px 0 0 var(--ink); }
+.fn-row[aria-pressed="true"] { background: var(--mark-soft) !important; box-shadow: inset 5px 0 0 var(--mark); }
 .fn-name { font-family: var(--serif); font-size: 15px !important; }
 .fn-num { font-family: var(--mono); }
 .pbar { font-family: var(--mono); }
 .across-head h3 { font: 800 15px/1.2 var(--mono) !important; text-transform: uppercase; letter-spacing: -0.02em; }
-#across .row-label.hl, #across .bar-value.hl { fill: var(--ink); font-weight: 800; }
+#across .row-label.hl, #across .bar-value.hl { fill: var(--mark); font-weight: 800; }
 #across .bar-value { font-family: var(--mono); }
 .fn-grid > div:last-child { border-left: 1.5px dashed var(--border); padding-left: 24px; }
 @media (max-width: 960px) { .fn-grid > div:last-child { border-left: 0; padding-left: 0; border-top: 1.5px dashed var(--border); padding-top: 18px; } }
@@ -643,7 +663,7 @@ td button:hover { color: var(--ink); }
         <p class="small muted" id="scatter-sub">Each dot is a country. Further right: more spent on health (per person, price-adjusted (PPS)). Higher up: people pay a larger share themselves. Click a dot to compare that country with the EU-27 below; play the years to see dots move.</p>
       </div>
     </div>
-    <div class="keys" id="scatter-keys"><span class="key"><i class="k-dot"></i>Country</span><span class="key"><i class="k-line"></i>EU-27 average</span><span class="key"><i class="k-trail"></i>Germany since 2016</span><span class="key"><i class="k-trail eu"></i>EU-27 since 2016</span></div>
+    <div class="keys" id="scatter-keys"><span class="key"><i class="k-dot"></i>Country</span><span class="key"><i class="k-line"></i>EU-27 average</span><span class="key"><i class="k-shade"></i>People pay more out of pocket than the EU-27 average</span><span class="key"><i class="k-trail"></i>Germany since 2016</span><span class="key"><i class="k-trail eu"></i>EU-27 since 2016</span></div>
     <svg id="scatter" role="img" aria-labelledby="scatter-title scatter-sub"></svg>
   </section>
 
@@ -816,6 +836,11 @@ function renderScatter() {
   const x = v => m.l + (v - d.x[0]) / (d.x[1] - d.x[0]) * (W - m.l - m.r);
   const y = v => H - m.b - (v - d.y[0]) / (d.y[1] - d.y[0]) * (H - m.t - m.b);
   const xStep = narrow ? d.xStep * 2 : d.xStep;
+  const defs = el("defs", {}, svg);
+  for (const [id, cls] of [["arrow", "arrow"], ["arrow-eu", "arrow eu"]]) {
+    const mk = el("marker", { id, viewBox: "0 0 6 6", refX: 3, refY: 3, markerWidth: 6, markerHeight: 6, orient: "auto" }, defs);
+    el("path", { class: cls, d: "M0 0.5L6 3L0 5.5z" }, mk);
+  }
   for (let t = d.x[0]; t <= d.x[1] + 1e-9; t += xStep) {
     el("line", { class: "gridline", x1: x(t), x2: x(t), y1: m.t, y2: H - m.b }, svg);
     const last = t + xStep > d.x[1] + 1e-9; // keep the last label inside the chart
@@ -832,6 +857,7 @@ function renderScatter() {
   const ex = total(EU), ey = share(EU, "HF3");
   const taken = []; // label boxes already placed, to avoid overlaps
   if (ex != null && ey != null) {
+    el("rect", { class: "pay-more", x: m.l, y: m.t, width: W - m.l - m.r, height: Math.max(0, y(ey) - m.t) }, svg);
     el("line", { class: "eu-line", x1: x(ex), x2: x(ex), y1: m.t, y2: H - m.b }, svg);
     el("line", { class: "eu-line", x1: m.l, x2: W - m.r, y1: y(ey), y2: y(ey) }, svg);
     const lab = el("text", { class: "eu-label", x: x(ex) + 5, y: H - m.b - 6 }, svg);
@@ -859,7 +885,7 @@ function renderScatter() {
   if (ex != null && ey != null) {
     const pts = YEARS.map((_, i) => i).filter(i => i <= state.y && hasDot(EU, i));
     if (pts.length > 1) {
-      el("path", { class: "trail eu", d: pts.map((i, k) => `${k ? "L" : "M"}${x(total(EU, state.unit, i)).toFixed(1)} ${y(share(EU, "HF3", i)).toFixed(1)}`).join("") }, svg);
+      el("path", { class: "trail eu", "marker-mid": "url(#arrow-eu)", d: pts.map((i, k) => `${k ? "L" : "M"}${x(total(EU, state.unit, i)).toFixed(1)} ${y(share(EU, "HF3", i)).toFixed(1)}`).join("") }, svg);
       for (const i of pts.slice(0, -1)) {
         const tx = x(total(EU, state.unit, i)), ty = y(share(EU, "HF3", i));
         el("circle", { class: "trail-dot eu", cx: tx, cy: ty, r: 2.5 }, svg);
@@ -867,13 +893,15 @@ function renderScatter() {
       }
     }
     el("circle", { class: "eu-dot", cx: x(ex), cy: y(ey), r: 4.5 }, svg);
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]])
+      el("line", { class: "reticle", x1: x(ex) + dx * 7, y1: y(ey) + dy * 7, x2: x(ex) + dx * 12, y2: y(ey) + dy * 12 }, svg);
     taken.push([x(ex) - 6, y(ey) - 6, x(ex) + 6, y(ey) + 6]);
   }
   // The selected country's path since the first year.
   if (dots.includes(g0)) {
     const pts = YEARS.map((_, i) => i).filter(i => i <= state.y && hasDot(g0, i));
     if (pts.length > 1) {
-      el("path", { class: "trail", d: pts.map((i, k) => `${k ? "L" : "M"}${x(total(g0, state.unit, i)).toFixed(1)} ${y(share(g0, "HF3", i)).toFixed(1)}`).join("") }, svg);
+      el("path", { class: "trail", "marker-mid": "url(#arrow)", d: pts.map((i, k) => `${k ? "L" : "M"}${x(total(g0, state.unit, i)).toFixed(1)} ${y(share(g0, "HF3", i)).toFixed(1)}`).join("") }, svg);
       for (const i of pts.slice(0, -1)) {
         const tx = x(total(g0, state.unit, i)), ty = y(share(g0, "HF3", i));
         el("circle", { class: "trail-dot", cx: tx, cy: ty, r: 2.5 }, svg);
@@ -889,6 +917,7 @@ function renderScatter() {
     }
   }
   const order = dots.filter(g => g !== g0).concat(dots.includes(g0) ? [g0] : []); // selected drawn last, on top
+  if (dots.includes(g0)) el("circle", { class: "pulse", cx: x(total(g0)), cy: y(share(g0, "HF3")), r: 7 }, svg);
   for (const g of order) {
     el("circle", { class: "dot" + (A(g).eu ? "" : " non-eu") + (g === g0 ? " hl" : ""), cx: x(total(g)), cy: y(share(g, "HF3")), r: g === g0 ? 7 : 5.5 }, svg);
   }
@@ -913,6 +942,7 @@ function renderScatter() {
   key("k-dot", state.scope === "all" ? "EU country" : "Country");
   if (state.scope === "all") key("k-dot non-eu", "Other European country");
   key("k-line", "EU-27 average");
+  if (share(EU, "HF3") != null) key("k-shade", "People pay more out of pocket than the EU-27 average");
   if (dots.includes(g0) && state.y > 0) key("k-trail", `${name(g0)} since ${YEARS[0]}`);
   if (state.y > 0) key("k-trail eu", `EU-27 since ${YEARS[0]}`);
   $("scatter-title").textContent = `Spending and out-of-pocket share, ${YEARS[state.y]}`;
@@ -1052,7 +1082,7 @@ function renderAcross() {
   svg.replaceChildren();
   const list = Object.keys(D.areas).filter(c => (inScope(c) || c === EU) && fnValue(c, f.k) != null)
     .sort((a, b) => fnValue(b, f.k) - fnValue(a, f.k) || name(a).localeCompare(name(b)));
-  const W = svg.clientWidth || 440, labelW = 118, rowH = 19, barH = 11, m = { t: 4, r: 50, b: 4 };
+  const W = svg.clientWidth || 440, labelW = 118, rowH = 19, barH = 9, m = { t: 4, r: 50, b: 4 };
   const H = m.t + list.length * rowH + m.b;
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
   svg.setAttribute("height", H);
@@ -1063,7 +1093,7 @@ function renderAcross() {
     const top = m.t + i * rowH, cy = top + rowH / 2, hl = c === state.country ? " hl" : "", eu = c === EU ? " eu" : "";
     el("text", { class: "row-label" + hl, x: labelW - 8, y: cy + 4, "text-anchor": "end" }, svg).textContent =
       name(c).length > 17 ? name(c).slice(0, 16) + "…" : name(c);
-    el("rect", { class: "bar" + hl + eu, x: labelW, y: cy - barH / 2, width: Math.max(0, x(fnValue(c, f.k)) - labelW), height: barH, rx: 2 }, svg);
+    el("rect", { class: "bar" + hl + eu, x: labelW, y: cy - barH / 2, width: Math.max(0, x(fnValue(c, f.k)) - labelW), height: barH, rx: barH / 2 }, svg);
     el("text", { class: "bar-value" + hl, x: x(fnValue(c, f.k)) + 5, y: cy + 4 }, svg).textContent = fmtFn(fnValue(c, f.k));
     if (c !== EU) el("rect", { class: "row-hit", x: 0, y: top, width: W, height: rowH, "data-g": c }, svg);
   });

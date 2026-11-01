@@ -25,32 +25,38 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Dataset", "name": "Where in Europe do people live longest?", "description": "Life expectancy at birth in every European NUTS 2 region since 2002, for women, men and in total: an interactive map with Eurostat data.", "url": "https://healthviz.eu/life-expectancy/", "keywords": ["life expectancy", "Europe", "NUTS 2", "regional health statistics", "Eurostat", "mortality"], "variableMeasured": "Life expectancy at birth (years), by sex", "temporalCoverage": "2002/2023", "spatialCoverage": {"@type": "Place", "name": "Europe: EU-27, EFTA and candidate countries, NUTS 2 regions"}, "license": "https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree": true, "datePublished": "2026-10-26", "dateModified": "2026-10-26", "isBasedOn": ["https://ec.europa.eu/eurostat/databrowser/view/demo_r_mlifexp/default/table", "https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpec/default/table", "https://ec.europa.eu/eurostat/web/gisco/geodata/statistical-units/territorial-units-statistics"], "creditText": "Eurostat (demo_r_mlifexp, demo_mlexpec); © EuroGeographics for the administrative boundaries", "distribution": {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://healthviz.eu/life-expectancy/data.csv"}, "sourceOrganization": {"@type": "Organization", "name": "Eurostat", "url": "https://ec.europa.eu/eurostat"}, "@id": "https://healthviz.eu/life-expectancy/#dataset"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "healthviz", "item": "https://healthviz.eu/"}, {"@type": "ListItem", "position": 2, "name": "Where in Europe do people live longest?", "item": "https://healthviz.eu/life-expectancy/"}]}]}</script>
 <style>
 /* Shared by every healthviz page. Pasted inline at build time.
-   Design: "the patient chart". In light mode every page is a printout on ECG paper
-   (pink millimetre grid, red ink, tractor-feed paper); in dark mode it is a bedside
-   monitor (phosphor green on black, scanlines). Data colours (--series-*, --seq-*)
+   Design: "the patient chart", tilted towards the EU's blue and gold. In light mode every
+   page is a printout on ECG paper (red millimetre grid, tractor-feed paper) written on in
+   blue ballpoint with a gold highlighter; in dark mode it is a bedside monitor (phosphor
+   green on navy black, gold accents, scanlines). --ink is the room's accent (blue / gold);
+   --mark marks the selection inside charts (red in both, apart from the blue data). Data colours (--series-*, --seq-*)
    are the validated palette and stay the same in both: only the room around them changes. */
 :root {
   color-scheme: light;
-  --page: #fbeee8;
+  --page: #f9f0e9;
   --surface: #fffdf7;
-  --text: #1b1626;
-  --text-2: #4b4255;
-  --muted: #8a7e86;
+  --text: #141a3a;
+  --text-2: #434865;
+  --muted: #858198;
   --grid: #f1d3cc;
   --axis: #d6a79e;
-  --border: rgba(27, 22, 38, 0.16);
+  --border: rgba(20, 26, 58, 0.16);
   --land: #efe7e0;
   --out: #ddd4cb;
   --hatch: #c4b8ae;
-  --series-1: #2a78d6;
+  --series-1: #2d58d0;
   --series-2: #eb6834;
   --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4;
-  --wash: rgba(208, 40, 58, 0.07);
-  --seq-1: #9ec5f4; --seq-2: #6da7ec; --seq-3: #3987e5;
-  --seq-4: #256abf; --seq-5: #184f95; --seq-6: #0d366b;
+  --wash: rgba(29, 63, 154, 0.07);
+  --seq-1: #8aa5ee; --seq-2: #6688e6; --seq-3: #4a6dda;
+  --seq-4: #3456c4; --seq-5: #22409e; --seq-6: #142b70;
   /* The room: ink, paper, grid */
-  --ink: #d0283a;
-  --ink-soft: rgba(208, 40, 58, 0.14);
+  --ink: #1d3f9a;
+  --ink-soft: rgba(29, 63, 154, 0.14);
+  --on-ink: #fff;
+  --hl: rgba(255, 204, 0, 0.5);
+  --mark: #d0283a; --mark-soft: rgba(208, 40, 58, 0.12); --alert: #d0283a;
+  --flip: #ffcc00; /* accent on an inverted (text-coloured) background */
   --ecg-minor: rgba(222, 72, 72, 0.10);
   --ecg-major: rgba(222, 72, 72, 0.22);
   --hole: #f3ddd5;
@@ -58,7 +64,7 @@
   --glow: none;
   --paper-shadow: 0 1px 0 rgba(27, 22, 38, .06), 0 14px 30px -18px rgba(90, 20, 30, .35);
   /* The monitor strip (key figures) is a screen in both modes */
-  --screen: #03110a; --bezel: #1c1f22;
+  --screen: #020a12; --bezel: #16213f;
   --ch-1: #3dff8a; --ch-2: #ffd23d; --ch-3: #3fd6ff; --ch-4: #ff6b86;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --serif: ui-serif, "New York", "Iowan Old Style", Charter, Georgia, serif;
@@ -68,36 +74,38 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --page: #030605; --surface: #08110d; --text: #d8ffe8; --text-2: #92d8b0;
-    --muted: #5f8c73; --grid: #122419; --axis: #21402e; --border: rgba(80, 255, 150, 0.18);
-    --land: #0f1a14; --out: #17251d; --hatch: #2d4838;
-    --series-1: #3987e5; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+    --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
+    --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+    --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+    --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
     --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
-    --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5;
-    --seq-4: #6da7ec; --seq-5: #9ec5f4; --seq-6: #cde2fb;
-    --ink: #ff4d61; --ink-soft: rgba(255, 77, 97, 0.16);
+    --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+    --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+    --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+    --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --flip: #1d3f9a;
     --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
     --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
     --glow: 0 0 10px rgba(80, 255, 150, 0.45);
     --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
-    --screen: #000; --bezel: #0d1512;
+    --screen: #01040c; --bezel: #101a36;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: #030605; --surface: #08110d; --text: #d8ffe8; --text-2: #92d8b0;
-  --muted: #5f8c73; --grid: #122419; --axis: #21402e; --border: rgba(80, 255, 150, 0.18);
-  --land: #0f1a14; --out: #17251d; --hatch: #2d4838;
-  --series-1: #3987e5; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+  --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
+  --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+  --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+  --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
   --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
-  --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5;
-  --seq-4: #6da7ec; --seq-5: #9ec5f4; --seq-6: #cde2fb;
-  --ink: #ff4d61; --ink-soft: rgba(255, 77, 97, 0.16);
+  --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+  --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+  --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+  --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --flip: #1d3f9a;
   --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
   --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
   --glow: 0 0 10px rgba(80, 255, 150, 0.45);
   --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
-  --screen: #000; --bezel: #0d1512;
+  --screen: #01040c; --bezel: #101a36;
 }
 
 * { box-sizing: border-box; }
@@ -114,7 +122,7 @@ body {
   font: 15px/1.5 var(--sans);
   overflow-x: clip;
 }
-::selection { background: var(--ink); color: #fff; }
+::selection { background: var(--hl); color: var(--text); }
 main { max-width: 1240px; margin: 0 auto; padding: 8px 24px 48px; position: relative; }
 h1 {
   font-family: var(--mono); font-weight: 800; text-transform: uppercase;
@@ -131,12 +139,12 @@ h2 { font-size: 16px; margin: 0; }
   border: 1.5px solid var(--text); background: var(--surface);
 }
 .eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
-.eyebrow a:hover { background: var(--ink); }
+.eyebrow a:hover { background: var(--ink); color: var(--on-ink); }
 .eyebrow { padding-right: 10px; align-items: center; }
 .lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); }
 .lede strong {
   color: var(--text); font-weight: 700;
-  background: linear-gradient(transparent 58%, var(--ink-soft) 58%, var(--ink-soft) 92%, transparent 92%);
+  background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 94%, transparent 94%);
 }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
@@ -153,12 +161,12 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   display: inline-flex; align-items: center; gap: 10px; text-shadow: var(--glow);
 }
 .brand::before {
-  content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--ink);
-  box-shadow: 0 0 0 3px var(--ink-soft); animation: hv-beat 1.1s infinite;
+  content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--alert);
+  box-shadow: 0 0 0 3px var(--mark-soft); animation: hv-beat 1.1s infinite;
 }
 .brand::after {
-  content: "REC · LIVE DATA"; font: 600 9.5px/1 var(--mono); letter-spacing: .16em; color: var(--ink);
-  border: 1px solid var(--ink); padding: 3px 5px; border-radius: 3px;
+  content: "REC · LIVE DATA"; font: 600 9.5px/1 var(--mono); letter-spacing: .16em; color: var(--alert);
+  border: 1px solid var(--alert); padding: 3px 5px; border-radius: 3px;
 }
 @keyframes hv-beat { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.45); } 24% { transform: scale(.95); } 36% { transform: scale(1.2); } }
 .site-header nav { display: flex; gap: 6px; font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; align-items: center; }
@@ -312,7 +320,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 }
 .seg button:hover { background: var(--wash); }
 .seg button[aria-pressed="true"] {
-  background: var(--ink); color: #fff; border-color: var(--text); transform: translateY(3px); box-shadow: 0 0 0 var(--text);
+  background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(3px); box-shadow: 0 0 0 var(--text);
 }
 select {
   font: 700 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--text); background: var(--surface);
@@ -325,7 +333,7 @@ select {
 }
 .icon-btn {
   width: 34px; height: 34px; flex: none; display: grid; place-items: center; cursor: pointer;
-  border: 2px solid var(--text); border-radius: 50%; background: var(--ink); color: #fff; box-shadow: 0 3px 0 var(--text);
+  border: 2px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 3px 0 var(--text);
 }
 .icon-btn:hover { filter: brightness(1.1); }
 .icon-btn:active { transform: translateY(3px); box-shadow: none; }
@@ -413,7 +421,7 @@ details.card summary::before {
   content: "+"; display: grid; place-items: center; width: 24px; height: 24px; border: 1.5px solid var(--text);
   font-size: 16px; background: var(--page); transition: transform .15s;
 }
-details.card[open] summary::before { content: "−"; background: var(--ink); color: #fff; }
+details.card[open] summary::before { content: "−"; background: var(--ink); color: var(--on-ink); }
 details.card summary::after { content: "· print to screen"; color: var(--muted); font-weight: 500; letter-spacing: .06em; }
 .table-wrap { overflow-x: auto; margin-top: 16px; max-height: 560px; overflow-y: auto; border-top: 2px solid var(--text); }
 table { border-collapse: collapse; width: 100%; font: 12.5px var(--mono); }
@@ -422,7 +430,7 @@ tbody tr:nth-child(4n+1) td, tbody tr:nth-child(4n+2) td { background: rgba(27, 
 th { position: sticky; top: 0; background: var(--surface); color: var(--text); font-weight: 800; text-transform: uppercase;
   letter-spacing: .06em; font-size: 11px; border-bottom: 1.5px solid var(--text); }
 td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
-tr.hl td { background: var(--ink) !important; color: #fff; }
+tr.hl td { background: var(--mark) !important; color: #fff; }
 tr.hl td button { color: #fff; }
 td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
@@ -431,17 +439,17 @@ td button:hover { color: var(--ink); }
 /* Tooltip: embossed label tape */
 .tip {
   position: fixed; z-index: 20; pointer-events: none; opacity: 0; transition: opacity .1s;
-  background: #16120f; color: #f6f1e8; border-radius: 3px; transform: rotate(-1.2deg);
+  background: #1d3f9a; color: #f4f6ff; border-radius: 3px; transform: rotate(-1.2deg);
   box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 -1px 0 rgba(0, 0, 0, .6) inset, 4px 6px 0 rgba(0, 0, 0, .18);
   padding: 9px 12px 9px 16px; font: 600 11.5px/1.55 var(--mono); text-transform: uppercase; letter-spacing: .04em; max-width: 280px;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .8), 0 -1px 0 rgba(255, 255, 255, .25);
-  background-image: radial-gradient(circle at 6px 50%, #2b241f 0 2px, transparent 2.5px);
+  background-image: radial-gradient(circle at 6px 50%, #14306f 0 2px, transparent 2.5px);
 }
 :root[data-theme="dark"] .tip { background-color: #0b2a17; color: #b7ffd4; box-shadow: 0 0 0 1px #3dff8a, 0 0 18px rgba(61, 255, 138, .3); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tip { background-color: #0b2a17; color: #b7ffd4; box-shadow: 0 0 0 1px #3dff8a, 0 0 18px rgba(61, 255, 138, .3); } }
 .tip.on { opacity: 1; }
 .tip .tv { font-size: 15px; font-weight: 800; display: block; letter-spacing: 0; }
-.tip .tn { display: block; color: #ff8a97; }
+.tip .tn { display: block; color: #ffd84d; }
 .tip .tm { display: block; opacity: .82; text-transform: none; font-weight: 500; }
 .tip .row { display: flex; align-items: center; gap: 8px; }
 .tip .row i { width: 12px; height: 3px; border-radius: 1px; flex: none; }
@@ -452,7 +460,7 @@ td button:hover { color: var(--ink); }
   margin-top: 40px; color: var(--text-2); max-width: 96ch; position: relative;
   background: var(--surface); box-shadow: var(--paper-shadow); padding: 34px 34px 26px 92px;
   font: 15px/28px var(--serif);
-  background-image: linear-gradient(90deg, transparent 70px, var(--ink-soft) 70px, var(--ink-soft) 72px, transparent 72px),
+  background-image: linear-gradient(90deg, transparent 70px, var(--mark-soft) 70px, var(--mark-soft) 72px, transparent 72px),
     repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px);
   background-position: 0 0, 0 33px;
   transform: rotate(-.35deg);
@@ -479,7 +487,7 @@ td button:hover { color: var(--ink); }
   .card::before, .card::after { width: 16px; background-size: 16px 22px;
     background-image: radial-gradient(circle at 8px 11px, var(--hole) 0 3.5px, transparent 4px); }
   .notes { padding: 26px 18px 18px 30px; transform: none;
-    background-image: linear-gradient(90deg, transparent 18px, var(--ink-soft) 18px, var(--ink-soft) 20px, transparent 20px),
+    background-image: linear-gradient(90deg, transparent 18px, var(--mark-soft) 18px, var(--mark-soft) 20px, transparent 20px),
       repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
   .notes::before { display: none; }
 }
@@ -570,27 +578,27 @@ td button:hover { color: var(--ink); }
 }
 
 /* Patient-chart styling for this page's chart */
-.row-band { fill: var(--ink); opacity: .1; }
+.row-band { fill: var(--mark); opacity: .1; }
 .row-label { font-family: var(--sans); }
-.row-label.hl { fill: var(--ink); font-weight: 800; }
+.row-label.hl { fill: var(--mark); font-weight: 800; }
 .row-value { font-family: var(--mono); font-size: 11.5px; }
-.row-value.hl { fill: var(--ink); font-weight: 800; }
-.nodata-note { font-family: var(--hand); font-style: normal; font-size: 14px; fill: var(--ink); opacity: .75; }
+.row-value.hl { fill: var(--mark); font-weight: 800; }
+.nodata-note { font-family: var(--hand); font-style: normal; font-size: 14px; fill: var(--mark); opacity: .75; }
 .keys svg { overflow: visible; }
 .region { stroke: var(--surface); }
-.hover-ring, .outline-hl, .sel-ring { stroke: var(--ink); }
+.hover-ring, .outline-hl, .sel-ring { stroke: var(--mark); }
 .zoom-btn {
   font: 700 11.5px/1 var(--mono) !important; text-transform: uppercase; letter-spacing: .06em; border: 1.5px solid var(--text) !important;
   border-radius: 0 !important; padding: 7px 10px !important; box-shadow: 3px 3px 0 var(--ink);
 }
 .map-attrib { font-family: var(--mono); font-size: 10px !important; }
 .scale .ticks { font-family: var(--mono); font-size: 11px !important; }
-.scale .avg { font: 700 11px var(--mono) !important; color: var(--ink) !important; text-transform: uppercase; }
-.scale .avg::after { background: var(--ink) !important; }
+.scale .avg { font: 700 11px var(--mono) !important; color: var(--mark) !important; text-transform: uppercase; }
+.scale .avg::after { background: var(--mark) !important; }
 .insets figure { border: 1.5px solid var(--text) !important; border-radius: 0 !important; background: var(--page); }
 .insets figcaption { font-family: var(--mono); text-transform: uppercase; font-size: 9.5px !important; }
 /* The detail panel is the patient's own monitor */
-.detail .hero b { font: 800 54px/1 var(--mono) !important; letter-spacing: -0.05em; color: var(--ink); text-shadow: var(--glow); }
+.detail .hero b { font: 800 54px/1 var(--mono) !important; letter-spacing: -0.05em; color: var(--mark); text-shadow: var(--glow); }
 .detail .hero span { font-family: var(--mono); text-transform: uppercase; font-size: 12px; letter-spacing: .1em; }
 .detail .facts { font: 15px/1.5 var(--serif) !important; }
 #d-name { font: 800 20px/1.15 var(--mono); text-transform: uppercase; letter-spacing: -0.03em; }
@@ -598,9 +606,26 @@ td button:hover { color: var(--ink); }
 #gap-title { font-family: var(--mono); text-transform: uppercase; font-size: 11.5px !important; letter-spacing: .06em; }
 .sexgap { font-family: var(--mono); font-size: 12px !important; }
 .range { stroke: var(--axis); stroke-width: 3; }
-.eu-line { stroke: var(--ink); stroke-dasharray: 5 3; opacity: .8; }
-.eu-label { fill: var(--ink); font-family: var(--mono); text-transform: uppercase; font-size: 10.5px; }
+.eu-line { stroke: var(--mark); stroke-dasharray: 5 3; opacity: .8; }
+.eu-label { fill: var(--mark); font-family: var(--mono); text-transform: uppercase; font-size: 10.5px; }
 .rank-range { font-family: var(--mono); font-size: 10.5px; }
+.tube { stroke: var(--land); stroke-width: 11; stroke-linecap: round; }
+.tube.hl { stroke: var(--mark-soft); }
+.range { stroke: var(--axis) !important; stroke-width: 1 !important; }
+.dot { stroke: var(--surface); stroke-width: 1; fill-opacity: .75 !important; }
+/* The region's line chart runs on a small bedside monitor in both modes: the dark-mode
+   data colours (validated against a dark surface) and phosphor text, scoped to the panel. */
+.screen-panel {
+  --series-1: #4a78ec; --series-2: #d95926; --muted: #6f8f86; --surface: var(--screen);
+  --text: #d8ffe8; --text-2: #92d8b0; --grid: #10262a; --axis: #24454a;
+  background: var(--screen); border: 7px solid var(--bezel); border-radius: 12px; padding: 8px 10px 4px;
+  box-shadow: inset 0 0 18px rgba(61, 255, 138, .08); position: relative;
+}
+.screen-panel::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 5px;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .25) 0 1px, transparent 1px 3px); }
+.screen-panel .chart-legend { color: var(--text-2); }
+.screen-panel .gridline { stroke-dasharray: none; }
+#line path { filter: drop-shadow(0 0 3px rgba(80, 255, 150, .25)); }
 </style>
 </head>
 <body>
@@ -680,7 +705,7 @@ td button:hover { color: var(--ink); }
       </div>
       <p class="hero"><b id="d-val"></b><span id="d-unit">years</span></p>
       <p class="facts" id="d-facts"></p>
-      <div>
+      <div class="screen-panel">
         <div class="chart-legend" id="line-legend"></div>
         <svg id="line" height="210"></svg>
       </div>
@@ -1163,7 +1188,11 @@ function renderStrip() {
     label.textContent = countryName(g.cc);
     label.addEventListener("click", () => setCountry(g.cc));
     const vs = g.rs.map(r => val(r));
-    if (vs.length > 1) el("line", { class: "range", x1: x(Math.min(...vs)), x2: x(Math.max(...vs)), y1: cy, y2: cy }, svg);
+    // An IV tube from the country's lowest to its highest region; the regions are beads on its line.
+    if (vs.length > 1) {
+      el("line", { class: "tube" + (hl ? " hl" : ""), x1: x(Math.min(...vs)), x2: x(Math.max(...vs)), y1: cy, y2: cy }, svg);
+      el("line", { class: "range", x1: x(Math.min(...vs)), x2: x(Math.max(...vs)), y1: cy, y2: cy }, svg);
+    }
     // The country's rank among the countries shown, by national value; equal values share a rank.
     const place = 1 + order.filter(o => o.key > g.key).length;
     el("text", { class: "rank-range" + (hl ? " hl" : ""), x: rankX, y: cy + 4, "text-anchor": "end" }, svg)
