@@ -16,7 +16,7 @@
 <meta property="og:title" content="healthviz · European health data, visualised">
 <meta property="og:description" content="A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it.">
 <meta property="og:url" content="https://healthviz.eu/">
-<meta property="og:image" content="https://healthviz.eu/og.png?v=0e22759b38">
+<meta property="og:image" content="https://healthviz.eu/og.png?v=76d02b8925">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="healthviz: European health data, one question at a time. The newest entry&#x27;s chart on a monitor, on ECG paper.">
@@ -146,6 +146,10 @@ h2 { font-size: 16px; margin: 0; }
   color: var(--text); font-weight: 700;
   background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 94%, transparent 94%);
 }
+/* Opening sentences: one thought per line, each marked like an entry in a chart */
+.lede .thought { display: block; position: relative; padding-left: 1.3em; }
+.lede .thought + .thought { margin-top: .5em; }
+.lede .thought::before { content: ""; position: absolute; left: 0; top: .74em; width: .72em; height: 2px; background: var(--ink); }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
 .num { font-variant-numeric: tabular-nums; }
@@ -209,29 +213,26 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .site-footer .sig { font: 26px/1 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink); transform: rotate(-4deg);
   display: inline-block; border-bottom: 1px solid var(--text-2); padding: 0 18px 4px 4px; margin-right: 10px; }
 
-/* Data snapshot: a patient wristband under an entry's title */
+/* Data snapshot: an admission-style sheet beside an entry's title (below it on narrow screens),
+   like the home page's admission sheet: a title bar, ruled rows, one big figure, a handwritten note. */
 .snapshot {
-  margin: 26px 0 0; padding: 12px 64px 12px 54px; position: relative; max-width: 980px;
-  border-radius: 28px; background: var(--surface); border: 1.5px solid var(--text);
-  box-shadow: var(--paper-shadow);
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 22px; font: 12.5px/1.45 var(--mono);
+  margin: 0; font: 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .05em; background: var(--surface);
+  border: 1.5px solid var(--text); box-shadow: 6px 6px 0 var(--text); transform: rotate(1.6deg);
 }
-.snapshot::before { /* the snap button */
-  content: ""; position: absolute; left: 16px; top: 50%; width: 20px; height: 20px; margin-top: -10px; border-radius: 50%;
-  background: radial-gradient(circle, var(--surface) 0 3px, var(--text) 3.5px 5px, var(--ink) 5.5px);
+.snapshot-k {
+  margin: 0; padding: 8px 12px; background: var(--text); color: var(--page); font-weight: 800; letter-spacing: .2em; text-align: center;
 }
-.snapshot::after { /* barcode */
-  content: ""; position: absolute; right: 18px; top: 12px; bottom: 12px; width: 30px;
-  background: repeating-linear-gradient(90deg, var(--text) 0 2px, transparent 2px 3px, var(--text) 3px 4px, transparent 4px 7px, var(--text) 7px 10px, transparent 10px 11px);
-  opacity: .85;
+.snapshot dl { margin: 0; }
+.snapshot dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 14px; border-bottom: 1px dashed var(--border); }
+.snapshot dt { color: var(--text-2); flex: none; }
+.snapshot dd { margin: 0; font-weight: 800; text-align: right; }
+.snapshot dl div:first-child { align-items: center; }
+.snapshot dl div:first-child dd { font-size: 22px; line-height: 1.05; color: var(--ink); text-shadow: var(--glow); letter-spacing: -0.01em; }
+.snapshot-note {
+  margin: 0; padding: 12px 18px 14px; font: 18px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink);
+  text-align: center; transform: rotate(-1.5deg);
 }
-.snapshot-k { margin: 0; font-weight: 800; text-transform: uppercase; letter-spacing: .14em; color: var(--ink); }
-.snapshot dl { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0; }
-.snapshot dl div { display: flex; gap: 6px; }
-.snapshot dt { color: var(--text-2); text-transform: uppercase; font-size: 11px; letter-spacing: .06em; }
-.snapshot dt::after { content: ":"; }
-.snapshot dd { margin: 0; font-weight: 700; }
-.snapshot-note { margin: 0; color: var(--text-2); flex-basis: 100%; font-family: var(--sans); font-size: 12.5px; }
+.snapshot-note a { display: table; margin: 10px auto 0; font-size: 14.5px; white-space: nowrap; } /* its own line, centred */
 .sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
 .sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
 .sources li::before {
@@ -241,14 +242,19 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .sources code { font: 12px var(--mono); background: var(--wash); padding: 1px 4px; }
 
 /* Decorations every entry header may use */
-.chart-head { position: relative; padding: 26px 0 8px; }
+.chart-head {
+  position: relative; padding: 26px 0 8px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 290px; column-gap: 48px; align-items: start;
+}
+.chart-head > * { grid-column: 1; justify-self: start; }
+.chart-head > .snapshot { grid-column: 2; grid-row: 1 / span 5; justify-self: stretch; margin-top: 74px; }
 .chart-head::before { /* the entry's motif, huge and outlined behind the title */
   content: attr(data-motif); position: absolute; right: -2vw; top: -10px; z-index: -1; pointer-events: none;
   font: 900 clamp(150px, 30vw, 420px)/0.8 var(--mono); letter-spacing: -0.08em; color: transparent;
   -webkit-text-stroke: 2px var(--ink-soft); white-space: nowrap;
 }
 .stamp {
-  position: absolute; right: 2%; top: 64px; margin: 0; transform: rotate(-11deg); pointer-events: none;
+  position: absolute; right: 250px; top: 20px; margin: 0; transform: rotate(-11deg); pointer-events: none; z-index: 1;
   font: 800 15px/1.1 var(--mono); text-transform: uppercase; letter-spacing: .14em; text-align: center; color: var(--ink);
   border: 3px double var(--ink); border-radius: 8px; padding: 8px 12px; opacity: .78; mix-blend-mode: multiply;
   -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
@@ -257,11 +263,16 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .stamp small { display: block; font-size: 10px; letter-spacing: .2em; margin-top: 3px; }
 :root[data-theme="dark"] .stamp { mix-blend-mode: normal; }
 .scribble {
-  font: 21px/1.15 var(--hand); color: var(--ink); margin: 10px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
+  font: 21px/1.15 var(--hand); color: var(--ink); margin: 24px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
   display: inline-block; max-width: 34ch;
 }
 .scribble::before { content: "↳ "; }
 
+@media (max-width: 960px) {
+  .chart-head { grid-template-columns: minmax(0, 1fr); }
+  .chart-head > .snapshot { grid-column: 1; grid-row: auto; justify-self: start; width: min(100%, 420px); margin: 28px 0 0 4px; transform: rotate(1deg); }
+  .stamp { right: 2%; top: 64px; }
+}
 @media (max-width: 760px) {
   .stamp { display: none; }
   .chart-head::before { top: 40px; }
@@ -270,8 +281,6 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .site-header, .site-footer { padding-left: 16px; padding-right: 16px; }
   .trace { margin: 4px -16px 0; width: calc(100% + 32px); }
   .brand::after { display: none; }
-  .snapshot { padding: 12px 18px 12px 46px; border-radius: 18px; }
-  .snapshot::after { display: none; }
   .lede { font-size: 17px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -295,6 +304,10 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 /* Hero: the admission sheet for a patient called Europe */
 .hero { padding: 34px 0 30px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: end; position: relative; }
 .hero h1 { font-size: clamp(42px, 8.6vw, 128px); line-height: .86; letter-spacing: -0.07em; max-width: none; margin: 18px 0 26px; }
+.hero h1 .kicker {
+  display: block; margin: 0 0 .22em; font: italic 400 clamp(26px, 3.8vw, 52px)/1.05 var(--serif);
+  letter-spacing: -0.015em; text-transform: none; color: var(--ink);
+}
 .hero h1 em { font: italic 400 1em/1 var(--serif); letter-spacing: -0.03em; text-transform: none; color: var(--ink); }
 .hero .lede { font-size: 20px; max-width: 46ch; }
 .admission {
@@ -307,7 +320,9 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .admission dd { margin: 0; font-weight: 800; text-align: right; }
 .admission .head { background: var(--text); color: var(--page); font-weight: 800; letter-spacing: .2em; justify-content: center; }
 .admission .big dd { font-size: 34px; line-height: 1; color: var(--ink); text-shadow: var(--glow); }
-.admission .note { font: 19px/1.2 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink); display: block; transform: rotate(-3deg); }
+.admission .note-row { justify-content: center; padding: 14px 22px 16px; }
+.admission .note { font: 19px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink); display: inline-block;
+  text-align: center; max-width: 22ch; transform: rotate(-1.8deg); }
 
 /* Entries: a triage board, one bed per question */
 .section-head { display: flex; align-items: center; gap: 16px; margin: 30px 0 0; padding: 10px 0; border-top: 6px solid var(--text); border-bottom: 1.5px solid var(--text); }
@@ -379,7 +394,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 
 /* About: a prescription pad */
 .about {
-  margin: 70px 0 8px auto; max-width: 620px; position: relative; padding: 30px 34px 34px 104px; background: var(--surface);
+  margin: 70px auto 8px; max-width: 620px; position: relative; padding: 30px 34px 34px 104px; background: var(--surface);
   box-shadow: var(--paper-shadow); transform: rotate(-1.2deg); border-top: 14px solid var(--ink);
 }
 .about::before { content: "℞"; position: absolute; left: 26px; top: 18px; font: 400 64px/1 var(--serif); color: var(--ink); }
@@ -416,16 +431,16 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   <section class="hero">
     <div>
       <p class="eyebrow"><a href="#entries">Admitting</a> European health data</p>
-      <h1>One question <em>at a time.</em></h1>
-      <p class="lede">healthviz is a playground for exploring and presenting open health data from Europe. Each entry takes public data, mostly from Eurostat, and turns one question into an interactive visualisation.</p>
+      <h1><span class="kicker">Health across the EU,</span> One question <em>at a time.</em></h1>
+      <p class="lede">healthviz is a playground for exploring and presenting open health data from Europe. Each entry takes public data and turns one question into an interactive visualisation.</p>
     </div>
     <dl class="admission" aria-label="About the patient">
       <div class="head">Admission sheet</div>
       <div><dt>Patient</dt><dd>Europe</dd></div>
       <div><dt>Ward</dt><dd>Open data</dd></div>
-      <div class="big"><dt>Questions<br>open</dt><dd>02</dd></div>
+      <div class="big"><dt>Questions<br>answered</dt><dd>02</dd></div>
       <div><dt>Main source</dt><dd>Eurostat</dd></div>
-      <div><span class="note">Prognosis: curious. Keep under observation.</span></div>
+      <div class="note-row"><span class="note">Prognosis: curious. Keep under observation.</span></div>
     </dl>
   </section>
 

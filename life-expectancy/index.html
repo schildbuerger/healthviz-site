@@ -146,6 +146,10 @@ h2 { font-size: 16px; margin: 0; }
   color: var(--text); font-weight: 700;
   background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 94%, transparent 94%);
 }
+/* Opening sentences: one thought per line, each marked like an entry in a chart */
+.lede .thought { display: block; position: relative; padding-left: 1.3em; }
+.lede .thought + .thought { margin-top: .5em; }
+.lede .thought::before { content: ""; position: absolute; left: 0; top: .74em; width: .72em; height: 2px; background: var(--ink); }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
 .num { font-variant-numeric: tabular-nums; }
@@ -209,29 +213,26 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .site-footer .sig { font: 26px/1 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink); transform: rotate(-4deg);
   display: inline-block; border-bottom: 1px solid var(--text-2); padding: 0 18px 4px 4px; margin-right: 10px; }
 
-/* Data snapshot: a patient wristband under an entry's title */
+/* Data snapshot: an admission-style sheet beside an entry's title (below it on narrow screens),
+   like the home page's admission sheet: a title bar, ruled rows, one big figure, a handwritten note. */
 .snapshot {
-  margin: 26px 0 0; padding: 12px 64px 12px 54px; position: relative; max-width: 980px;
-  border-radius: 28px; background: var(--surface); border: 1.5px solid var(--text);
-  box-shadow: var(--paper-shadow);
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 22px; font: 12.5px/1.45 var(--mono);
+  margin: 0; font: 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .05em; background: var(--surface);
+  border: 1.5px solid var(--text); box-shadow: 6px 6px 0 var(--text); transform: rotate(1.6deg);
 }
-.snapshot::before { /* the snap button */
-  content: ""; position: absolute; left: 16px; top: 50%; width: 20px; height: 20px; margin-top: -10px; border-radius: 50%;
-  background: radial-gradient(circle, var(--surface) 0 3px, var(--text) 3.5px 5px, var(--ink) 5.5px);
+.snapshot-k {
+  margin: 0; padding: 8px 12px; background: var(--text); color: var(--page); font-weight: 800; letter-spacing: .2em; text-align: center;
 }
-.snapshot::after { /* barcode */
-  content: ""; position: absolute; right: 18px; top: 12px; bottom: 12px; width: 30px;
-  background: repeating-linear-gradient(90deg, var(--text) 0 2px, transparent 2px 3px, var(--text) 3px 4px, transparent 4px 7px, var(--text) 7px 10px, transparent 10px 11px);
-  opacity: .85;
+.snapshot dl { margin: 0; }
+.snapshot dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 14px; border-bottom: 1px dashed var(--border); }
+.snapshot dt { color: var(--text-2); flex: none; }
+.snapshot dd { margin: 0; font-weight: 800; text-align: right; }
+.snapshot dl div:first-child { align-items: center; }
+.snapshot dl div:first-child dd { font-size: 22px; line-height: 1.05; color: var(--ink); text-shadow: var(--glow); letter-spacing: -0.01em; }
+.snapshot-note {
+  margin: 0; padding: 12px 18px 14px; font: 18px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink);
+  text-align: center; transform: rotate(-1.5deg);
 }
-.snapshot-k { margin: 0; font-weight: 800; text-transform: uppercase; letter-spacing: .14em; color: var(--ink); }
-.snapshot dl { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0; }
-.snapshot dl div { display: flex; gap: 6px; }
-.snapshot dt { color: var(--text-2); text-transform: uppercase; font-size: 11px; letter-spacing: .06em; }
-.snapshot dt::after { content: ":"; }
-.snapshot dd { margin: 0; font-weight: 700; }
-.snapshot-note { margin: 0; color: var(--text-2); flex-basis: 100%; font-family: var(--sans); font-size: 12.5px; }
+.snapshot-note a { display: table; margin: 10px auto 0; font-size: 14.5px; white-space: nowrap; } /* its own line, centred */
 .sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
 .sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
 .sources li::before {
@@ -241,14 +242,19 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .sources code { font: 12px var(--mono); background: var(--wash); padding: 1px 4px; }
 
 /* Decorations every entry header may use */
-.chart-head { position: relative; padding: 26px 0 8px; }
+.chart-head {
+  position: relative; padding: 26px 0 8px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 290px; column-gap: 48px; align-items: start;
+}
+.chart-head > * { grid-column: 1; justify-self: start; }
+.chart-head > .snapshot { grid-column: 2; grid-row: 1 / span 5; justify-self: stretch; margin-top: 74px; }
 .chart-head::before { /* the entry's motif, huge and outlined behind the title */
   content: attr(data-motif); position: absolute; right: -2vw; top: -10px; z-index: -1; pointer-events: none;
   font: 900 clamp(150px, 30vw, 420px)/0.8 var(--mono); letter-spacing: -0.08em; color: transparent;
   -webkit-text-stroke: 2px var(--ink-soft); white-space: nowrap;
 }
 .stamp {
-  position: absolute; right: 2%; top: 64px; margin: 0; transform: rotate(-11deg); pointer-events: none;
+  position: absolute; right: 250px; top: 20px; margin: 0; transform: rotate(-11deg); pointer-events: none; z-index: 1;
   font: 800 15px/1.1 var(--mono); text-transform: uppercase; letter-spacing: .14em; text-align: center; color: var(--ink);
   border: 3px double var(--ink); border-radius: 8px; padding: 8px 12px; opacity: .78; mix-blend-mode: multiply;
   -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
@@ -257,11 +263,16 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .stamp small { display: block; font-size: 10px; letter-spacing: .2em; margin-top: 3px; }
 :root[data-theme="dark"] .stamp { mix-blend-mode: normal; }
 .scribble {
-  font: 21px/1.15 var(--hand); color: var(--ink); margin: 10px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
+  font: 21px/1.15 var(--hand); color: var(--ink); margin: 24px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
   display: inline-block; max-width: 34ch;
 }
 .scribble::before { content: "↳ "; }
 
+@media (max-width: 960px) {
+  .chart-head { grid-template-columns: minmax(0, 1fr); }
+  .chart-head > .snapshot { grid-column: 1; grid-row: auto; justify-self: start; width: min(100%, 420px); margin: 28px 0 0 4px; transform: rotate(1deg); }
+  .stamp { right: 2%; top: 64px; }
+}
 @media (max-width: 760px) {
   .stamp { display: none; }
   .chart-head::before { top: 40px; }
@@ -270,8 +281,6 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .site-header, .site-footer { padding-left: 16px; padding-right: 16px; }
   .trace { margin: 4px -16px 0; width: calc(100% + 32px); }
   .brand::after { display: none; }
-  .snapshot { padding: 12px 18px 12px 46px; border-radius: 18px; }
-  .snapshot::after { display: none; }
   .lede { font-size: 17px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -296,48 +305,54 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
    key figures a bedside monitor, cards tractor-feed printouts, the table greenbar paper,
    the tooltip embossed label tape, and the notes a lined case-notes sheet. */
 
-/* Filters: a control panel above everything they scope */
+/* Filters: a control panel above everything they scope. Every control has the same height
+   (--ctl-h) and type; on phones the toggles share one row that scrolls sideways, the year
+   slider gets its own row, and the text labels are kept for screen readers only. */
 .filters {
+  --ctl-h: 30px;
   position: sticky; top: 0; z-index: 5;
-  display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: center;
-  margin: 30px -24px 26px; padding: 12px 24px;
+  display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center;
+  margin: 26px -24px 22px; padding: 8px 24px;
   background: color-mix(in srgb, var(--surface) 94%, transparent);
   backdrop-filter: blur(6px);
   border-top: 3px solid var(--text); border-bottom: 1.5px solid var(--text);
   box-shadow: 0 8px 18px -14px rgba(0, 0, 0, .5);
 }
 .filters::before {
-  content: "CONTROLS"; font: 800 10px/1 var(--mono); letter-spacing: .25em; color: var(--surface); background: var(--ink);
-  padding: 5px 6px; writing-mode: vertical-rl; transform: rotate(180deg); align-self: stretch; text-align: center; margin: -4px 0;
+  content: "CONTROLS"; font: 800 9px/1 var(--mono); letter-spacing: .22em; color: var(--surface); background: var(--ink);
+  padding: 4px 5px; writing-mode: vertical-rl; transform: rotate(180deg); align-self: stretch; text-align: center; margin: -2px 0;
 }
-.filter { display: flex; align-items: center; gap: 9px; }
-.filter > .label { font: 700 11px/1 var(--mono); color: var(--text-2); text-transform: uppercase; letter-spacing: .12em; }
-.seg { display: inline-flex; gap: 6px; padding: 0 0 3px; }
+.filter-row { display: contents; } /* one wrapping line with the year on desktop; its own row on phones */
+.filter { display: flex; align-items: center; gap: 7px; }
+.filter > .label { font: 700 10.5px/1 var(--mono); color: var(--text-2); text-transform: uppercase; letter-spacing: .1em; white-space: nowrap; }
+.seg { display: inline-flex; gap: 4px; padding: 0 0 2px; }
 .seg button {
-  border: 1.5px solid var(--text); background: var(--surface); color: var(--text); font: 600 12px/1 var(--mono);
-  text-transform: uppercase; letter-spacing: .04em; padding: 7px 10px; border-radius: 4px; cursor: pointer;
-  box-shadow: 0 3px 0 var(--text); transition: transform .06s, box-shadow .06s, background .1s;
+  height: var(--ctl-h, 30px); display: inline-flex; align-items: center; white-space: nowrap;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--text); font: 600 11.5px/1 var(--mono);
+  text-transform: uppercase; letter-spacing: .03em; padding: 0 9px; border-radius: 4px; cursor: pointer;
+  box-shadow: 0 2px 0 var(--text); transition: transform .06s, box-shadow .06s, background .1s;
 }
 .seg button:hover { background: var(--wash); }
 .seg button[aria-pressed="true"] {
-  background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(3px); box-shadow: 0 0 0 var(--text);
+  background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(2px); box-shadow: 0 0 0 var(--text);
 }
 select {
-  font: 700 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--text); background: var(--surface);
-  border: 1.5px solid var(--text); border-radius: 0; padding: 7px 10px; box-shadow: 3px 3px 0 var(--ink); cursor: pointer;
+  height: var(--ctl-h, 30px); max-width: 220px; text-overflow: ellipsis;
+  font: 700 11.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--text); background: var(--surface);
+  border: 1.5px solid var(--text); border-radius: 0; padding: 0 8px; box-shadow: 2px 2px 0 var(--ink); cursor: pointer;
 }
-.year { flex: 1 1 260px; min-width: 220px; }
-.year input { flex: 1; accent-color: var(--ink); min-width: 120px; }
+.year { flex: 1 1 240px; min-width: 200px; }
+.year input { flex: 1; accent-color: var(--ink); min-width: 100px; margin: 0; }
 .year output {
-  font: 800 20px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 3.2em; color: var(--ink); text-shadow: var(--glow);
+  font: 800 16px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 2.8em; color: var(--ink); text-shadow: var(--glow);
 }
 .icon-btn {
-  width: 34px; height: 34px; flex: none; display: grid; place-items: center; cursor: pointer;
-  border: 2px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 3px 0 var(--text);
+  width: var(--ctl-h, 30px); height: var(--ctl-h, 30px); flex: none; display: grid; place-items: center; cursor: pointer;
+  border: 1.5px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 2px 0 var(--text);
 }
 .icon-btn:hover { filter: brightness(1.1); }
-.icon-btn:active { transform: translateY(3px); box-shadow: none; }
-.icon-btn svg { width: 13px; height: 13px; fill: currentColor; }
+.icon-btn:active { transform: translateY(2px); box-shadow: none; }
+.icon-btn svg { width: 11px; height: 11px; fill: currentColor; }
 button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 
 /* Key figures: a bedside monitor with four channels, in both modes */
@@ -479,8 +494,19 @@ td button:hover { color: var(--ink); }
 }
 @media (max-width: 600px) {
   main { padding: 20px 16px 40px; }
-  .filters { margin: 20px -16px 18px; padding: 10px 16px; gap: 10px 14px; }
+  .filters { --ctl-h: 28px; flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 6px; margin: 18px -16px 16px; padding: 6px 0; }
   .filters::before { display: none; }
+  .filter-row {
+    display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 2px; scrollbar-width: none; overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
+            mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .filter { flex: none; }
+  .filter > .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .year { flex: none; min-width: 0; padding: 0 16px; }
+  .seg button { padding: 0 8px; font-size: 11px; }
+  select { max-width: 150px; font-size: 11px; }
   .tile .v { font-size: 24px; }
   .tiles { border-width: 6px; border-radius: 12px; }
   .card { padding: 18px 26px; }
@@ -636,18 +662,31 @@ td button:hover { color: var(--ink); }
     <p class="eyebrow"><a href="../#entries">← Entries</a>Life expectancy</p>
     <p class="stamp" aria-hidden="true">Vital records<small>region by region</small></p>
     <h1>Where in Europe do people live longest<span class="qm">?</span></h1>
-    <p class="lede" id="lede">In 2023, a baby born in <strong>Comunidad de Madrid (Spain)</strong> could expect to live <strong>86.1 years</strong>, 12.2 years longer than one born in <strong>Severozapaden (Bulgaria)</strong>. That is the spread across 242 regions in the EU-27. In Germany it ranges from 79.2 in Sachsen-Anhalt to 82.8 in Tübingen.</p>
+    <p class="lede" id="lede"><span class="thought">In 2023, a baby born in <strong>Comunidad de Madrid (Spain)</strong> could expect to live <strong>86.1 years</strong>, 12.2 years longer than one born in <strong>Severozapaden (Bulgaria)</strong>.</span> <span class="thought">That is the spread across 242 regions in the EU-27.</span> <span class="thought">In Germany it ranges from 79.2 in Sachsen-Anhalt to 82.8 in Tübingen.</span></p>
     <p class="scribble" aria-hidden="true">Hover the map: every region has its own number.</p>
     <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Data retrieved</dt><dd><time datetime="2026-10-26">26 Oct 2026</time></dd></div><div><dt>Source last updated</dt><dd><time datetime="2025-06-05">5 Jun 2025</time> · Eurostat</dd></div><div><dt>Covers</dt><dd>2002–2023 · 292 regions</dd></div></dl><p class="snapshot-note">This entry stays as it is until its data is explicitly updated. <a href="#sources">Sources and notes</a></p></aside>
   </header>
 
   <div class="filters" role="group" aria-label="Filters">
-    <div class="filter">
-      <span class="label" id="sex-label">Sex</span>
-      <div class="seg" id="sex" role="group" aria-labelledby="sex-label">
-        <button type="button" data-v="T">Total</button>
-        <button type="button" data-v="F">Women</button>
-        <button type="button" data-v="M">Men</button>
+    <div class="filter-row">
+      <div class="filter">
+        <span class="label" id="sex-label">Sex</span>
+        <div class="seg" id="sex" role="group" aria-labelledby="sex-label">
+          <button type="button" data-v="T">Total</button>
+          <button type="button" data-v="F">Women</button>
+          <button type="button" data-v="M">Men</button>
+        </div>
+      </div>
+      <div class="filter">
+        <label class="label" for="country">Country</label>
+        <select id="country"></select>
+      </div>
+      <div class="filter">
+        <span class="label" id="scope-label">Compare</span>
+        <div class="seg" id="scope" role="group" aria-labelledby="scope-label">
+          <button type="button" data-v="eu">EU-27</button>
+          <button type="button" data-v="all">All of Europe</button>
+        </div>
       </div>
     </div>
     <div class="filter year">
@@ -655,17 +694,6 @@ td button:hover { color: var(--ink); }
       <span class="label">Year</span>
       <input type="range" id="year" aria-label="Year">
       <output id="year-out" for="year"></output>
-    </div>
-    <div class="filter">
-      <label class="label" for="country">Country</label>
-      <select id="country"></select>
-    </div>
-    <div class="filter">
-      <span class="label" id="scope-label">Compare</span>
-      <div class="seg" id="scope" role="group" aria-labelledby="scope-label">
-        <button type="button" data-v="eu">EU-27</button>
-        <button type="button" data-v="all">All of Europe</button>
-      </div>
     </div>
   </div>
 
@@ -998,16 +1026,23 @@ function renderTiles() {
   lede.replaceChildren();
   if (!top) return;
   const baby = { T: "a baby", F: "a girl", M: "a boy" }[state.sex];
-  const b = t => html("strong", "", t, lede);
-  lede.append(`In ${year}, ${baby} born in `);
+  // One span per thought, so each reads on its own line; a space between them keeps the text flowing.
+  let at = lede;
+  const thought = () => { if (at !== lede) lede.append(" "); at = html("span", "thought", null, lede); };
+  const b = t => html("strong", "", t, at);
+  thought();
+  at.append(`In ${year}, ${baby} born in `);
   b(`${top.name} (${countryName(top.c)})`);
-  lede.append(" could expect to live ");
+  at.append(" could expect to live ");
   b(`${fmt(val(top))} years`);
-  lede.append(`, ${fmt(val(top) - val(bottom))} years longer than one born in `);
+  at.append(`, ${fmt(val(top) - val(bottom))} years longer than one born in `);
   b(`${bottom.name} (${countryName(bottom.c)})`);
-  lede.append(`. That is the spread across ${ranked.length} regions in ${scopeName()}.`);
+  at.append(".");
+  thought();
+  at.append(`That is the spread across ${ranked.length} regions in ${scopeName()}.`);
   if (own.length > 1) {
-    lede.append(` In ${countryName(cc)} it ranges from ${fmt(val(own[own.length - 1]))} in ${own[own.length - 1].name} to ${fmt(val(own[0]))} in ${own[0].name}.`);
+    thought();
+    at.append(`In ${countryName(cc)} it ranges from ${fmt(val(own[own.length - 1]))} in ${own[own.length - 1].name} to ${fmt(val(own[0]))} in ${own[0].name}.`);
   }
 }
 
