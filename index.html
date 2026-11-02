@@ -123,7 +123,7 @@ body {
   overflow-x: clip;
 }
 ::selection { background: var(--hl); color: var(--text); }
-main { max-width: 1240px; margin: 0 auto; padding: 8px 24px 48px; position: relative; }
+main { max-width: 1440px; margin: 0 auto; padding: 8px 24px 48px; position: relative; }
 h1 {
   font-family: var(--mono); font-weight: 800; text-transform: uppercase;
   font-size: clamp(30px, 5.4vw, 70px); line-height: .98; letter-spacing: -0.055em;
@@ -135,7 +135,7 @@ h1 .qm {
 }
 h2 { font-size: 16px; margin: 0; }
 .eyebrow {
-  margin: 0; display: inline-flex; gap: 0; font: 600 11.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em;
+  margin: 0; display: inline-flex; gap: 0; font: 600 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em;
   border: 1.5px solid var(--text); background: var(--surface);
 }
 .eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
@@ -151,13 +151,13 @@ h2 { font-size: 16px; margin: 0; }
 .lede .thought + .thought { margin-top: .5em; }
 .lede .thought::before { content: ""; position: absolute; left: 0; top: .74em; width: .72em; height: 2px; background: var(--ink); }
 .muted { color: var(--muted); }
-.small { font-size: 13px; }
+.small { font-size: 14px; }
 .num { font-variant-numeric: tabular-nums; }
 a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3px; }
 
 /* Site header: brand, nav, theme switch, and a live heart trace across the page */
 .site-header {
-  max-width: 1240px; margin: 0 auto; padding: 18px 24px 0; position: relative;
+  max-width: 1440px; margin: 0 auto; padding: 18px 24px 0; position: relative;
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
 }
 .brand {
@@ -169,17 +169,17 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   box-shadow: 0 0 0 3px var(--mark-soft); animation: hv-beat 1.1s infinite;
 }
 .brand::after {
-  content: "REC · LIVE DATA"; font: 600 9.5px/1 var(--mono); letter-spacing: .16em; color: var(--alert);
+  content: "REC · LIVE DATA"; font: 600 10.5px/1 var(--mono); letter-spacing: .16em; color: var(--alert);
   border: 1px solid var(--alert); padding: 3px 5px; border-radius: 3px;
 }
 @keyframes hv-beat { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.45); } 24% { transform: scale(.95); } 36% { transform: scale(1.2); } }
-.site-header nav { display: flex; gap: 6px; font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; align-items: center; }
+.site-header nav { display: flex; gap: 6px; font: 600 13px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; align-items: center; }
 .site-header nav a { color: var(--text); text-decoration: none; padding: 7px 9px; border: 1.5px solid transparent; }
 .site-header nav a::before { content: "["; color: var(--ink); }
 .site-header nav a::after { content: "]"; color: var(--ink); }
 .site-header nav a:hover { border-color: var(--text); background: var(--surface); }
 .theme-switch {
-  font: 600 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
+  font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
   color: var(--text); background: var(--surface); border: 1.5px solid var(--text); padding: 6px 8px; margin-left: 6px;
   box-shadow: 2px 2px 0 var(--text);
 }
@@ -203,7 +203,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 @keyframes hv-drip { to { transform: scaleY(1); } }
 
 .site-footer {
-  max-width: 1240px; margin: 40px auto 0; padding: 26px 24px 56px; font: 12px/1.7 var(--mono); color: var(--text-2);
+  max-width: 1440px; margin: 40px auto 0; padding: 26px 24px 56px; font: 13px/1.7 var(--mono); color: var(--text-2);
   text-transform: uppercase; letter-spacing: .06em; position: relative;
 }
 .site-footer::before {
@@ -216,7 +216,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 /* Data snapshot: an admission-style sheet beside an entry's title (below it on narrow screens),
    like the home page's admission sheet: a title bar, ruled rows, one big figure, a handwritten note. */
 .snapshot {
-  margin: 0; font: 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .05em; background: var(--surface);
+  margin: 0; font: 13px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .05em; background: var(--surface);
   border: 1.5px solid var(--text); box-shadow: 6px 6px 0 var(--text); transform: rotate(1.6deg);
 }
 .snapshot-k {
@@ -236,15 +236,15 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
 .sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
 .sources li::before {
-  content: "Rx" counter(rx); position: absolute; left: 0; top: 1px; font: 700 12px/1 var(--mono); color: var(--ink);
+  content: "Rx" counter(rx); position: absolute; left: 0; top: 1px; font: 700 13px/1 var(--mono); color: var(--ink);
   border: 1.5px solid var(--ink); padding: 3px 4px; border-radius: 3px;
 }
-.sources code { font: 12px var(--mono); background: var(--wash); padding: 1px 4px; }
+.sources code { font: 14px var(--mono); background: var(--wash); padding: 1px 4px; }
 
 /* Decorations every entry header may use */
 .chart-head {
   position: relative; padding: 26px 0 8px;
-  display: grid; grid-template-columns: minmax(0, 1fr) 290px; column-gap: 48px; align-items: start;
+  display: grid; grid-template-columns: minmax(0, 1fr) 320px; column-gap: 48px; align-items: start;
 }
 .chart-head > * { grid-column: 1; justify-self: start; }
 .chart-head > .snapshot { grid-column: 2; grid-row: 1 / span 5; justify-self: stretch; margin-top: 74px; }
@@ -254,13 +254,13 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   -webkit-text-stroke: 2px var(--ink-soft); white-space: nowrap;
 }
 .stamp {
-  position: absolute; right: 250px; top: 20px; margin: 0; transform: rotate(-11deg); pointer-events: none; z-index: 1;
+  position: absolute; right: 280px; top: 20px; margin: 0; transform: rotate(-11deg); pointer-events: none; z-index: 1;
   font: 800 15px/1.1 var(--mono); text-transform: uppercase; letter-spacing: .14em; text-align: center; color: var(--ink);
   border: 3px double var(--ink); border-radius: 8px; padding: 8px 12px; opacity: .78; mix-blend-mode: multiply;
   -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
           mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
 }
-.stamp small { display: block; font-size: 10px; letter-spacing: .2em; margin-top: 3px; }
+.stamp small { display: block; font-size: 11px; letter-spacing: .2em; margin-top: 3px; }
 :root[data-theme="dark"] .stamp { mix-blend-mode: normal; }
 .scribble {
   font: 21px/1.15 var(--hand); color: var(--ink); margin: 24px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
@@ -311,7 +311,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .hero h1 em { font: italic 400 1em/1 var(--serif); letter-spacing: -0.03em; text-transform: none; color: var(--ink); }
 .hero .lede { font-size: 20px; max-width: 46ch; }
 .admission {
-  margin: 0; font: 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .06em; background: var(--surface);
+  margin: 0; font: 13px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .06em; background: var(--surface);
   border: 1.5px solid var(--text); box-shadow: 6px 6px 0 var(--text); transform: rotate(2.2deg);
 }
 .admission dl { margin: 0; }
@@ -327,11 +327,11 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 
 /* Entries: a triage board, one bed per question */
 .section-head { display: flex; align-items: center; gap: 16px; margin: 30px 0 0; padding: 10px 0; border-top: 6px solid var(--text); border-bottom: 1.5px solid var(--text); }
-.section-head h2 { font: 800 13px/1 var(--mono); text-transform: uppercase; letter-spacing: .3em; }
-.section-head .cols { margin-left: auto; display: flex; gap: 40px; font: 600 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .14em; color: var(--text-2); }
+.section-head h2 { font: 800 14px/1 var(--mono); text-transform: uppercase; letter-spacing: .3em; }
+.section-head .cols { margin-left: auto; display: flex; gap: 40px; font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .14em; color: var(--text-2); }
 .entries { display: flex; flex-direction: column; }
 .entry-card {
-  display: grid; grid-template-columns: 120px minmax(0, 1fr) 240px; gap: 0 34px; align-items: center; position: relative;
+  display: grid; grid-template-columns: 120px minmax(0, 1fr) 280px; gap: 0 34px; align-items: center; position: relative;
   margin: 0 -24px; padding: 26px 24px; /* the hover colour reaches past the content, so nothing touches its edge */
   text-decoration: none; border-bottom: 1.5px dashed var(--text); transition: background .15s, color .15s;
 }
@@ -348,10 +348,10 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .entry-body h3 { margin: 0; font: 800 clamp(22px, 3vw, 36px)/1.02 var(--mono); text-transform: uppercase; letter-spacing: -0.045em; }
 .entry-body p { margin: 0; color: var(--text-2); font: 16px/1.45 var(--serif); max-width: 62ch; }
 .entry-body .topic {
-  align-self: flex-start; font: 800 11px/1 var(--mono) !important; text-transform: uppercase; letter-spacing: .16em;
+  align-self: flex-start; font: 800 12px/1 var(--mono) !important; text-transform: uppercase; letter-spacing: .16em;
   color: var(--on-ink) !important; background: var(--ink); padding: 5px 8px; transform: rotate(-1.5deg);
 }
-.entry-body .entry-meta { font: 11.5px/1.5 var(--mono) !important; text-transform: uppercase; letter-spacing: .05em; }
+.entry-body .entry-meta { font: 12.5px/1.5 var(--mono) !important; text-transform: uppercase; letter-spacing: .05em; }
 .thumb {
   grid-column: 3; grid-row: 1; width: 100%; overflow: hidden;
   aspect-ratio: 4 / 3; padding: 12px; background: var(--screen); border: 8px solid var(--bezel); border-radius: 14px; position: relative;
@@ -377,7 +377,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .thumb .ring { stroke: #020a12; stroke-width: 2; }
 .thumb .ret { fill: none; stroke: #ff6b86; stroke-width: 2.5; }
 .admit {
-  grid-column: 3; grid-row: 2; justify-self: end; margin-top: 12px; font: 800 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .16em; color: var(--ink);
+  grid-column: 3; grid-row: 2; justify-self: end; margin-top: 12px; font: 800 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .16em; color: var(--ink);
   opacity: 0; transition: opacity .15s;
 }
 .entry-card:hover .admit, .entry-card:focus-visible .admit { opacity: 1; color: var(--flip); }
@@ -387,7 +387,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 }
 .coming strong { display: block; font: 800 20px/1.1 var(--mono); text-transform: uppercase; letter-spacing: -0.03em; color: var(--text); margin-bottom: 4px; }
 .coming::before {
-  content: "Next"; font: 800 13px/1 var(--mono); text-transform: uppercase; letter-spacing: .2em; text-align: center;
+  content: "Next"; font: 800 14px/1 var(--mono); text-transform: uppercase; letter-spacing: .2em; text-align: center;
   border: 2px dashed var(--text-2); border-radius: 50%; width: 92px; height: 92px; display: grid; place-items: center; justify-self: center;
   animation: hv-spin 18s linear infinite;
 }
@@ -399,8 +399,8 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   box-shadow: var(--paper-shadow); transform: rotate(-1.2deg); border-top: 14px solid var(--ink);
 }
 .about::before { content: "℞"; position: absolute; left: 26px; top: 18px; font: 400 64px/1 var(--serif); color: var(--ink); }
-.about h2 { font: 800 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .3em; margin-bottom: 14px; color: var(--ink); }
-.about p { color: var(--text-2); margin: 0 0 12px; font: 16px/1.55 var(--serif); }
+.about h2 { font: 800 14px/1 var(--mono); text-transform: uppercase; letter-spacing: .3em; margin-bottom: 14px; color: var(--ink); }
+.about p { color: var(--text-2); margin: 0 0 12px; font: 17px/1.55 var(--serif); }
 .about .signed { font: 30px/1 var(--hand); color: var(--ink); text-align: right; margin: 18px 0 0; transform: rotate(-4deg); }
 
 @media (max-width: 900px) {
@@ -413,7 +413,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .admit { grid-column: 2; grid-row: auto; justify-self: start; opacity: 1; }
   .section-head .cols { display: none; }
   .coming { grid-template-columns: 70px 1fr; }
-  .coming::before { width: 64px; height: 64px; font-size: 11px; }
+  .coming::before { width: 64px; height: 64px; font-size: 12px; }
 }
 @media (max-width: 600px) {
   .about { padding: 80px 22px 26px; transform: none; }
@@ -432,7 +432,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   <section class="hero">
     <div>
       <p class="eyebrow"><a href="#entries">Admitting</a> European health data</p>
-      <h1><span class="kicker">Health across the EU,</span> One question <em>at a time.</em></h1>
+      <h1><span class="kicker">Health across the EU,</span> One question<br> <em>at a time.</em></h1>
       <p class="lede">healthviz is a playground for exploring and presenting open health data from Europe. Each entry takes public data and turns one question into an interactive visualisation.</p>
     </div>
     <div class="admission" role="group" aria-labelledby="admission-head">
