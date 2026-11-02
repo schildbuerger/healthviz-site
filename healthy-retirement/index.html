@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>When does Europe retire, and how many healthy years are left at 65? · healthviz</title>
+<meta name="description" content="Healthy years at 65 and the average pension age in every EU country, for women and men: an interactive chart with Eurostat data.">
+<link rel="canonical" href="https://healthviz.eu/healthy-retirement/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="healthviz: new entries" href="https://healthviz.eu/feed.xml">
+<meta name="theme-color" content="#fbeee8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#030605" media="(prefers-color-scheme: dark)">
+<script>try{var t=localStorage.getItem('hv-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="healthviz">
+<meta property="og:title" content="When does Europe retire, and how many healthy years are left at 65? · healthviz">
+<meta property="og:description" content="Healthy years at 65 and the average pension age in every EU country, for women and men: an interactive chart with Eurostat data.">
+<meta property="og:url" content="https://healthviz.eu/healthy-retirement/">
+<meta property="og:image" content="https://healthviz.eu/healthy-retirement/og.png?v=9793103467">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="When does Europe retire, and how many healthy years are left at 65? A healthviz chart of the data on a monitor, on ECG paper.">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Dataset", "name": "When does Europe retire, and how many healthy years are left at 65?", "description": "Healthy years at 65 and the average pension age in every EU country, for women and men: an interactive chart with Eurostat data.", "url": "https://healthviz.eu/healthy-retirement/", "keywords": ["healthy life years", "life expectancy at 65", "retirement age", "pension age", "healthy ageing", "Europe", "EU", "Eurostat"], "variableMeasured": ["Healthy life years at 65", "Life expectancy at 65", "Average age at which the person started receiving an old-age pension"], "temporalCoverage": "2023/2024", "spatialCoverage": {"@type": "Place", "name": "Europe: EU-27 and other European countries"}, "license": "https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree": true, "datePublished": "2026-11-02", "dateModified": "2026-10-27", "isBasedOn": ["https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table", "https://ec.europa.eu/eurostat/databrowser/view/lfso_23pens03/default/table"], "creditText": "Eurostat (hlth_hlye, lfso_23pens03)", "distribution": {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://healthviz.eu/healthy-retirement/data.csv"}, "sourceOrganization": {"@type": "Organization", "name": "Eurostat", "url": "https://ec.europa.eu/eurostat"}, "@id": "https://healthviz.eu/healthy-retirement/#dataset"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "healthviz", "item": "https://healthviz.eu/"}, {"@type": "ListItem", "position": 2, "name": "When does Europe retire, and how many healthy years are left at 65?", "item": "https://healthviz.eu/healthy-retirement/"}]}]}</script>
+<style>
+/* Shared by every healthviz page. Pasted inline at build time.
+   Design: "the patient chart", tilted towards the EU's blue and gold. In light mode every
+   page is a printout on ECG paper (red millimetre grid, tractor-feed paper) written on in
+   blue ballpoint with a gold highlighter; in dark mode it is a bedside monitor (phosphor
+   green on navy black, gold accents, scanlines). --ink is the room's accent (blue / gold);
+   --mark marks the selection inside charts (red in both, apart from the blue data). Data colours (--series-*, --seq-*)
+   are the validated palette and stay the same in both: only the room around them changes. */
+:root {
+  color-scheme: light;
+  --page: #f9f0e9;
+  --surface: #fffdf7;
+  --text: #141a3a;
+  --text-2: #434865;
+  --muted: #68647e;
+  --grid: #f1d3cc;
+  --axis: #d6a79e;
+  --border: rgba(20, 26, 58, 0.16);
+  --land: #efe7e0;
+  --out: #ddd4cb;
+  --hatch: #c4b8ae;
+  --series-1: #2d58d0;
+  --series-2: #eb6834;
+  --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4;
+  --wash: rgba(29, 63, 154, 0.07);
+  --seq-1: #8aa5ee; --seq-2: #6688e6; --seq-3: #4a6dda;
+  --seq-4: #3456c4; --seq-5: #22409e; --seq-6: #142b70;
+  /* The room: ink, paper, grid */
+  --ink: #1d3f9a;
+  --ink-soft: rgba(29, 63, 154, 0.14);
+  --on-ink: #fff;
+  --hl: rgba(255, 204, 0, 0.5);
+  --mark: #d0283a; --mark-soft: rgba(208, 40, 58, 0.12); --alert: #d0283a; --on-mark: #fff;
+  --flip: #ffcc00; /* accent on an inverted (text-coloured) background */
+  --ecg-minor: rgba(222, 72, 72, 0.10);
+  --ecg-major: rgba(222, 72, 72, 0.22);
+  --hole: #f3ddd5;
+  --bar-paper: rgba(27, 140, 80, 0.07);
+  --glow: none;
+  --paper-shadow: 0 1px 0 rgba(27, 22, 38, .06), 0 14px 30px -18px rgba(90, 20, 30, .35);
+  /* The monitor strip (key figures) is a screen in both modes */
+  --screen: #020a12; --bezel: #16213f;
+  --ch-1: #3dff8a; --ch-2: #ffd23d; --ch-3: #3fd6ff; --ch-4: #ff6b86;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --serif: ui-serif, "New York", "Iowan Old Style", Charter, Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hand: "Noteworthy", "Bradley Hand", "Segoe Print", "Ink Free", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
+    --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+    --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+    --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+    --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+    --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+    --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+    --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+    --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
+    --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
+    --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
+    --glow: 0 0 10px rgba(80, 255, 150, 0.45);
+    --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
+    --screen: #01040c; --bezel: #101a36;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
+  --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+  --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+  --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+  --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+  --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+  --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+  --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+  --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
+  --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
+  --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
+  --glow: 0 0 10px rgba(80, 255, 150, 0.45);
+  --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
+  --screen: #01040c; --bezel: #101a36;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--text); background-color: var(--page);
+  /* ECG paper: 1 mm minor lines, 5 mm major lines */
+  background-image:
+    linear-gradient(var(--ecg-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ecg-major) 1px, transparent 1px),
+    linear-gradient(var(--ecg-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ecg-minor) 1px, transparent 1px);
+  background-size: 30px 30px, 30px 30px, 6px 6px, 6px 6px;
+  font: 15px/1.5 var(--sans);
+  overflow-x: clip;
+}
+::selection { background: var(--hl); color: var(--text); }
+main { max-width: 1240px; margin: 0 auto; padding: 8px 24px 48px; position: relative; }
+h1 {
+  font-family: var(--mono); font-weight: 800; text-transform: uppercase;
+  font-size: clamp(30px, 5.4vw, 70px); line-height: .98; letter-spacing: -0.055em;
+  margin: 14px 0 22px; text-shadow: var(--glow); max-width: 17ch; text-wrap: balance;
+}
+h1 .qm {
+  color: var(--ink); display: inline-block; font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: 1.5em; line-height: 0; transform: rotate(10deg) translateY(.06em); margin-left: .04em; letter-spacing: 0;
+}
+h2 { font-size: 16px; margin: 0; }
+.eyebrow {
+  margin: 0; display: inline-flex; gap: 0; font: 600 11.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em;
+  border: 1.5px solid var(--text); background: var(--surface);
+}
+.eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
+.eyebrow a:hover { background: var(--ink); color: var(--on-ink); }
+.eyebrow { padding-right: 10px; align-items: center; }
+.lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); }
+.lede strong {
+  color: var(--text); font-weight: 700;
+  background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 94%, transparent 94%);
+}
+/* Opening sentences: one thought per line, each marked like an entry in a chart */
+.lede .thought { display: block; position: relative; padding-left: 1.3em; }
+.lede .thought + .thought { margin-top: .5em; }
+.lede .thought::before { content: ""; position: absolute; left: 0; top: .74em; width: .72em; height: 2px; background: var(--ink); }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.num { font-variant-numeric: tabular-nums; }
+a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3px; }
+
+/* Site header: brand, nav, theme switch, and a live heart trace across the page */
+.site-header {
+  max-width: 1240px; margin: 0 auto; padding: 18px 24px 0; position: relative;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.brand {
+  font: 800 19px/1 var(--mono); letter-spacing: -0.04em; text-decoration: none; text-transform: lowercase;
+  display: inline-flex; align-items: center; gap: 10px; text-shadow: var(--glow);
+}
+.brand::before {
+  content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--alert);
+  box-shadow: 0 0 0 3px var(--mark-soft); animation: hv-beat 1.1s infinite;
+}
+.brand::after {
+  content: "REC · LIVE DATA"; font: 600 9.5px/1 var(--mono); letter-spacing: .16em; color: var(--alert);
+  border: 1px solid var(--alert); padding: 3px 5px; border-radius: 3px;
+}
+@keyframes hv-beat { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.45); } 24% { transform: scale(.95); } 36% { transform: scale(1.2); } }
+.site-header nav { display: flex; gap: 6px; font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; align-items: center; }
+.site-header nav a { color: var(--text); text-decoration: none; padding: 7px 9px; border: 1.5px solid transparent; }
+.site-header nav a::before { content: "["; color: var(--ink); }
+.site-header nav a::after { content: "]"; color: var(--ink); }
+.site-header nav a:hover { border-color: var(--text); background: var(--surface); }
+.theme-switch {
+  font: 600 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
+  color: var(--text); background: var(--surface); border: 1.5px solid var(--text); padding: 6px 8px; margin-left: 6px;
+  box-shadow: 2px 2px 0 var(--text);
+}
+.theme-switch:active { transform: translate(2px, 2px); box-shadow: none; }
+.theme-switch .t-dark { display: none; }
+:root[data-theme="dark"] .theme-switch .t-dark { display: inline; }
+:root[data-theme="dark"] .theme-switch .t-light { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-switch .t-dark { display: inline; }
+  :root:not([data-theme="light"]) .theme-switch .t-light { display: none; }
+}
+.trace { flex-basis: 100%; height: 46px; margin: 4px -24px 0; width: calc(100% + 48px); display: block; overflow: visible; }
+.trace path { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke;
+  stroke-dasharray: 100 100; animation: hv-sweep 7s linear infinite; filter: drop-shadow(var(--glow-f, 0 0 0 transparent)); }
+:root[data-theme="dark"] .trace path { stroke: #3dff8a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .trace path { stroke: #3dff8a; } }
+@keyframes hv-sweep { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -100; } }
+/* Reading progress: an IV line down the right edge, filling as you scroll */
+.drip { position: fixed; top: 0; right: 0; width: 5px; height: 100vh; z-index: 30; pointer-events: none;
+  background: var(--ink); transform-origin: top; transform: scaleY(0); animation: hv-drip linear both; animation-timeline: scroll(root); }
+@keyframes hv-drip { to { transform: scaleY(1); } }
+
+.site-footer {
+  max-width: 1240px; margin: 40px auto 0; padding: 26px 24px 56px; font: 12px/1.7 var(--mono); color: var(--text-2);
+  text-transform: uppercase; letter-spacing: .06em; position: relative;
+}
+.site-footer::before {
+  content: "— — — end of report — — —"; display: block; text-align: center; letter-spacing: .3em; color: var(--ink); margin-bottom: 22px;
+}
+.site-footer p { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; }
+.site-footer .sig { font: 26px/1 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink); transform: rotate(-4deg);
+  display: inline-block; border-bottom: 1px solid var(--text-2); padding: 0 18px 4px 4px; margin-right: 10px; }
+
+/* Data snapshot: an admission-style sheet beside an entry's title (below it on narrow screens),
+   like the home page's admission sheet: a title bar, ruled rows, one big figure, a handwritten note. */
+.snapshot {
+  margin: 0; font: 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .05em; background: var(--surface);
+  border: 1.5px solid var(--text); box-shadow: 6px 6px 0 var(--text); transform: rotate(1.6deg);
+}
+.snapshot-k {
+  margin: 0; padding: 8px 12px; background: var(--text); color: var(--page); font-weight: 800; letter-spacing: .2em; text-align: center;
+}
+.snapshot dl { margin: 0; }
+.snapshot dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 14px; border-bottom: 1px dashed var(--border); }
+.snapshot dt { color: var(--text-2); flex: none; }
+.snapshot dd { margin: 0; font-weight: 800; text-align: right; }
+.snapshot dl div:first-child { align-items: center; }
+.snapshot dl div:first-child dd { font-size: 22px; line-height: 1.05; color: var(--ink); text-shadow: var(--glow); letter-spacing: -0.01em; }
+.snapshot-note {
+  margin: 0; padding: 12px 18px 14px; font: 18px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink);
+  text-align: center; transform: rotate(-1.5deg);
+}
+.snapshot-note a { display: table; margin: 10px auto 0; font-size: 14.5px; white-space: nowrap; } /* its own line, centred */
+.sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
+.sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
+.sources li::before {
+  content: "Rx" counter(rx); position: absolute; left: 0; top: 1px; font: 700 12px/1 var(--mono); color: var(--ink);
+  border: 1.5px solid var(--ink); padding: 3px 4px; border-radius: 3px;
+}
+.sources code { font: 12px var(--mono); background: var(--wash); padding: 1px 4px; }
+
+/* Decorations every entry header may use */
+.chart-head {
+  position: relative; padding: 26px 0 8px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 290px; column-gap: 48px; align-items: start;
+}
+.chart-head > * { grid-column: 1; justify-self: start; }
+.chart-head > .snapshot { grid-column: 2; grid-row: 1 / span 5; justify-self: stretch; margin-top: 74px; }
+.chart-head::before { /* the entry's motif, huge and outlined behind the title */
+  content: attr(data-motif); position: absolute; right: -2vw; top: -10px; z-index: -1; pointer-events: none;
+  font: 900 clamp(150px, 30vw, 420px)/0.8 var(--mono); letter-spacing: -0.08em; color: transparent;
+  -webkit-text-stroke: 2px var(--ink-soft); white-space: nowrap;
+}
+.stamp {
+  position: absolute; right: 250px; top: 20px; margin: 0; transform: rotate(-11deg); pointer-events: none; z-index: 1;
+  font: 800 15px/1.1 var(--mono); text-transform: uppercase; letter-spacing: .14em; text-align: center; color: var(--ink);
+  border: 3px double var(--ink); border-radius: 8px; padding: 8px 12px; opacity: .78; mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
+          mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
+}
+.stamp small { display: block; font-size: 10px; letter-spacing: .2em; margin-top: 3px; }
+:root[data-theme="dark"] .stamp { mix-blend-mode: normal; }
+.scribble {
+  font: 21px/1.15 var(--hand); color: var(--ink); margin: 24px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
+  display: inline-block; max-width: 34ch;
+}
+.scribble::before { content: "↳ "; }
+
+@media (max-width: 960px) {
+  .chart-head { grid-template-columns: minmax(0, 1fr); }
+  .chart-head > .snapshot { grid-column: 1; grid-row: auto; justify-self: start; width: min(100%, 420px); margin: 28px 0 0 4px; transform: rotate(1deg); }
+  .stamp { right: 2%; top: 64px; }
+}
+@media (max-width: 760px) {
+  .stamp { display: none; }
+  .chart-head::before { top: 40px; }
+}
+@media (max-width: 600px) {
+  .site-header, .site-footer { padding-left: 16px; padding-right: 16px; }
+  .trace { margin: 4px -16px 0; width: calc(100% + 32px); }
+  .brand::after { display: none; }
+  .lede { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand::before, .trace path { animation: none; }
+  .trace path { stroke-dasharray: none; }
+}
+/* Monitor mode: scanlines over everything */
+:root[data-theme="dark"] body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
+  }
+  :root:not([data-theme="light"]) .stamp { mix-blend-mode: normal; }
+}
+
+/* Components shared by entry pages: filters, tiles, cards, chart axes, table, tooltip, notes.
+   Pasted inline at build time, after shell.css. Filters are a control panel of physical keys,
+   key figures a bedside monitor, cards tractor-feed printouts, the table greenbar paper,
+   the tooltip embossed label tape, and the notes a lined case-notes sheet. */
+
+/* Filters: a control panel above everything they scope. Every control has the same height
+   (--ctl-h) and type; on phones the toggles share one row that scrolls sideways, the year
+   slider gets its own row, and the text labels are kept for screen readers only. */
+.filters {
+  --ctl-h: 30px;
+  position: sticky; top: 0; z-index: 5;
+  display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center;
+  margin: 26px -24px 22px; padding: 8px 24px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  backdrop-filter: blur(6px);
+  border-top: 3px solid var(--text); border-bottom: 1.5px solid var(--text);
+  box-shadow: 0 8px 18px -14px rgba(0, 0, 0, .5);
+}
+.filters::before {
+  content: "CONTROLS"; font: 800 9px/1 var(--mono); letter-spacing: .22em; color: var(--surface); background: var(--ink);
+  padding: 4px 5px; writing-mode: vertical-rl; transform: rotate(180deg); align-self: stretch; text-align: center; margin: -2px 0;
+}
+.filter-row { display: contents; } /* one wrapping line with the year on desktop; its own row on phones */
+.filter { display: flex; align-items: center; gap: 7px; }
+.filter > .label { font: 700 10.5px/1 var(--mono); color: var(--text-2); text-transform: uppercase; letter-spacing: .1em; white-space: nowrap; }
+.seg { display: inline-flex; gap: 4px; padding: 0 0 2px; }
+.seg button {
+  height: var(--ctl-h, 30px); display: inline-flex; align-items: center; white-space: nowrap;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--text); font: 600 11.5px/1 var(--mono);
+  text-transform: uppercase; letter-spacing: .03em; padding: 0 9px; border-radius: 4px; cursor: pointer;
+  box-shadow: 0 2px 0 var(--text); transition: transform .06s, box-shadow .06s, background .1s;
+}
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] {
+  background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(2px); box-shadow: 0 0 0 var(--text);
+}
+select {
+  height: var(--ctl-h, 30px); max-width: 220px; text-overflow: ellipsis;
+  font: 700 11.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--text); background: var(--surface);
+  border: 1.5px solid var(--text); border-radius: 0; padding: 0 8px; box-shadow: 2px 2px 0 var(--ink); cursor: pointer;
+}
+.year { flex: 1 1 240px; min-width: 200px; }
+.year input { flex: 1; accent-color: var(--ink); min-width: 100px; margin: 0; }
+.year output {
+  font: 800 16px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 2.8em; color: var(--ink); text-shadow: var(--glow);
+}
+.icon-btn {
+  width: var(--ctl-h, 30px); height: var(--ctl-h, 30px); flex: none; display: grid; place-items: center; cursor: pointer;
+  border: 1.5px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 2px 0 var(--text);
+}
+.icon-btn:hover { filter: brightness(1.1); }
+.icon-btn:active { transform: translateY(2px); box-shadow: none; }
+.icon-btn svg { width: 11px; height: 11px; fill: currentColor; }
+button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* Key figures: a bedside monitor with four channels, in both modes */
+.tiles {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin-bottom: 30px;
+  background: rgba(61, 255, 138, .16); border: 10px solid var(--bezel); border-radius: 18px; overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), 0 18px 34px -20px rgba(0, 0, 0, .7);
+  position: relative;
+}
+.tiles::after { /* screen glare and scanlines */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .07), transparent 40%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, .25) 0 1px, transparent 1px 3px);
+}
+.tile { background: var(--screen); padding: 14px 16px 12px; min-width: 0; color: var(--ch-1); position: relative; }
+.tile:nth-child(2) { color: var(--ch-2); }
+.tile:nth-child(3) { color: var(--ch-3); }
+.tile:nth-child(4) { color: var(--ch-4); }
+.tile .k { font: 700 11px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .12em; margin: 0 0 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile .k::before { content: "CH" counter(ch) " ▸ "; opacity: .55; }
+.tiles { counter-reset: ch; }
+.tile { counter-increment: ch; }
+.tile .v { font: 700 34px/1.15 var(--mono); letter-spacing: -0.04em; margin: 0; text-shadow: 0 0 12px currentColor; font-variant-numeric: tabular-nums; }
+.tile .v small { font-size: 14px; font-weight: 500; opacity: .85; margin-left: 4px; letter-spacing: 0; }
+.tile .s { font: 12px/1.5 var(--mono); color: #b9d4c6; opacity: .85; margin: 4px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Tiles are filled by the script: each line keeps its height from the start (no layout shift). */
+.tile .k, .tile .s { min-height: 1.5em; }
+.tile .v { min-height: 1.2em; }
+
+/* Cards: continuous tractor-feed printouts, sprocket holes down both edges */
+.card {
+  background: var(--surface); padding: 22px 46px 22px; position: relative;
+  box-shadow: var(--paper-shadow);
+}
+.card::before, .card::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 30px; pointer-events: none;
+  background: radial-gradient(circle at 15px 15px, var(--hole) 0 5px, transparent 5.5px) 0 0 / 30px 30px repeat-y;
+}
+.card::before { left: 0; border-right: 1.5px dashed var(--border); }
+.card::after { right: 0; border-left: 1.5px dashed var(--border); }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin-bottom: 14px; }
+.card-head h2, .card > h2 { font: 700 22px/1.2 var(--serif); letter-spacing: -0.01em; max-width: 40ch; }
+.card-head h2::before { content: "§ "; color: var(--ink); font-style: italic; }
+.card-head p { margin: 6px 0 0; max-width: 92ch; }
+.card-head .small.muted { color: var(--text-2); font-size: 13.5px; }
+.grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr); gap: 22px; margin-bottom: 22px; }
+
+/* Legend keys */
+.key { display: inline-flex; align-items: center; gap: 6px; font: 11.5px var(--mono); color: var(--text-2); text-transform: uppercase; letter-spacing: .03em; }
+.key i { width: 14px; height: 10px; border-radius: 2px; display: inline-block; }
+.keys { font-family: var(--mono) !important; text-transform: uppercase; letter-spacing: .03em; font-size: 11.5px !important; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.find input {
+  width: 100%; font: 600 13px var(--mono); text-transform: uppercase; color: var(--text); background: var(--page);
+  border: 1.5px solid var(--text); border-radius: 0; padding: 8px 10px; box-shadow: inset 3px 3px 0 var(--wash);
+}
+.find input:focus-visible { outline: 3px solid var(--ink); outline-offset: 1px; }
+
+/* Small charts */
+.chart-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font: 11.5px var(--mono); color: var(--text-2); text-transform: uppercase; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 14px; height: 2px; border-radius: 1px; display: inline-block; }
+svg text { font-family: var(--sans); }
+.tick { font: 10.5px var(--mono); fill: var(--muted); font-variant-numeric: tabular-nums; }
+.gridline { stroke: var(--grid); stroke-width: 1; stroke-dasharray: 2 3; }
+.baseline { stroke: var(--axis); stroke-width: 1; }
+.endlabel { font-size: 11.5px; fill: var(--text-2); }
+.endlabel tspan.v { fill: var(--text); font-weight: 600; }
+.col-head, .axis-title { font-family: var(--mono) !important; text-transform: uppercase; letter-spacing: .06em; }
+svg[role="img"] { cursor: crosshair; }
+
+/* Table view: greenbar printout */
+details.card summary {
+  cursor: pointer; font: 800 13px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em; list-style: none;
+  display: flex; align-items: center; gap: 12px;
+}
+details.card summary::-webkit-details-marker { display: none; }
+details.card summary::before {
+  content: "+"; display: grid; place-items: center; width: 24px; height: 24px; border: 1.5px solid var(--text);
+  font-size: 16px; background: var(--page); transition: transform .15s;
+}
+details.card[open] summary::before { content: "−"; background: var(--ink); color: var(--on-ink); }
+details.card summary::after { content: "· print to screen"; color: var(--muted); font-weight: 500; letter-spacing: .06em; }
+.table-wrap { overflow-x: auto; margin-top: 16px; max-height: 560px; overflow-y: auto; border-top: 2px solid var(--text); }
+table { border-collapse: collapse; width: 100%; font: 12.5px var(--mono); }
+th, td { text-align: left; padding: 6px 10px; white-space: nowrap; }
+tbody tr:nth-child(4n+1) td, tbody tr:nth-child(4n+2) td { background: rgba(27, 175, 90, .09); }
+th { position: sticky; top: 0; background: var(--surface); color: var(--text); font-weight: 800; text-transform: uppercase;
+  letter-spacing: .06em; font-size: 11px; border-bottom: 1.5px solid var(--text); }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+tr.hl td { background: var(--mark) !important; color: var(--on-mark); }
+tr.hl td button { color: var(--on-mark); }
+td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
+  text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
+td button:hover { color: var(--ink); }
+
+/* Tooltip: embossed label tape */
+.tip {
+  position: fixed; z-index: 20; pointer-events: none; opacity: 0; transition: opacity .1s;
+  background: #1d3f9a; color: #f4f6ff; border-radius: 3px; transform: rotate(-1.2deg);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 -1px 0 rgba(0, 0, 0, .6) inset, 4px 6px 0 rgba(0, 0, 0, .18);
+  padding: 9px 12px 9px 16px; font: 600 11.5px/1.55 var(--mono); text-transform: uppercase; letter-spacing: .04em; max-width: 280px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .8), 0 -1px 0 rgba(255, 255, 255, .25);
+  background-image: radial-gradient(circle at 6px 50%, #14306f 0 2px, transparent 2.5px);
+}
+:root[data-theme="dark"] .tip { background-color: #0b2a17; color: #b7ffd4; box-shadow: 0 0 0 1px #3dff8a, 0 0 18px rgba(61, 255, 138, .3); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tip { background-color: #0b2a17; color: #b7ffd4; box-shadow: 0 0 0 1px #3dff8a, 0 0 18px rgba(61, 255, 138, .3); } }
+.tip.on { opacity: 1; }
+.tip .tv { font-size: 15px; font-weight: 800; display: block; letter-spacing: 0; }
+.tip .tn { display: block; color: #ffd84d; }
+.tip .tm { display: block; opacity: .82; text-transform: none; font-weight: 500; }
+.tip .row { display: flex; align-items: center; gap: 8px; }
+.tip .row i { width: 12px; height: 3px; border-radius: 1px; flex: none; }
+.tip .row b { font-variant-numeric: tabular-nums; min-width: 2.6em; }
+
+/* Notes: a lined case-notes sheet with a margin rule */
+.notes {
+  margin-top: 40px; color: var(--text-2); max-width: 96ch; position: relative;
+  background: var(--surface); box-shadow: var(--paper-shadow); padding: 34px 34px 26px 92px;
+  font: 15px/28px var(--serif);
+  background-image: linear-gradient(90deg, transparent 70px, var(--mark-soft) 70px, var(--mark-soft) 72px, transparent 72px),
+    repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px);
+  background-position: 0 0, 0 33px;
+  transform: rotate(-.35deg);
+}
+.notes::before {
+  content: "case notes"; position: absolute; left: 14px; top: 32px; font: 22px/1 var(--hand); color: var(--ink);
+  writing-mode: vertical-rl; transform: rotate(180deg);
+}
+.notes h2 { font: 800 12px/28px var(--mono); text-transform: uppercase; letter-spacing: .2em; color: var(--ink); margin: 0; }
+.notes p { margin: 0 0 28px; }
+.notes .sources { font-size: 14px; line-height: 1.6; margin-bottom: 28px; }
+
+@media (max-width: 960px) {
+  .grid { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  main { padding: 20px 16px 40px; }
+  .filters { --ctl-h: 28px; flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 6px; margin: 18px -16px 16px; padding: 6px 0; }
+  .filters::before { display: none; }
+  .filter-row {
+    display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 2px; scrollbar-width: none; overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
+            mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .filter { flex: none; }
+  .filter > .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .year { flex: none; min-width: 0; padding: 0 16px; }
+  .seg button { padding: 0 8px; font-size: 11px; }
+  select { max-width: 150px; font-size: 11px; }
+  .tile .v { font-size: 24px; }
+  .tiles { border-width: 6px; border-radius: 12px; }
+  .card { padding: 18px 26px; }
+  .card::before, .card::after { width: 16px; background-size: 16px 22px;
+    background-image: radial-gradient(circle at 8px 11px, var(--hole) 0 3.5px, transparent 4px); }
+  .notes { padding: 26px 18px 18px 30px; transform: none;
+    background-image: linear-gradient(90deg, transparent 18px, var(--mark-soft) 18px, var(--mark-soft) 20px, transparent 20px),
+      repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
+  .notes::before { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .seg button, details.card summary::before { transition: none; } }
+
+/* Below the fold: the browser skips rendering these until they come near the viewport. */
+.notes { content-visibility: auto; contain-intrinsic-size: auto 480px; }
+
+
+/* Years after 65 as blocks: one block per year, filled while healthy */
+#blocks { display: block; width: 100%; }
+.year-healthy { fill: var(--series-1); }
+.year-limited { fill: var(--surface); stroke: var(--series-1); stroke-width: 1.25; stroke-opacity: .7; }
+.pension { fill: var(--text); stroke: var(--surface); stroke-width: 2; }
+.pension-span { stroke: var(--text-2); stroke-width: 2; stroke-linecap: round; }
+.age65 { stroke: var(--text-2); stroke-width: 1; stroke-dasharray: 3 3; }
+.row-label { font-size: 12.5px; fill: var(--text-2); }
+.row-label.hl, .row-label.eu { fill: var(--text); font-weight: 600; }
+.row-band { fill: var(--series-1); opacity: .07; }
+.row-value { font-size: 12px; fill: var(--text-2); font-variant-numeric: tabular-nums; }
+.row-value.hl, .row-value.eu { fill: var(--text); font-weight: 600; }
+.row-hit { fill: transparent; cursor: pointer; }
+.row-label.nodata, .nodata-note { fill: var(--muted); }
+.nodata-note { font-size: 12px; font-style: italic; }
+.keys { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 6px 0 10px; font-size: 12.5px; color: var(--text-2); }
+.keys span { display: inline-flex; align-items: center; gap: 6px; }
+.keys svg { display: block; }
+.term-note { margin: 0 0 10px; max-width: 90ch; }
+.term-note strong { color: var(--text-2); font-weight: 600; }
+
+/* Patient-chart styling for this page's chart */
+.row-band { fill: var(--mark); opacity: .1; }
+.row-label { font-family: var(--sans); }
+.row-label.hl { fill: var(--mark); font-weight: 800; }
+.row-value { font-family: var(--mono); font-size: 11.5px; }
+.row-value.hl { fill: var(--mark); font-weight: 800; }
+.nodata-note { font-family: var(--hand); font-style: normal; font-size: 14px; fill: var(--mark); opacity: .75; }
+.keys svg { overflow: visible; }
+.pension { fill: var(--mark); stroke: var(--surface); stroke-width: 2; }
+.pension-span { stroke: var(--mark); stroke-width: 2.5; stroke-dasharray: 1 4; }
+.age65 { stroke: var(--mark); stroke-width: 1.5; stroke-dasharray: 5 3; }
+.row-label.eu, .row-value.eu { fill: var(--text); font-weight: 800; }
+.year-limited { stroke-dasharray: 2 1.5; fill: var(--page); }
+.foil { fill: var(--wash); stroke: var(--border); stroke-width: 1; }
+.year-healthy { stroke: var(--surface); stroke-width: 1; }
+.pension-ring { fill: none; stroke: var(--mark); stroke-width: 1.2; opacity: .45; }
+.term-note {
+  font: 14px/1.4 var(--serif) !important; color: var(--text-2) !important; background: var(--wash); border-left: 4px solid var(--ink);
+  padding: 8px 12px; margin: 4px 0 14px !important;
+}
+.term-note strong { font-family: var(--mono); text-transform: uppercase; letter-spacing: .06em; font-size: 12px; color: var(--ink) !important; }
+</style>
+</head>
+<body>
+<div class="drip" aria-hidden="true"></div><header class="site-header"><a class="brand" href="../">healthviz</a><nav aria-label="Site"><a href="../#entries">Entries</a><a href="../#about">About</a><button type="button" class="theme-switch" onclick="var r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';try{localStorage.setItem('hv-theme',r.dataset.theme)}catch(e){}" aria-label="Switch between paper and monitor"><span class="t-light">◐ Monitor</span><span class="t-dark">◑ Paper</span></button></nav><svg class="trace" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true"><path d="M0 30H40c4 0 5-6 9-6s5 6 9 6H66l3 5 6-33 6 40 4-12H100c5 0 7-9 13-9s8 9 13 9H173c4 0 5-6 9-6s5 6 9 6H199l3 5 6-33 6 40 4-12H233c5 0 7-9 13-9s8 9 13 9H306c4 0 5-6 9-6s5 6 9 6H332l3 5 6-33 6 40 4-12H366c5 0 7-9 13-9s8 9 13 9H439c4 0 5-6 9-6s5 6 9 6H465l3 5 6-33 6 40 4-12H499c5 0 7-9 13-9s8 9 13 9H572c4 0 5-6 9-6s5 6 9 6H598l3 5 6-33 6 40 4-12H632c5 0 7-9 13-9s8 9 13 9H705c4 0 5-6 9-6s5 6 9 6H731l3 5 6-33 6 40 4-12H765c5 0 7-9 13-9s8 9 13 9H838c4 0 5-6 9-6s5 6 9 6H864l3 5 6-33 6 40 4-12H898c5 0 7-9 13-9s8 9 13 9H971c4 0 5-6 9-6s5 6 9 6H997l3 5 6-33 6 40 4-12H1031c5 0 7-9 13-9s8 9 13 9H1104c4 0 5-6 9-6s5 6 9 6H1130l3 5 6-33 6 40 4-12H1164c5 0 7-9 13-9s8 9 13 9H1237c4 0 5-6 9-6s5 6 9 6H1263l3 5 6-33 6 40 4-12H1297c5 0 7-9 13-9s8 9 13 9H1200" pathLength="100"/></svg></header>
+<main>
+  <header class="chart-head" data-motif="65">
+    <p class="eyebrow"><a href="../#entries">← Entries</a>Healthy ageing</p>
+    <p class="stamp" aria-hidden="true">Off duty<small>pension &amp; health</small></p>
+    <h1>When does Europe retire, and how many healthy years are left at 65<span class="qm">?</span></h1>
+    <p class="lede" id="lede"><span class="thought">In Germany, people now aged 65 to 74 started their old-age pension at <strong>62.6</strong> on average.</span> <span class="thought">At 65, people in Germany can expect <strong>19.7 more years</strong> of life, <strong>8.6</strong> of them without health limitations: fewer than the EU-27 average of 10.3, 18th of 27 EU countries (Luxembourg has no 2024 figures).</span></p>
+    <p class="scribble" aria-hidden="true">Every filled block is a healthy year. Count them.</p>
+    <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Data retrieved</dt><dd><time datetime="2026-10-27">27 Oct 2026</time></dd></div><div><dt>Source last updated</dt><dd><time datetime="2026-07-17">17 Jul 2026</time> · Eurostat</dd></div><div><dt>Covers</dt><dd>2024; pension age 2023 · 28 countries</dd></div></dl><p class="snapshot-note">This entry stays as it is until its data is explicitly updated. <a href="#sources">Sources and notes</a></p></aside>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filters">
+    <div class="filter-row">
+      <div class="filter">
+        <span class="label" id="sex-label">Sex</span>
+        <div class="seg" id="sex" role="group" aria-labelledby="sex-label">
+          <button type="button" data-v="T">Total</button>
+          <button type="button" data-v="F">Women</button>
+          <button type="button" data-v="M">Men</button>
+        </div>
+      </div>
+      <div class="filter">
+        <label class="label" for="country">Country</label>
+        <select id="country"></select>
+      </div>
+      <div class="filter">
+        <span class="label" id="scope-label">Compare</span>
+        <div class="seg" id="scope" role="group" aria-labelledby="scope-label">
+          <button type="button" data-v="eu">EU-27</button>
+          <button type="button" data-v="all">All of Europe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="tiles" aria-label="Key figures">
+    <div class="tile"><p class="k">EU-27: healthy years at 65</p><p class="v" id="t1v"></p><p class="s" id="t1s"></p></div>
+    <div class="tile"><p class="k">Most</p><p class="v" id="t2v"></p><p class="s" id="t2s"></p></div>
+    <div class="tile"><p class="k">Fewest</p><p class="v" id="t3v"></p><p class="s" id="t3s"></p></div>
+    <div class="tile"><p class="k" id="t4k">Germany</p><p class="v" id="t4v"></p><p class="s" id="t4s"></p></div>
+  </section>
+
+  <section class="card" aria-labelledby="blocks-title">
+    <div class="card-head">
+      <div>
+        <h2 id="blocks-title">Life after 65, one block per year, 2024</h2>
+        <p class="small muted" id="blocks-sub">Each block is a year a 65-year-old can expect to live. Filled blocks are years without health limitations. The red marker is the average age at which people started their old-age pension. Countries are ranked by healthy years. Click a row to pick a country.</p>
+      </div>
+    </div>
+    <div class="keys" aria-hidden="true">
+      <span><svg width="14" height="14" aria-hidden="true"><rect class="year-healthy" x="0" y="3" width="14" height="8" rx="4"/></svg>Healthy year (a pill)</span>
+      <span><svg width="14" height="14" aria-hidden="true"><rect class="year-limited" x=".6" y="3.6" width="12.8" height="6.8" rx="3.4"/></svg>Year with health limitations (an empty blister)</span>
+      <span><svg width="22" height="14" aria-hidden="true"><line class="pension-span" x1="2" x2="14" y1="7" y2="7"/><circle class="pension" cx="5" cy="7" r="5"/></svg>Average pension age; the line spans the years on pension before 65</span>
+    </div>
+    <p class="small muted term-note"><strong>Pension or retirement?</strong> Here, retiring means starting to receive an old-age pension. Stopping work can happen at a different time: some people leave work years before their pension starts, others keep working while they draw it.</p>
+    <svg id="blocks" role="img" aria-labelledby="blocks-title blocks-sub" height="776"></svg>
+  </section>
+
+  <details class="card" id="table-card" style="margin-top:16px">
+    <summary>Table view: all countries</summary>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="r">Rank</th><th>Country</th><th class="r">Pension age</th><th class="r">Years left at 65</th><th class="r">Healthy</th><th class="r">With limitations</th><th class="r">Share healthy</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </details>
+
+  <section class="notes" id="sources">
+    <h2>Sources</h2>
+    <ul class="sources"><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table">Eurostat: Healthy life years by sex (from 2004 onwards)</a> (<code>hlth_hlye</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-17">17 jul 2026</time>, retrieved <time datetime="2026-10-27">27 oct 2026</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/lfso_23pens03/default/table">Eurostat: Age at which the person started receiving an old-age pension (2023)</a> (<code>lfso_23pens03</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-09-10">10 sep 2026</time>, retrieved <time datetime="2026-10-27">27 oct 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
+    <h2>Notes</h2>
+    <p>Healthy life years are the years a person can expect to live without being limited in usual activities because of a health problem for at least six months, as people report it themselves in the EU statistics on income and living conditions (EU-SILC). Eurostat combines these answers with mortality data. Because the answers are self-reported, cultural differences in how people judge their health affect comparisons between countries; changes within a country are more reliable than small gaps between countries.</p>
+    <p>Eurostat measures healthy years from age 65, not from the age people retire, so the chart starts the blocks at 65. They show how many years are healthy, not when: drawing the healthy years first is a simplification. The pension age is the average age at which people aged 65 to 74 in 2023 started receiving an old-age pension (EU Labour Force Survey), including early retirement. It measures when the pension started, not when people stopped working. The years between the pension age and 65 are not split into healthy and not healthy, because Eurostat publishes no healthy life years for those ages. Values Eurostat marks provisional or estimated are labelled so in the tooltip and the table. Luxembourg has no 2024 figures (latest: 9.8 healthy years of 21.0 at 65 in 2022); it is listed without blocks and not ranked.</p>
+  </section>
+</main>
+<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+const D = {"year":2024,"pens_year":2023,"areas":{"AT":{"name":"Austria","eu":true,"hly":{"T":9.2,"F":9.3,"M":9.1},"le":{"T":20.3,"F":21.7,"M":18.8},"pens":{"T":59.9,"F":58.8,"M":61.0},"flag":{"T":null,"F":null,"M":null}},"BE":{"name":"Belgium","eu":true,"hly":{"T":11.8,"F":12.1,"M":11.5},"le":{"T":20.6,"F":22.0,"M":19.1},"pens":{"T":63.0,"F":63.0,"M":63.0},"flag":{"T":null,"F":null,"M":null}},"BG":{"name":"Bulgaria","eu":true,"hly":{"T":11.9,"F":12.7,"M":11.0},"le":{"T":16.9,"F":18.8,"M":14.7},"pens":{"T":60.7,"F":60.2,"M":61.3},"flag":{"T":null,"F":null,"M":null}},"CH":{"name":"Switzerland","eu":false,"hly":{"T":11.2,"F":11.1,"M":11.3},"le":{"T":21.8,"F":23.0,"M":20.4},"pens":{"T":64.8,"F":64.4,"M":65.4},"flag":{"T":null,"F":null,"M":null}},"CY":{"name":"Cyprus","eu":true,"hly":{"T":8.2,"F":8.1,"M":8.3},"le":{"T":21.2,"F":22.5,"M":19.8},"pens":{"T":63.5,"F":63.9,"M":63.1},"flag":{"T":null,"F":null,"M":null}},"CZ":{"name":"Czechia","eu":true,"hly":{"T":8.0,"F":8.2,"M":7.8},"le":{"T":18.9,"F":20.6,"M":16.9},"pens":{"T":60.8,"F":59.5,"M":62.4},"flag":{"T":null,"F":null,"M":null}},"DE":{"name":"Germany","eu":true,"hly":{"T":8.6,"F":8.8,"M":8.3},"le":{"T":19.7,"F":21.2,"M":18.0},"pens":{"T":62.6,"F":62.5,"M":62.7},"flag":{"T":null,"F":null,"M":null}},"DK":{"name":"Denmark","eu":true,"hly":{"T":11.3,"F":11.8,"M":10.7},"le":{"T":20.1,"F":21.3,"M":18.7},"pens":{"T":65.7,"F":65.6,"M":65.8},"flag":{"T":"b","F":"b","M":"b"}},"EE":{"name":"Estonia","eu":true,"hly":{"T":7.6,"F":7.9,"M":7.4},"le":{"T":19.2,"F":21.3,"M":16.3},"pens":{"T":61.9,"F":61.7,"M":62.1},"flag":{"T":null,"F":null,"M":null}},"EL":{"name":"Greece","eu":true,"hly":{"T":10.1,"F":10.4,"M":9.7},"le":{"T":20.3,"F":21.8,"M":18.7},"pens":{"T":60.3,"F":60.2,"M":60.4},"flag":{"T":null,"F":null,"M":null}},"ES":{"name":"Spain","eu":true,"hly":{"T":12.5,"F":12.5,"M":12.4},"le":{"T":21.9,"F":23.7,"M":19.8},"pens":{"T":63.7,"F":63.8,"M":63.5},"flag":{"T":"b","F":"b","M":"b"}},"EU27_2020":{"name":"EU-27","eu":false,"hly":{"T":10.3,"F":10.5,"M":10.0},"le":{"T":20.2,"F":21.8,"M":18.4},"pens":{"T":61.9,"F":61.6,"M":62.3},"flag":{"T":null,"F":null,"M":null}},"FI":{"name":"Finland","eu":true,"hly":{"T":9.6,"F":10.0,"M":9.4},"le":{"T":20.6,"F":22.2,"M":18.7},"pens":{"T":63.2,"F":63.3,"M":63.2},"flag":{"T":null,"F":null,"M":null}},"FR":{"name":"France","eu":true,"hly":{"T":10.9,"F":11.5,"M":10.3},"le":{"T":21.9,"F":23.6,"M":19.9},"pens":{"T":60.8,"F":61.0,"M":60.5},"flag":{"T":"p","F":"p","M":"p"}},"HR":{"name":"Croatia","eu":true,"hly":{"T":6.8,"F":6.6,"M":6.9},"le":{"T":18.0,"F":19.6,"M":16.1},"pens":{"T":61.5,"F":60.5,"M":62.6},"flag":{"T":null,"F":null,"M":null}},"HU":{"name":"Hungary","eu":true,"hly":{"T":7.6,"F":7.9,"M":7.2},"le":{"T":16.9,"F":18.6,"M":14.7},"pens":{"T":61.1,"F":60.1,"M":62.4},"flag":{"T":null,"F":null,"M":null}},"IE":{"name":"Ireland","eu":true,"hly":{"T":12.3,"F":12.7,"M":11.9},"le":{"T":21.0,"F":22.2,"M":19.8},"pens":{"T":64.7,"F":64.5,"M":64.8},"flag":{"T":null,"F":null,"M":null}},"IT":{"name":"Italy","eu":true,"hly":{"T":13.1,"F":13.3,"M":12.9},"le":{"T":21.4,"F":22.7,"M":19.9},"pens":{"T":61.9,"F":62.4,"M":61.5},"flag":{"T":"b","F":"b","M":"b"}},"LT":{"name":"Lithuania","eu":true,"hly":{"T":8.9,"F":9.3,"M":8.5},"le":{"T":18.3,"F":20.3,"M":15.4},"pens":{"T":62.2,"F":61.7,"M":63.1},"flag":{"T":"p","F":"p","M":"p"}},"LU":{"name":"Luxembourg","eu":true,"hly":{"T":null,"F":null,"M":null},"le":{"T":null,"F":null,"M":null},"pens":{"T":61.4,"F":61.7,"M":61.1},"flag":{"T":null,"F":null,"M":null},"latest":{"year":2022,"hly":{"T":9.8,"F":9.8,"M":9.7},"le":{"T":21.0,"F":22.2,"M":19.6}}},"LV":{"name":"Latvia","eu":true,"hly":{"T":4.2,"F":4.5,"M":3.9},"le":{"T":17.8,"F":19.8,"M":14.9},"pens":{"T":61.6,"F":61.5,"M":61.8},"flag":{"T":null,"F":null,"M":null}},"MT":{"name":"Malta","eu":true,"hly":{"T":12.2,"F":12.2,"M":12.5},"le":{"T":20.8,"F":22.1,"M":19.4},"pens":{"T":61.6,"F":61.9,"M":61.5},"flag":{"T":null,"F":null,"M":null}},"NL":{"name":"Netherlands","eu":true,"hly":{"T":9.6,"F":9.6,"M":9.7},"le":{"T":19.9,"F":20.9,"M":18.9},"pens":{"T":65.4,"F":65.4,"M":65.4},"flag":{"T":null,"F":null,"M":null}},"NO":{"name":"Norway","eu":false,"hly":{"T":14.0,"F":13.9,"M":13.8},"le":{"T":20.9,"F":21.9,"M":19.8},"pens":{"T":64.8,"F":65.1,"M":64.5},"flag":{"T":null,"F":null,"M":null}},"PL":{"name":"Poland","eu":true,"hly":{"T":9.3,"F":9.7,"M":8.8},"le":{"T":18.5,"F":20.3,"M":16.3},"pens":{"T":60.8,"F":59.2,"M":63.1},"flag":{"T":null,"F":null,"M":null}},"PT":{"name":"Portugal","eu":true,"hly":{"T":9.8,"F":9.4,"M":10.3},"le":{"T":21.1,"F":22.6,"M":19.3},"pens":{"T":62.9,"F":63.1,"M":62.7},"flag":{"T":"b","F":"b","M":"b"}},"RO":{"name":"Romania","eu":true,"hly":{"T":7.0,"F":7.1,"M":6.8},"le":{"T":17.3,"F":19.1,"M":15.1},"pens":{"T":60.2,"F":59.4,"M":61.1},"flag":{"T":"be","F":"be","M":"be"}},"SE":{"name":"Sweden","eu":true,"hly":{"T":14.2,"F":14.2,"M":14.3},"le":{"T":21.3,"F":22.4,"M":20.2},"pens":{"T":64.5,"F":64.7,"M":64.3},"flag":{"T":null,"F":null,"M":null}},"SI":{"name":"Slovenia","eu":true,"hly":{"T":11.8,"F":12.5,"M":11.2},"le":{"T":20.2,"F":21.9,"M":18.3},"pens":{"T":58.4,"F":57.1,"M":59.7},"flag":{"T":null,"F":null,"M":null}},"SK":{"name":"Slovakia","eu":true,"hly":{"T":4.9,"F":5.3,"M":4.5},"le":{"T":18.3,"F":19.9,"M":16.3},"pens":{"T":60.1,"F":59.3,"M":61.1},"flag":{"T":null,"F":null,"M":null}}},"missing":["Luxembourg"]};
+const EU = "EU27_2020";
+const SEX = { T: "Total", F: "Women", M: "Men" };
+const WHO = { T: "people", F: "women", M: "men" };
+const FLAG = { p: "provisional", e: "estimated", ep: "estimated, provisional", b: "break in series", bp: "provisional", be: "estimated", bep: "estimated, provisional", bu: "low reliability" };
+// Chart geometry; the build reserves the same height for the default view (chart_height).
+const AXIS = 30, ROW = 26, GAP = 10, BOTTOM = 8, BLOCK = 14;
+const NS = "http://www.w3.org/2000/svg";
+const state = { sex: "T", country: "DE", scope: "eu" };
+
+const $ = id => document.getElementById(id);
+const el = (tag, attrs = {}, parent) => {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+};
+const html = (tag, cls, text, parent) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  if (parent) parent.appendChild(n);
+  return n;
+};
+const A = g => D.areas[g];
+const name = g => A(g).name;
+const hly = (g, s = state.sex) => A(g).hly[s];
+const le = (g, s = state.sex) => A(g).le[s];
+const pens = (g, s = state.sex) => A(g).pens[s];
+const flag = (g, s = state.sex) => FLAG[A(g).flag[s]] || "";
+const yrs = v => v == null ? "–" : v.toFixed(1);
+const inScope = g => g !== EU && (state.scope === "all" || A(g).eu);
+const ordinal = n => n + (n % 100 >= 10 && n % 100 <= 20 ? "th" : { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th");
+
+// Countries in scope with healthy years, most first; equal values share a rank, ties by name.
+// EU members without figures for the year follow, unranked (`nodata`).
+let rows = [], nodata = [];
+function computeRows() {
+  rows = Object.keys(D.areas).filter(g => inScope(g) && hly(g) != null && le(g) != null)
+    .sort((a, b) => hly(b) - hly(a) || name(a).localeCompare(name(b)))
+    .map(g => ({ g }));
+  for (const r of rows) r.rank = 1 + rows.filter(o => hly(o.g) > hly(r.g)).length;
+  nodata = Object.keys(D.areas).filter(g => inScope(g) && hly(g) == null).sort((a, b) => name(a).localeCompare(name(b)));
+}
+const counted = () => rows.length + nodata.length;
+// "(Luxembourg has no 2024 figures)", as in the build's opening sentence (unranked_note).
+function unrankedNote() {
+  const names = Object.keys(D.areas).filter(g => A(g).eu && hly(g) == null).map(name);
+  if (!names.length) return "";
+  const who = names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}` : names[0];
+  return ` (${who} ${names.length > 1 ? "have" : "has"} no ${D.year} figures)`;
+}
+// The latest figures Eurostat has for a member without the year's, as text.
+function latestText(g, s = state.sex) {
+  const l = A(g).latest;
+  return l && l.hly[s] != null ? `${l.year}: ${yrs(l.hly[s])} healthy years of ${yrs(l.le[s])}` : "";
+}
+const rankOf = g => rows.find(r => r.g === g)?.rank;
+// The age axis is fixed for every view, so blocks compare across sexes and scopes.
+const AGE0 = 55;
+const AGE1 = Math.ceil(Math.max(...Object.values(D.areas).flatMap(a => Object.values(a.le).filter(v => v != null)).map(v => 65 + v)) / 5) * 5;
+
+/* ---------- Tooltip ---------- */
+const tip = $("tip");
+function placeTip(evt) {
+  const pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = evt.clientX + pad, y = evt.clientY + pad;
+  if (x + w > innerWidth - 8) x = evt.clientX - w - pad;
+  if (y + h > innerHeight - 8) y = evt.clientY - h - pad;
+  tip.style.left = `${Math.max(8, x)}px`;
+  tip.style.top = `${Math.max(8, y)}px`;
+}
+const hideTip = () => tip.classList.remove("on");
+addEventListener("scroll", hideTip, { passive: true });
+function rowTip(evt, g) {
+  tip.replaceChildren();
+  if (hly(g) == null) {
+    html("span", "tv", `No ${D.year} figures`, tip);
+    html("span", "tn", `${name(g)} · ${SEX[state.sex]}`, tip);
+    if (latestText(g)) html("span", "tm", `Latest: ${latestText(g)}`, tip);
+    html("span", "tm", pens(g) == null ? "No pension age" : `Pension from ${yrs(pens(g))} on average`, tip);
+    tip.classList.add("on");
+    placeTip(evt);
+    return;
+  }
+  html("span", "tv", `${yrs(hly(g))} healthy years${flag(g) ? ` (${flag(g)})` : ""}`, tip);
+  html("span", "tn", `${name(g)} · ${SEX[state.sex]}`, tip);
+  const r = rankOf(g);
+  if (r) html("span", "tm", `#${r} of ${rows.length}`, tip);
+  html("span", "tm", `At 65: ${yrs(le(g))} more years, ${yrs(le(g) - hly(g))} of them with limitations`, tip);
+  html("span", "tm", pens(g) == null ? "No pension age" : `Pension from ${yrs(pens(g))} on average`, tip);
+  tip.classList.add("on");
+  placeTip(evt);
+}
+
+/* ---------- Main chart: life after 65 as blocks ---------- */
+function drawRow(svg, g, top, x, unit, gap, cls, W) {
+  const cy = top + ROW / 2, y = cy - BLOCK / 2, L = le(g), H = hly(g);
+  if (H == null || L == null) {
+    // No figures for the year: no blocks, a note with the latest figures instead.
+    // Phones have no room for the latest figures; the tooltip has them.
+    el("text", { class: "nodata-note", x: x(65) + 6, y: cy + 4 }, svg).textContent =
+      `No ${D.year} figures${latestText(g) && W >= 560 ? ` · latest ${latestText(g)}` : ""}`;
+  }
+  // A blister pack: the foil card behind the row, one blister per year, a pill in each healthy one.
+  if (L != null && H != null) el("rect", { class: "foil", x: x(65) - 3, y: y - 3, width: L * unit - gap + 6, height: BLOCK + 6, rx: (BLOCK + 6) / 2 }, svg);
+  for (let k = 0; L != null && H != null && k < Math.ceil(L - 1e-9); k++) {
+    const span = Math.min(1, L - k), x0 = x(65 + k);
+    el("rect", { class: "year-limited", x: x0 + 0.6, y: y + 0.6, width: Math.max(0, span * unit - gap - 1.2), height: BLOCK - 1.2, rx: (BLOCK - 1.2) / 2, "data-age": 65 + k }, svg);
+    const healthy = Math.max(0, Math.min(span, H - k));
+    if (healthy > 0) el("rect", { class: "year-healthy", x: x0, y, width: Math.max(1, healthy * unit - (healthy === span ? gap : 0)), height: BLOCK, rx: BLOCK / 2 }, svg);
+  }
+  const p = pens(g);
+  if (p != null) {
+    if (p < 65) el("line", { class: "pension-span", x1: x(p), x2: x(65) - gap, y1: cy, y2: cy }, svg);
+    el("circle", { class: "pension-ring", cx: x(p), cy, r: 9 }, svg);
+    el("circle", { class: "pension", cx: x(p), cy, r: 5, "data-age": p }, svg);
+  }
+  el("text", { class: "row-value" + cls, x: W, y: cy + 4, "text-anchor": "end" }, svg).textContent = H == null ? "–" : `${yrs(H)} / ${yrs(L)}`;
+}
+
+function renderBlocks() {
+  const svg = $("blocks");
+  svg.replaceChildren();
+  const W = svg.clientWidth || 900, narrow = W < 560;
+  const labelW = narrow ? 104 : 150, valueW = narrow ? 62 : 110, gap = narrow ? 1 : 2; // valueW leaves room for the last age tick
+  const H = AXIS + ROW + GAP + counted() * ROW + BOTTOM;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("height", H);
+  const unit = (W - labelW - valueW) / (AGE1 - AGE0);
+  const x = age => labelW + (age - AGE0) * unit;
+  for (let a = AGE0; a <= AGE1; a += 5) {
+    el("line", { class: "gridline", x1: x(a), x2: x(a), y1: AXIS - 6, y2: H - BOTTOM }, svg);
+    if (narrow && a % 10) continue; // phones: label every 10 years so the labels don't collide
+    el("text", { class: "tick", x: x(a), y: AXIS - 12, "text-anchor": "middle" }, svg).textContent = a === AGE0 || (narrow && a === AGE0 + 5) ? `Age ${a}` : a;
+  }
+  el("line", { class: "age65", x1: x(65), x2: x(65), y1: AXIS - 6, y2: H - BOTTOM }, svg);
+  el("text", { class: "tick", x: W, y: AXIS - 12, "text-anchor": "end" }, svg).textContent = narrow ? "Healthy" : "Healthy / total";
+
+  const all = [{ g: EU, top: AXIS }, ...[...rows.map(r => r.g), ...nodata].map((g, i) => ({ g, top: AXIS + ROW + GAP + i * ROW }))];
+  for (const { g, top } of all) {
+    const hl = g === state.country, cls = g === EU ? " eu" : hl ? " hl" : "";
+    if (hl) el("rect", { class: "row-band", x: 0, y: top, width: W, height: ROW, rx: 4 }, svg);
+    const r = rankOf(g), label = narrow && name(g).length > 12 ? name(g).slice(0, 11) + "…" : name(g);
+    el("text", { class: "row-label" + cls + (g !== EU && !r ? " nodata" : ""), x: 0, y: top + ROW / 2 + 4 }, svg).textContent =
+      g === EU || !r ? label : `${r}. ${label}`;
+    drawRow(svg, g, top, x, unit, gap, cls, W);
+    el("rect", { class: "row-hit", x: 0, y: top, width: W, height: ROW, "data-g": g }, svg);
+  }
+  $("blocks-sub").textContent = `Each block is a year a 65-year-old can expect to live${state.sex === "T" ? "" : ` (${WHO[state.sex]})`}. Filled blocks are years without health limitations. The red marker is the average age at which people started their old-age pension. Countries are ranked by healthy years. Click a row to pick a country.`;
+}
+const blocks = $("blocks");
+blocks.addEventListener("pointermove", evt => {
+  const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
+  if (g) rowTip(evt, g); else hideTip();
+});
+blocks.addEventListener("pointerleave", hideTip);
+blocks.addEventListener("click", evt => {
+  const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
+  if (g && g !== EU) setCountry(g);
+});
+
+/* ---------- Tiles and lede ---------- */
+function setTile(n, value, sub) {
+  $(`t${n}v`).textContent = value;
+  $(`t${n}s`).textContent = sub;
+}
+function renderTiles() {
+  setTile(1, `${yrs(hly(EU))} years`, `of ${yrs(le(EU))} years left at 65`);
+  const top = rows[0]?.g, bottom = rows[rows.length - 1]?.g;
+  setTile(2, top ? `${yrs(hly(top))} years` : "–", top ? name(top) : "");
+  setTile(3, bottom ? `${yrs(hly(bottom))} years` : "–", bottom ? name(bottom) : "");
+  const g = state.country, r = rankOf(g);
+  $("t4k").textContent = name(g);
+  setTile(4, hly(g) == null ? "–" : `${yrs(hly(g))} years`,
+    `${r ? `#${r} of ${counted()}` : `No ${D.year} figures`}${pens(g) == null ? "" : ` · pension at ${yrs(pens(g))}`}`);
+  renderLede();
+}
+function renderLede() {
+  const lede = $("lede"), g = state.country, s = state.sex, who = WHO[s];
+  lede.replaceChildren();
+  // One span per thought, so each reads on its own line; a space between them keeps the text flowing.
+  let at = lede;
+  const thought = () => { if (at !== lede) lede.append(" "); at = html("span", "thought", null, lede); };
+  const b = t => html("strong", "", t, at);
+  if (pens(g) != null) {
+    thought();
+    at.append(`In ${name(g)}, ${who} now aged 65 to 74 started their old-age pension at `);
+    b(yrs(pens(g)));
+    at.append(" on average.");
+  }
+  thought();
+  if (hly(g) == null || le(g) == null) {
+    const l = A(g).latest;
+    at.append(`Eurostat has no ${D.year} figures on healthy years for ${name(g)}`);
+    at.append(l && l.hly[s] != null ? `; in ${l.year}, ${who} at 65 could expect ${yrs(l.hly[s])} healthy years of ${yrs(l.le[s])}.` : ".");
+    return;
+  }
+  // The rank among all EU members, as in the build's opening sentence; members without figures are named.
+  const eu = Object.keys(D.areas).filter(c => A(c).eu);
+  const rank = 1 + eu.filter(c => hly(c) != null && hly(c) > hly(g)).length, diff = hly(g) - hly(EU);
+  at.append(`At 65, ${who} in ${name(g)} can expect `);
+  b(`${yrs(le(g))} more years`);
+  at.append(" of life, ");
+  b(yrs(hly(g)));
+  at.append(` of them without health limitations: ${Math.abs(diff) < 0.15 ? "about as many as the EU-27 average" :
+    `${diff > 0 ? "more" : "fewer"} than the EU-27 average of ${yrs(hly(EU))}`}`);
+  at.append(A(g).eu ? `, ${ordinal(rank)} of ${eu.length} EU countries${unrankedNote()}.` : ".");
+}
+
+/* ---------- Table view ---------- */
+function renderTable() {
+  if (!$("table-card").open) return;
+  const tb = $("tbody");
+  tb.replaceChildren();
+  for (const { g, rank } of [{ g: EU, rank: "" }, ...rows, ...nodata.map(g => ({ g, rank: "" }))]) {
+    const tr = html("tr", g === state.country ? "hl" : "", null, tb);
+    html("td", "r", rank ? `#${rank}` : "", tr);
+    if (g === EU) html("td", "", name(g), tr);
+    else {
+      const btn = html("button", "", name(g), html("td", "", null, tr));
+      btn.type = "button";
+      btn.addEventListener("click", () => setCountry(g));
+    }
+    html("td", "r", yrs(pens(g)), tr);
+    html("td", "r", yrs(le(g)), tr);
+    html("td", "r", `${yrs(hly(g))}${A(g).flag[state.sex] ? " " + A(g).flag[state.sex] : ""}`, tr);
+    html("td", "r", hly(g) == null ? "–" : yrs(le(g) - hly(g)), tr);
+    html("td", "r", hly(g) == null ? "–" : `${Math.round((hly(g) / le(g)) * 100)}%`, tr);
+  }
+}
+$("table-card").addEventListener("toggle", renderTable);
+
+/* ---------- Controls ---------- */
+function render() {
+  computeRows();
+  for (const id of ["sex", "scope"]) {
+    for (const b of $(id).children) b.setAttribute("aria-pressed", b.dataset.v === state[id]);
+  }
+  renderBlocks(); renderTiles(); renderTable();
+}
+function setCountry(g) { state.country = g; $("country").value = g; render(); }
+function fillCountries() {
+  const s = $("country");
+  s.replaceChildren();
+  Object.keys(D.areas).filter(inScope).sort((a, b) => name(a).localeCompare(name(b)))
+    .forEach(g => { const o = html("option", "", name(g), s); o.value = g; });
+  s.value = state.country;
+}
+$("sex").addEventListener("click", e => { const v = e.target.dataset?.v; if (v) { state.sex = v; render(); } });
+$("scope").addEventListener("click", e => {
+  const v = e.target.dataset?.v;
+  if (!v) return;
+  state.scope = v;
+  if (!inScope(state.country)) state.country = "DE";
+  fillCountries(); render();
+});
+$("country").addEventListener("change", e => setCountry(e.target.value));
+
+let lastW = 0;
+new ResizeObserver(() => {
+  const w = blocks.clientWidth;
+  if (Math.abs(w - lastW) < 2) return;
+  lastW = w;
+  renderBlocks();
+}).observe(document.querySelector("main"));
+
+fillCountries();
+render();
+</script>
+</body>
+</html>

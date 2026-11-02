@@ -5,8 +5,16 @@
     <link>https://healthviz.eu/</link>
     <description>A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 26 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 02 Nov 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://healthviz.eu/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>When does Europe retire, and how many healthy years are left at 65?</title>
+      <link>https://healthviz.eu/healthy-retirement/</link>
+      <guid isPermaLink="true">https://healthviz.eu/healthy-retirement/</guid>
+      <pubDate>Mon, 02 Nov 2026 00:00:00 +0000</pubDate>
+      <category>Healthy ageing</category>
+      <description>When people in each European country start their pension, and how many years at 65 they can expect to live in good health, shown year by year.</description>
+    </item>
     <item>
       <title>How much does Europe spend on health, and who pays?</title>
       <link>https://healthviz.eu/health-spending/</link>
