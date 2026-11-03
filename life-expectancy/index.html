@@ -71,7 +71,7 @@
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --serif: ui-serif, "New York", "Iowan Old Style", Charter, Georgia, serif;
   --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --hand: "Noteworthy", "Bradley Hand", "Segoe Print", "Ink Free", "Comic Sans MS", cursive;
+  --hand: var(--serif); /* notes in the margin: always set in italic */
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -212,7 +212,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   content: "— — — end of report — — —"; display: block; text-align: center; letter-spacing: .3em; color: var(--ink); margin-bottom: 22px;
 }
 .site-footer p { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; }
-.site-footer .sig { font: 26px/1 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink); transform: rotate(-4deg);
+.site-footer .sig { font: italic 26px/1 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink); transform: rotate(-4deg);
   display: inline-block; border-bottom: 1px solid var(--text-2); padding: 0 18px 4px 4px; margin-right: 10px; }
 
 /* Data snapshot: an admission-style sheet beside an entry's title (below it on narrow screens),
@@ -231,7 +231,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .snapshot dl div:first-child { align-items: center; }
 .snapshot dl div:first-child dd { font-size: 22px; line-height: 1.05; color: var(--ink); text-shadow: var(--glow); letter-spacing: -0.01em; }
 .snapshot-note {
-  margin: 0; padding: 12px 18px 14px; font: 18px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink);
+  margin: 0; padding: 12px 18px 14px; font: italic 18px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink);
   text-align: center; transform: rotate(-1.5deg);
 }
 .snapshot-note a { display: table; margin: 10px auto 0; font-size: 14.5px; white-space: nowrap; } /* its own line, centred */
@@ -265,7 +265,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .stamp small { display: block; font-size: 11px; letter-spacing: .2em; margin-top: 3px; }
 :root[data-theme="dark"] .stamp { mix-blend-mode: normal; }
 .scribble {
-  font: 21px/1.15 var(--hand); color: var(--ink); margin: 24px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
+  font: italic 21px/1.15 var(--hand); color: var(--ink); margin: 24px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
   display: inline-block; max-width: 34ch;
 }
 .scribble::before { content: "↳ "; }
@@ -483,7 +483,7 @@ td button:hover { color: var(--ink); }
   transform: rotate(-.35deg);
 }
 .notes::before {
-  content: "case notes"; position: absolute; left: 14px; top: 32px; font: 22px/1 var(--hand); color: var(--ink);
+  content: "case notes"; position: absolute; left: 14px; top: 32px; font: italic 22px/1 var(--hand); color: var(--ink);
   writing-mode: vertical-rl; transform: rotate(180deg);
 }
 .notes h2 { font: 800 14px/28px var(--mono); text-transform: uppercase; letter-spacing: .2em; color: var(--ink); margin: 0; }
@@ -611,7 +611,7 @@ td button:hover { color: var(--ink); }
 .row-label.hl { fill: var(--mark); font-weight: 800; }
 .row-value { font-family: var(--mono); font-size: 12.5px; }
 .row-value.hl { fill: var(--mark); font-weight: 800; }
-.nodata-note { font-family: var(--hand); font-style: normal; font-size: 14px; fill: var(--mark); opacity: .75; }
+.nodata-note { font-family: var(--hand); font-style: italic; font-size: 14px; fill: var(--mark); opacity: .75; }
 .keys svg { overflow: visible; }
 .region { stroke: var(--surface); }
 .hover-ring, .outline-hl, .sel-ring { stroke: var(--mark); }
