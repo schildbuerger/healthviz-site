@@ -141,7 +141,7 @@ h2 { font-size: 16px; margin: 0; }
   border: 1.5px solid var(--text); background: var(--surface);
 }
 .eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
-.eyebrow a:hover { background: var(--ink); color: var(--on-ink); }
+@media (hover: hover) { .eyebrow a:hover { background: var(--ink); color: var(--on-ink); } }
 .eyebrow { padding-right: 10px; align-items: center; }
 .lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); }
 .lede strong {
@@ -179,7 +179,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .site-header nav a { color: var(--text); text-decoration: none; padding: 7px 9px; border: 1.5px solid transparent; }
 .site-header nav a::before { content: "["; color: var(--ink); }
 .site-header nav a::after { content: "]"; color: var(--ink); }
-.site-header nav a:hover { border-color: var(--text); background: var(--surface); }
+@media (hover: hover) { .site-header nav a:hover { border-color: var(--text); background: var(--surface); } }
 .theme-switch {
   font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
   color: var(--text); background: var(--surface); border: 1.5px solid var(--text); padding: 6px 8px; margin-left: 6px;
@@ -289,6 +289,17 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .brand::before, .trace path { animation: none; }
   .trace path { stroke-dasharray: none; }
 }
+/* Touch screens: every control is at least 44px tall (Apple's 44pt, close to Material's 48dp; WCAG 2.2
+   asks for 24px). Links inside running text keep their size. */
+@media (pointer: coarse) {
+  .brand { padding: 8px 0; }
+  .site-header nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; }
+  .theme-switch { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; }
+  .eyebrow a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; }
+  .snapshot-note a { padding: 10px 6px; margin-top: 4px; }
+  .site-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+  a, button, summary, select, input { -webkit-tap-highlight-color: transparent; }
+}
 /* Monitor mode: scanlines over everything */
 :root[data-theme="dark"] body::after {
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
@@ -338,14 +349,18 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   text-decoration: none; border-bottom: 1.5px dashed var(--text); transition: background .15s, color .15s;
 }
 /* Hover: EU blue on paper (gold on the monitor), so the monitor's navy frame stands apart from it */
-.entry-card:hover, .entry-card:focus-visible { background: var(--ink); color: var(--on-ink); outline: none; }
-.entry-card:hover .entry-body p, .entry-card:focus-visible .entry-body p { color: color-mix(in srgb, var(--on-ink) 80%, transparent); }
-.entry-card:hover .entry-body .topic, .entry-card:focus-visible .entry-body .topic { background: var(--flip); color: var(--ink) !important; }
+.entry-card:focus-visible { background: var(--ink); color: var(--on-ink); outline: none; }
+@media (hover: hover) { .entry-card:hover { background: var(--ink); color: var(--on-ink); outline: none; } }
+.entry-card:focus-visible .entry-body p { color: color-mix(in srgb, var(--on-ink) 80%, transparent); }
+@media (hover: hover) { .entry-card:hover .entry-body p { color: color-mix(in srgb, var(--on-ink) 80%, transparent); } }
+.entry-card:focus-visible .entry-body .topic { background: var(--flip); color: var(--ink) !important; }
+@media (hover: hover) { .entry-card:hover .entry-body .topic { background: var(--flip); color: var(--ink) !important; } }
 .bed, .entry-body { grid-row: 1 / span 2; } /* the monitor and its label stack in the third column */
 .bed {
   font: 900 92px/.8 var(--mono); letter-spacing: -0.08em; color: transparent; -webkit-text-stroke: 2px currentColor; text-align: center;
 }
-.entry-card:hover .bed, .entry-card:focus-visible .bed { color: var(--flip); -webkit-text-stroke-color: var(--flip); }
+.entry-card:focus-visible .bed { color: var(--flip); -webkit-text-stroke-color: var(--flip); }
+@media (hover: hover) { .entry-card:hover .bed { color: var(--flip); -webkit-text-stroke-color: var(--flip); } }
 .entry-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .entry-body h3 { margin: 0; font: 800 clamp(22px, 3vw, 36px)/1.02 var(--mono); text-transform: uppercase; letter-spacing: -0.045em; }
 .entry-body p { margin: 0; color: var(--text-2); font: 16px/1.45 var(--serif); max-width: 62ch; }
@@ -360,7 +375,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   box-shadow: 0 12px 24px -16px rgba(0, 0, 0, .8); transform: rotate(1deg); transition: transform .2s;
 }
 .entry-card:nth-child(even) .thumb { transform: rotate(-1.4deg); }
-.entry-card:hover .thumb { transform: rotate(0); }
+@media (hover: hover) { .entry-card:hover .thumb { transform: rotate(0); } }
 .thumb::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 6px;
   background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .3) 0 1px, transparent 1px 3px); }
 .thumb svg { display: block; width: 100%; height: 100%; }
@@ -382,7 +397,8 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   grid-column: 3; grid-row: 2; justify-self: end; margin-top: 12px; font: 800 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .16em; color: var(--ink);
   opacity: 0; transition: opacity .15s;
 }
-.entry-card:hover .admit, .entry-card:focus-visible .admit { opacity: 1; color: var(--flip); }
+.entry-card:focus-visible .admit { opacity: 1; color: var(--flip); }
+@media (hover: hover) { .entry-card:hover .admit { opacity: 1; color: var(--flip); } }
 .coming {
   display: grid; grid-template-columns: 120px 1fr; gap: 0 30px; align-items: center; padding: 26px 0; color: var(--text-2);
   font: 16px/1.45 var(--serif); border-bottom: 6px solid var(--text);
@@ -421,6 +437,8 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .about { padding: 80px 22px 26px; transform: none; }
   .entry-card { gap: 0 14px; margin: 0 -16px; padding: 22px 16px; }
 }
+/* Touch: no hover colours (they would stick after a tap); a short tint while the finger is down */
+@media (hover: none) { .entry-card:active { background: var(--ink-soft); } }
 @media (prefers-reduced-motion: reduce) {
   .entry-card, .thumb, .admit { transition: none; }
   .entry-card:hover .thumb { transform: none; }

@@ -141,7 +141,7 @@ h2 { font-size: 16px; margin: 0; }
   border: 1.5px solid var(--text); background: var(--surface);
 }
 .eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
-.eyebrow a:hover { background: var(--ink); color: var(--on-ink); }
+@media (hover: hover) { .eyebrow a:hover { background: var(--ink); color: var(--on-ink); } }
 .eyebrow { padding-right: 10px; align-items: center; }
 .lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); }
 .lede strong {
@@ -179,7 +179,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .site-header nav a { color: var(--text); text-decoration: none; padding: 7px 9px; border: 1.5px solid transparent; }
 .site-header nav a::before { content: "["; color: var(--ink); }
 .site-header nav a::after { content: "]"; color: var(--ink); }
-.site-header nav a:hover { border-color: var(--text); background: var(--surface); }
+@media (hover: hover) { .site-header nav a:hover { border-color: var(--text); background: var(--surface); } }
 .theme-switch {
   font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
   color: var(--text); background: var(--surface); border: 1.5px solid var(--text); padding: 6px 8px; margin-left: 6px;
@@ -289,6 +289,17 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .brand::before, .trace path { animation: none; }
   .trace path { stroke-dasharray: none; }
 }
+/* Touch screens: every control is at least 44px tall (Apple's 44pt, close to Material's 48dp; WCAG 2.2
+   asks for 24px). Links inside running text keep their size. */
+@media (pointer: coarse) {
+  .brand { padding: 8px 0; }
+  .site-header nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; }
+  .theme-switch { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; }
+  .eyebrow a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; }
+  .snapshot-note a { padding: 10px 6px; margin-top: 4px; }
+  .site-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+  a, button, summary, select, input { -webkit-tap-highlight-color: transparent; }
+}
 /* Monitor mode: scanlines over everything */
 :root[data-theme="dark"] body::after {
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
@@ -334,7 +345,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   text-transform: uppercase; letter-spacing: .03em; padding: 0 9px; border-radius: 4px; cursor: pointer;
   box-shadow: 0 2px 0 var(--text); transition: transform .06s, box-shadow .06s, background .1s;
 }
-.seg button:hover { background: var(--wash); }
+@media (hover: hover) { .seg button:hover { background: var(--wash); } }
 .seg button[aria-pressed="true"] {
   background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(2px); box-shadow: 0 0 0 var(--text);
 }
@@ -352,7 +363,7 @@ select {
   width: var(--ctl-h, 30px); height: var(--ctl-h, 30px); flex: none; display: grid; place-items: center; cursor: pointer;
   border: 1.5px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 2px 0 var(--text);
 }
-.icon-btn:hover { filter: brightness(1.1); }
+@media (hover: hover) { .icon-btn:hover { filter: brightness(1.1); } }
 .icon-btn:active { transform: translateY(2px); box-shadow: none; }
 .icon-btn svg { width: 11px; height: 11px; fill: currentColor; }
 button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
@@ -451,7 +462,7 @@ tr.hl td { background: var(--mark) !important; color: var(--on-mark); }
 tr.hl td button { color: var(--on-mark); }
 td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
-td button:hover { color: var(--ink); }
+@media (hover: hover) { td button:hover { color: var(--ink); } }
 
 /* Tooltip: embossed label tape */
 .tip {
@@ -519,6 +530,21 @@ td button:hover { color: var(--ink); }
       repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
   .notes::before { display: none; }
 }
+/* Touch screens: 44px controls (see shell.css), and 16px text in form fields so iOS Safari doesn't
+   zoom the page when one is tapped. Comes after the phone rules so it wins on small screens too. */
+@media (pointer: coarse) {
+  .filters { --ctl-h: 44px; }
+  .seg { gap: 6px; }
+  .seg button { min-width: 44px; justify-content: center; padding: 0 12px; }
+  select { font-size: 16px; }
+  .year input { height: var(--ctl-h); }
+  .icon-btn svg { width: 14px; height: 14px; }
+  .find input { font-size: 16px; min-height: 44px; }
+  details.card summary { min-height: 44px; }
+  details.card summary::before { width: 32px; height: 32px; }
+  td button { padding: 12px 0; margin: -12px 0; }
+  .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
+}
 @media (prefers-reduced-motion: reduce) { .seg button, details.card summary::before { transition: none; } }
 
 /* Below the fold: the browser skips rendering these until they come near the viewport. */
@@ -561,7 +587,7 @@ td button:hover { color: var(--ink); }
 .fn-cols { font-size: 12.5px; color: var(--muted); padding: 0 8px 6px; border-bottom: 1px solid var(--border); }
 .fn-cols span:nth-child(n+3) { text-align: right; }
 .fn-row { width: 100%; text-align: left; font: inherit; color: inherit; background: none; border: 0; border-bottom: 1px solid var(--border); padding: 9px 8px; cursor: pointer; border-radius: 6px; }
-.fn-row:hover { background: var(--wash); }
+@media (hover: hover) { .fn-row:hover { background: var(--wash); } }
 .fn-row[aria-pressed="true"] { background: color-mix(in srgb, var(--series-1) 9%, transparent); }
 .fn-row:focus-visible { outline: 2px solid var(--series-1); outline-offset: -2px; }
 .fn-name { font-size: 14.5px; color: var(--text); font-weight: 600; }
@@ -690,7 +716,7 @@ td button:hover { color: var(--ink); }
     <div class="card-head">
       <div>
         <h2 id="scatter-title">Spending and out-of-pocket share, 2024</h2>
-        <p class="small muted" id="scatter-sub">Each dot is a country. Further right: more spent on health (per person, price-adjusted (PPS)). Higher up: people pay a larger share themselves. Click a dot to compare that country with the EU-27 below; play the years to see dots move.</p>
+        <p class="small muted" id="scatter-sub">Each dot is a country. Further right: more spent on health (per person, price-adjusted (PPS)). Higher up: people pay a larger share themselves. Tap or click a dot to compare that country with the EU-27 below; play the years to see dots move.</p>
       </div>
     </div>
     <div class="keys" id="scatter-keys"><span class="key"><i class="k-dot"></i>Country</span><span class="key"><i class="k-line"></i>EU-27 average</span><span class="key"><i class="k-shade"></i>People pay more out of pocket than the EU-27 average</span><span class="key"><i class="k-trail"></i>Germany since 2016</span><span class="key"><i class="k-trail eu"></i>EU-27 since 2016</span></div>
@@ -701,7 +727,7 @@ td button:hover { color: var(--ink); }
     <div class="card-head">
       <div>
         <h2 id="fn-title">What the money goes to</h2>
-        <p class="small muted" id="fn-sub">Germany compared with the EU-27, 2024. Click a category to compare every country on it.</p>
+        <p class="small muted" id="fn-sub">Germany compared with the EU-27, 2024. Tap or click a category to compare every country on it.</p>
       </div>
     </div>
     <div class="fn-grid">
@@ -825,6 +851,13 @@ function placeTip(evt) {
 }
 const hideTip = () => tip.classList.remove("on");
 addEventListener("scroll", hideTip, { passive: true });
+// Touch: a tap selects like a click and also shows the tooltip a mouse gets on hover; a tap
+// anywhere else hides it again.
+let touch = false;
+addEventListener("pointerdown", e => {
+  touch = e.pointerType !== "mouse";
+  if (touch && !e.target.closest?.("svg[role=img], #insets")) hideTip();
+}, { capture: true, passive: true });
 function countryTip(evt, g) {
   tip.replaceChildren();
   html("span", "tv", `${fmtU(total(g))}${provisional(g) ? " (provisional)" : ""}`, tip);
@@ -976,17 +1009,19 @@ function renderScatter() {
   if (dots.includes(g0) && state.y > 0) key("k-trail", `${name(g0)} since ${YEARS[0]}`);
   if (state.y > 0) key("k-trail eu", `EU-27 since ${YEARS[0]}`);
   $("scatter-title").textContent = `Spending and out-of-pocket share, ${YEARS[state.y]}`;
-  $("scatter-sub").textContent = `Each dot is a country. Further right: more spent on health (${UNITS[state.unit].axis.replace(/^Spending /, "")}). Higher up: people pay a larger share themselves. Click a dot to compare that country with the EU-27 below; play the years to see dots move.`;
+  $("scatter-sub").textContent = `Each dot is a country. Further right: more spent on health (${UNITS[state.unit].axis.replace(/^Spending /, "")}). Higher up: people pay a larger share themselves. Tap or click a dot to compare that country with the EU-27 below; play the years to see dots move.`;
 }
 const scatter = $("scatter");
-scatter.addEventListener("pointermove", evt => {
+const scatterTip = evt => {
   const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
   if (g) countryTip(evt, g); else hideTip();
-});
+};
+scatter.addEventListener("pointermove", scatterTip);
 scatter.addEventListener("pointerleave", hideTip);
 scatter.addEventListener("click", evt => {
   const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
   if (g) setCountry(g);
+  if (touch) scatterTip(evt);
 });
 
 /* ---------- Tiles and lede ---------- */
@@ -1064,7 +1099,7 @@ function acrossMax() {
 
 function renderFunctions() {
   const g = state.country, y0 = 0, year = YEARS[state.y];
-  $("fn-sub").textContent = `${name(g)} compared with the EU-27, ${year}. Click a category to compare every country on it.`;
+  $("fn-sub").textContent = `${name(g)} compared with the EU-27, ${year}. Tap or click a category to compare every country on it.`;
   $("fn-change-h").textContent = state.y > 0 ? `Since ${YEARS[y0]}` : "";
   const keys = $("fn-keys");
   keys.replaceChildren();

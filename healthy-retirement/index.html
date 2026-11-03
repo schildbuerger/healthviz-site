@@ -141,7 +141,7 @@ h2 { font-size: 16px; margin: 0; }
   border: 1.5px solid var(--text); background: var(--surface);
 }
 .eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
-.eyebrow a:hover { background: var(--ink); color: var(--on-ink); }
+@media (hover: hover) { .eyebrow a:hover { background: var(--ink); color: var(--on-ink); } }
 .eyebrow { padding-right: 10px; align-items: center; }
 .lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); }
 .lede strong {
@@ -179,7 +179,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .site-header nav a { color: var(--text); text-decoration: none; padding: 7px 9px; border: 1.5px solid transparent; }
 .site-header nav a::before { content: "["; color: var(--ink); }
 .site-header nav a::after { content: "]"; color: var(--ink); }
-.site-header nav a:hover { border-color: var(--text); background: var(--surface); }
+@media (hover: hover) { .site-header nav a:hover { border-color: var(--text); background: var(--surface); } }
 .theme-switch {
   font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
   color: var(--text); background: var(--surface); border: 1.5px solid var(--text); padding: 6px 8px; margin-left: 6px;
@@ -289,6 +289,17 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .brand::before, .trace path { animation: none; }
   .trace path { stroke-dasharray: none; }
 }
+/* Touch screens: every control is at least 44px tall (Apple's 44pt, close to Material's 48dp; WCAG 2.2
+   asks for 24px). Links inside running text keep their size. */
+@media (pointer: coarse) {
+  .brand { padding: 8px 0; }
+  .site-header nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; }
+  .theme-switch { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; }
+  .eyebrow a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; }
+  .snapshot-note a { padding: 10px 6px; margin-top: 4px; }
+  .site-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+  a, button, summary, select, input { -webkit-tap-highlight-color: transparent; }
+}
 /* Monitor mode: scanlines over everything */
 :root[data-theme="dark"] body::after {
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
@@ -334,7 +345,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   text-transform: uppercase; letter-spacing: .03em; padding: 0 9px; border-radius: 4px; cursor: pointer;
   box-shadow: 0 2px 0 var(--text); transition: transform .06s, box-shadow .06s, background .1s;
 }
-.seg button:hover { background: var(--wash); }
+@media (hover: hover) { .seg button:hover { background: var(--wash); } }
 .seg button[aria-pressed="true"] {
   background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(2px); box-shadow: 0 0 0 var(--text);
 }
@@ -352,7 +363,7 @@ select {
   width: var(--ctl-h, 30px); height: var(--ctl-h, 30px); flex: none; display: grid; place-items: center; cursor: pointer;
   border: 1.5px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 2px 0 var(--text);
 }
-.icon-btn:hover { filter: brightness(1.1); }
+@media (hover: hover) { .icon-btn:hover { filter: brightness(1.1); } }
 .icon-btn:active { transform: translateY(2px); box-shadow: none; }
 .icon-btn svg { width: 11px; height: 11px; fill: currentColor; }
 button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
@@ -451,7 +462,7 @@ tr.hl td { background: var(--mark) !important; color: var(--on-mark); }
 tr.hl td button { color: var(--on-mark); }
 td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
-td button:hover { color: var(--ink); }
+@media (hover: hover) { td button:hover { color: var(--ink); } }
 
 /* Tooltip: embossed label tape */
 .tip {
@@ -518,6 +529,21 @@ td button:hover { color: var(--ink); }
     background-image: linear-gradient(90deg, transparent 18px, var(--mark-soft) 18px, var(--mark-soft) 20px, transparent 20px),
       repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
   .notes::before { display: none; }
+}
+/* Touch screens: 44px controls (see shell.css), and 16px text in form fields so iOS Safari doesn't
+   zoom the page when one is tapped. Comes after the phone rules so it wins on small screens too. */
+@media (pointer: coarse) {
+  .filters { --ctl-h: 44px; }
+  .seg { gap: 6px; }
+  .seg button { min-width: 44px; justify-content: center; padding: 0 12px; }
+  select { font-size: 16px; }
+  .year input { height: var(--ctl-h); }
+  .icon-btn svg { width: 14px; height: 14px; }
+  .find input { font-size: 16px; min-height: 44px; }
+  details.card summary { min-height: 44px; }
+  details.card summary::before { width: 32px; height: 32px; }
+  td button { padding: 12px 0; margin: -12px 0; }
+  .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
 }
 @media (prefers-reduced-motion: reduce) { .seg button, details.card summary::before { transition: none; } }
 
@@ -616,7 +642,7 @@ td button:hover { color: var(--ink); }
     <div class="card-head">
       <div>
         <h2 id="blocks-title">Life after 65, one block per year, 2024</h2>
-        <p class="small muted" id="blocks-sub">Each block is a year a 65-year-old can expect to live. Filled blocks are years without health limitations. The red marker is the average age at which people started their old-age pension. Countries are ranked by healthy years. Click a row to pick a country.</p>
+        <p class="small muted" id="blocks-sub">Each block is a year a 65-year-old can expect to live. Filled blocks are years without health limitations. The red marker is the average age at which people started their old-age pension. Countries are ranked by healthy years. Tap or click a row to pick a country.</p>
       </div>
     </div>
     <div class="keys" aria-hidden="true">
@@ -724,6 +750,13 @@ function placeTip(evt) {
 }
 const hideTip = () => tip.classList.remove("on");
 addEventListener("scroll", hideTip, { passive: true });
+// Touch: a tap selects like a click and also shows the tooltip a mouse gets on hover; a tap
+// anywhere else hides it again.
+let touch = false;
+addEventListener("pointerdown", e => {
+  touch = e.pointerType !== "mouse";
+  if (touch && !e.target.closest?.("svg[role=img], #insets")) hideTip();
+}, { capture: true, passive: true });
 function rowTip(evt, g) {
   tip.replaceChildren();
   if (hly(g) == null) {
@@ -799,17 +832,19 @@ function renderBlocks() {
     drawRow(svg, g, top, x, unit, gap, cls, W);
     el("rect", { class: "row-hit", x: 0, y: top, width: W, height: ROW, "data-g": g }, svg);
   }
-  $("blocks-sub").textContent = `Each block is a year a 65-year-old can expect to live${state.sex === "T" ? "" : ` (${WHO[state.sex]})`}. Filled blocks are years without health limitations. The red marker is the average age at which people started their old-age pension. Countries are ranked by healthy years. Click a row to pick a country.`;
+  $("blocks-sub").textContent = `Each block is a year a 65-year-old can expect to live${state.sex === "T" ? "" : ` (${WHO[state.sex]})`}. Filled blocks are years without health limitations. The red marker is the average age at which people started their old-age pension. Countries are ranked by healthy years. Tap or click a row to pick a country.`;
 }
 const blocks = $("blocks");
-blocks.addEventListener("pointermove", evt => {
+const blocksTip = evt => {
   const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
   if (g) rowTip(evt, g); else hideTip();
-});
+};
+blocks.addEventListener("pointermove", blocksTip);
 blocks.addEventListener("pointerleave", hideTip);
 blocks.addEventListener("click", evt => {
   const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
   if (g && g !== EU) setCountry(g);
+  if (touch) blocksTip(evt);
 });
 
 /* ---------- Tiles and lede ---------- */

@@ -141,7 +141,7 @@ h2 { font-size: 16px; margin: 0; }
   border: 1.5px solid var(--text); background: var(--surface);
 }
 .eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
-.eyebrow a:hover { background: var(--ink); color: var(--on-ink); }
+@media (hover: hover) { .eyebrow a:hover { background: var(--ink); color: var(--on-ink); } }
 .eyebrow { padding-right: 10px; align-items: center; }
 .lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); }
 .lede strong {
@@ -179,7 +179,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .site-header nav a { color: var(--text); text-decoration: none; padding: 7px 9px; border: 1.5px solid transparent; }
 .site-header nav a::before { content: "["; color: var(--ink); }
 .site-header nav a::after { content: "]"; color: var(--ink); }
-.site-header nav a:hover { border-color: var(--text); background: var(--surface); }
+@media (hover: hover) { .site-header nav a:hover { border-color: var(--text); background: var(--surface); } }
 .theme-switch {
   font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
   color: var(--text); background: var(--surface); border: 1.5px solid var(--text); padding: 6px 8px; margin-left: 6px;
@@ -289,6 +289,17 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .brand::before, .trace path { animation: none; }
   .trace path { stroke-dasharray: none; }
 }
+/* Touch screens: every control is at least 44px tall (Apple's 44pt, close to Material's 48dp; WCAG 2.2
+   asks for 24px). Links inside running text keep their size. */
+@media (pointer: coarse) {
+  .brand { padding: 8px 0; }
+  .site-header nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; }
+  .theme-switch { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; }
+  .eyebrow a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; }
+  .snapshot-note a { padding: 10px 6px; margin-top: 4px; }
+  .site-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+  a, button, summary, select, input { -webkit-tap-highlight-color: transparent; }
+}
 /* Monitor mode: scanlines over everything */
 :root[data-theme="dark"] body::after {
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
@@ -334,7 +345,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   text-transform: uppercase; letter-spacing: .03em; padding: 0 9px; border-radius: 4px; cursor: pointer;
   box-shadow: 0 2px 0 var(--text); transition: transform .06s, box-shadow .06s, background .1s;
 }
-.seg button:hover { background: var(--wash); }
+@media (hover: hover) { .seg button:hover { background: var(--wash); } }
 .seg button[aria-pressed="true"] {
   background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(2px); box-shadow: 0 0 0 var(--text);
 }
@@ -352,7 +363,7 @@ select {
   width: var(--ctl-h, 30px); height: var(--ctl-h, 30px); flex: none; display: grid; place-items: center; cursor: pointer;
   border: 1.5px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 2px 0 var(--text);
 }
-.icon-btn:hover { filter: brightness(1.1); }
+@media (hover: hover) { .icon-btn:hover { filter: brightness(1.1); } }
 .icon-btn:active { transform: translateY(2px); box-shadow: none; }
 .icon-btn svg { width: 11px; height: 11px; fill: currentColor; }
 button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
@@ -451,7 +462,7 @@ tr.hl td { background: var(--mark) !important; color: var(--on-mark); }
 tr.hl td button { color: var(--on-mark); }
 td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
-td button:hover { color: var(--ink); }
+@media (hover: hover) { td button:hover { color: var(--ink); } }
 
 /* Tooltip: embossed label tape */
 .tip {
@@ -519,6 +530,21 @@ td button:hover { color: var(--ink); }
       repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
   .notes::before { display: none; }
 }
+/* Touch screens: 44px controls (see shell.css), and 16px text in form fields so iOS Safari doesn't
+   zoom the page when one is tapped. Comes after the phone rules so it wins on small screens too. */
+@media (pointer: coarse) {
+  .filters { --ctl-h: 44px; }
+  .seg { gap: 6px; }
+  .seg button { min-width: 44px; justify-content: center; padding: 0 12px; }
+  select { font-size: 16px; }
+  .year input { height: var(--ctl-h); }
+  .icon-btn svg { width: 14px; height: 14px; }
+  .find input { font-size: 16px; min-height: 44px; }
+  details.card summary { min-height: 44px; }
+  details.card summary::before { width: 32px; height: 32px; }
+  td button { padding: 12px 0; margin: -12px 0; }
+  .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
+}
 @media (prefers-reduced-motion: reduce) { .seg button, details.card summary::before { transition: none; } }
 
 /* Below the fold: the browser skips rendering these until they come near the viewport. */
@@ -536,7 +562,7 @@ td button:hover { color: var(--ink); }
 .region[data-bin="4"] { fill: var(--seq-5); } .region[data-bin="5"] { fill: var(--seq-6); }
 .region[data-bin="na"] { fill: url(#hatch); }
 .region[data-bin="out"] { fill: var(--out); }
-.region:hover { opacity: .9; }
+@media (hover: hover) { .region:hover { opacity: .9; } }
 .hover-ring { fill: none; stroke: var(--text); stroke-width: 1.5; vector-effect: non-scaling-stroke; pointer-events: none; }
 .outline { fill: none; stroke: var(--surface); stroke-width: 1.4; vector-effect: non-scaling-stroke; pointer-events: none; }
 .outline-hl { fill: none; stroke: var(--text); stroke-width: 1.6; vector-effect: non-scaling-stroke; pointer-events: none; }
@@ -546,7 +572,8 @@ td button:hover { color: var(--ink); }
   position: absolute; top: 8px; right: 8px; font: inherit; font-size: 14px; color: var(--text);
   background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer;
 }
-.zoom-btn:hover { background: var(--wash); }
+@media (hover: hover) { .zoom-btn:hover { background: var(--wash); } }
+@media (pointer: coarse) { .zoom-btn { min-height: 44px; padding: 0 14px; } }
 
 /* Legend: a binned scale bar with the EU-27 average marked on it */
 .legend { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 18px; margin-bottom: 10px; min-height: 46px; } /* the scale's height, before the script draws it */
@@ -665,7 +692,7 @@ td button:hover { color: var(--ink); }
     <p class="stamp" aria-hidden="true">Vital records<small>region by region</small></p>
     <h1>Where in Europe do people live longest<span class="qm">?</span></h1>
     <p class="lede" id="lede"><span class="thought">In 2023, a baby born in <strong>Comunidad de Madrid (Spain)</strong> could expect to live <strong>86.1 years</strong>, 12.2 years longer than one born in <strong>Severozapaden (Bulgaria)</strong>.</span> <span class="thought">That is the spread across 242 regions in the EU-27.</span> <span class="thought">In Germany it ranges from 79.2 in Sachsen-Anhalt to 82.8 in Tübingen.</span></p>
-    <p class="scribble" aria-hidden="true">Hover the map: every region has its own number.</p>
+    <p class="scribble" aria-hidden="true">Touch the map: every region has its own number.</p>
     <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Data retrieved</dt><dd><time datetime="2026-10-26">26 Oct 2026</time></dd></div><div><dt>Source last updated</dt><dd><time datetime="2025-06-05">5 Jun 2025</time> · Eurostat</dd></div><div><dt>Covers</dt><dd>2002–2023 · 292 regions</dd></div></dl><p class="snapshot-note">This entry stays as it is until its data is explicitly updated. <a href="#sources">Sources and notes</a></p></aside>
   </header>
 
@@ -711,7 +738,7 @@ td button:hover { color: var(--ink); }
       <div class="card-head">
         <div>
           <h2 id="map-title"></h2>
-          <p class="small muted">Years a newborn can expect to live, by NUTS 2 region. Hover for values, click to see a region over time.</p>
+          <p class="small muted">Years a newborn can expect to live, by NUTS 2 region. Hover or tap for values; select a region to see it over time.</p>
         </div>
       </div>
       <div class="legend" id="legend"></div>
@@ -971,6 +998,13 @@ function regionTip(evt, r) {
 }
 const hideTip = () => tip.classList.remove("on");
 addEventListener("scroll", hideTip, { passive: true });
+// Touch: a tap selects like a click and also shows the tooltip a mouse gets on hover; a tap
+// anywhere else hides it again.
+let touch = false;
+addEventListener("pointerdown", e => {
+  touch = e.pointerType !== "mouse";
+  if (touch && !e.target.closest?.("svg[role=img], #insets")) hideTip();
+}, { capture: true, passive: true });
 
 // Hovering a region on the map outlines it.
 function setHover(id) {
@@ -979,15 +1013,17 @@ function setHover(id) {
 }
 
 function bindRegionEvents(root, outline = false) {
-  root.addEventListener("pointermove", evt => {
+  const show = evt => {
     const id = evt.target.getAttribute && evt.target.getAttribute("data-id");
     if (id) regionTip(evt, byId[id]); else hideTip();
     if (outline) setHover(id);
-  });
+  };
+  root.addEventListener("pointermove", show);
   root.addEventListener("pointerleave", () => { hideTip(); if (outline) setHover(null); });
   root.addEventListener("click", evt => {
     const id = evt.target.getAttribute && evt.target.getAttribute("data-id");
     if (id) selectRegion(id);
+    if (touch && id) regionTip(evt, byId[id]);
   });
 }
 bindRegionEvents(map, true);
