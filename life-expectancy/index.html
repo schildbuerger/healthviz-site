@@ -18,7 +18,7 @@
 <meta property="og:title" content="Where in Europe do people live longest? · healthviz">
 <meta property="og:description" content="Life expectancy at birth in every European NUTS 2 region since 2002, for women, men and in total: an interactive map with Eurostat data.">
 <meta property="og:url" content="https://healthviz.eu/life-expectancy/">
-<meta property="og:image" content="https://healthviz.eu/life-expectancy/og.png?v=32b00cdba1">
+<meta property="og:image" content="https://healthviz.eu/life-expectancy/og.png?v=f3b662b65e">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Where in Europe do people live longest? A healthviz chart of the data on a monitor, on ECG paper.">
@@ -29,8 +29,8 @@
 /* Shared by every healthviz page. Pasted inline at build time.
    Design: "the patient chart", tilted towards the EU's blue and gold. In light mode every
    page is a printout on ECG paper (red millimetre grid, tractor-feed paper) written on in
-   blue ballpoint with a gold highlighter; in dark mode it is a bedside monitor (phosphor
-   green on navy black, gold accents, scanlines). --ink is the room's accent (blue / gold);
+   blue ballpoint with a gold highlighter; in dark mode it is a bedside monitor (blue
+   phosphor on navy black, gold accents, scanlines). --ink is the room's accent (blue / gold);
    --mark marks the selection inside charts (red in both, apart from the blue data). Data colours (--series-*, --seq-*)
    are the validated palette and stay the same in both: only the room around them changes. */
 :root {
@@ -62,12 +62,12 @@
   --ecg-minor: rgba(222, 72, 72, 0.10);
   --ecg-major: rgba(222, 72, 72, 0.22);
   --hole: #f3ddd5;
-  --bar-paper: rgba(27, 140, 80, 0.07);
+  --bar-paper: rgba(29, 63, 154, 0.06);
   --glow: none;
   --paper-shadow: 0 1px 0 rgba(27, 22, 38, .06), 0 14px 30px -18px rgba(90, 20, 30, .35);
   /* The monitor strip (key figures) is a screen in both modes */
   --screen: #020a12; --bezel: #16213f;
-  --ch-1: #3dff8a; --ch-2: #ffd23d; --ch-3: #3fd6ff; --ch-4: #ff6b86;
+  --ch-1: #6f9dff; --ch-2: #ffd23d; --ch-3: #3fd6ff; --ch-4: #ff6b86;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --serif: ui-serif, "New York", "Iowan Old Style", Charter, Georgia, serif;
   --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -76,37 +76,37 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
-    --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+    --page: #02040b; --surface: #060d18; --text: #e2e9ff; --text-2: #a9bbef;
+    --muted: #7b8ab3; --grid: #0f1a30; --axis: #1e2d52; --border: rgba(111, 157, 255, 0.2);
     --land: #0d1820; --out: #13212c; --hatch: #2a424c;
-    --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+    --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(111, 157, 255, 0.08);
     --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
     --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
     --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
     --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
     --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
-    --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
-    --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
-    --glow: 0 0 10px rgba(80, 255, 150, 0.45);
-    --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
+    --ecg-minor: rgba(111, 157, 255, 0.04); --ecg-major: rgba(111, 157, 255, 0.09);
+    --hole: #000; --bar-paper: rgba(111, 157, 255, 0.06);
+    --glow: 0 0 10px rgba(111, 157, 255, 0.45);
+    --paper-shadow: 0 0 0 1px rgba(111, 157, 255, .14), 0 0 28px -8px rgba(111, 157, 255, .2);
     --screen: #01040c; --bezel: #101a36;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
-  --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+  --page: #02040b; --surface: #060d18; --text: #e2e9ff; --text-2: #a9bbef;
+  --muted: #7b8ab3; --grid: #0f1a30; --axis: #1e2d52; --border: rgba(111, 157, 255, 0.2);
   --land: #0d1820; --out: #13212c; --hatch: #2a424c;
-  --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+  --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(111, 157, 255, 0.08);
   --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
   --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
   --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
   --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
   --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
-  --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
-  --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
-  --glow: 0 0 10px rgba(80, 255, 150, 0.45);
-  --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
+  --ecg-minor: rgba(111, 157, 255, 0.04); --ecg-major: rgba(111, 157, 255, 0.09);
+  --hole: #000; --bar-paper: rgba(111, 157, 255, 0.06);
+  --glow: 0 0 10px rgba(111, 157, 255, 0.45);
+  --paper-shadow: 0 0 0 1px rgba(111, 157, 255, .14), 0 0 28px -8px rgba(111, 157, 255, .2);
   --screen: #01040c; --bezel: #101a36;
 }
 
@@ -196,8 +196,8 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .trace { flex-basis: 100%; height: 46px; margin: 4px -24px 0; width: calc(100% + 48px); display: block; overflow: visible; }
 .trace path { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke;
   stroke-dasharray: 100 100; animation: hv-sweep 7s linear infinite; filter: drop-shadow(var(--glow-f, 0 0 0 transparent)); }
-:root[data-theme="dark"] .trace path { stroke: #3dff8a; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .trace path { stroke: #3dff8a; } }
+:root[data-theme="dark"] .trace path { stroke: #6f9dff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .trace path { stroke: #6f9dff; } }
 @keyframes hv-sweep { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -100; } }
 /* Reading progress: an IV line down the right edge, filling as you scroll */
 .drip { position: fixed; top: 0; right: 0; width: 5px; height: 100vh; z-index: 30; pointer-events: none;
@@ -304,7 +304,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 
 /* Components shared by entry pages: filters, tiles, cards, chart axes, table, tooltip, notes.
    Pasted inline at build time, after shell.css. Filters are a control panel of physical keys,
-   key figures a bedside monitor, cards tractor-feed printouts, the table greenbar paper,
+   key figures a bedside monitor, cards tractor-feed printouts, the table bluebar paper,
    the tooltip embossed label tape, and the notes a lined case-notes sheet. */
 
 /* Filters: a control panel above everything they scope. Every control has the same height
@@ -360,7 +360,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 /* Key figures: a bedside monitor with four channels, in both modes */
 .tiles {
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin-bottom: 30px;
-  background: rgba(61, 255, 138, .16); border: 10px solid var(--bezel); border-radius: 18px; overflow: hidden;
+  background: rgba(111, 157, 255, .16); border: 10px solid var(--bezel); border-radius: 18px; overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), 0 18px 34px -20px rgba(0, 0, 0, .7);
   position: relative;
 }
@@ -380,7 +380,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .tile { counter-increment: ch; }
 .tile .v { font: 700 34px/1.15 var(--mono); letter-spacing: -0.04em; margin: 0; text-shadow: 0 0 12px currentColor; font-variant-numeric: tabular-nums; }
 .tile .v small { font-size: 14px; font-weight: 500; opacity: .85; margin-left: 4px; letter-spacing: 0; }
-.tile .s { font: 13px/1.5 var(--mono); color: #b9d4c6; opacity: .85; margin: 4px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tile .s { font: 13px/1.5 var(--mono); color: #bcc8e8; opacity: .85; margin: 4px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* Tiles are filled by the script: each line keeps its height from the start (no layout shift). */
 .tile .k, .tile .s { min-height: 1.5em; }
 .tile .v { min-height: 1.2em; }
@@ -428,7 +428,7 @@ svg text { font-family: var(--sans); }
 .col-head, .axis-title { font-family: var(--mono) !important; text-transform: uppercase; letter-spacing: .06em; }
 svg[role="img"] { cursor: crosshair; }
 
-/* Table view: greenbar printout */
+/* Table view: bluebar printout (blue instead of green: the room stays EU blue) */
 details.card summary {
   cursor: pointer; font: 800 14px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em; list-style: none;
   display: flex; align-items: center; gap: 12px;
@@ -443,7 +443,7 @@ details.card summary::after { content: "· print to screen"; color: var(--muted)
 .table-wrap { overflow-x: auto; margin-top: 16px; max-height: 560px; overflow-y: auto; border-top: 2px solid var(--text); }
 table { border-collapse: collapse; width: 100%; font: 13.5px var(--mono); }
 th, td { text-align: left; padding: 6px 10px; white-space: nowrap; }
-tbody tr:nth-child(4n+1) td, tbody tr:nth-child(4n+2) td { background: rgba(27, 175, 90, .09); }
+tbody tr:nth-child(4n+1) td, tbody tr:nth-child(4n+2) td { background: rgba(29, 63, 154, .07); }
 th { position: sticky; top: 0; background: var(--surface); color: var(--text); font-weight: 800; text-transform: uppercase;
   letter-spacing: .06em; font-size: 12px; border-bottom: 1.5px solid var(--text); }
 td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
@@ -462,8 +462,8 @@ td button:hover { color: var(--ink); }
   text-shadow: 0 1px 0 rgba(0, 0, 0, .8), 0 -1px 0 rgba(255, 255, 255, .25);
   background-image: radial-gradient(circle at 6px 50%, #14306f 0 2px, transparent 2.5px);
 }
-:root[data-theme="dark"] .tip { background-color: #0b2a17; color: #b7ffd4; box-shadow: 0 0 0 1px #3dff8a, 0 0 18px rgba(61, 255, 138, .3); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tip { background-color: #0b2a17; color: #b7ffd4; box-shadow: 0 0 0 1px #3dff8a, 0 0 18px rgba(61, 255, 138, .3); } }
+:root[data-theme="dark"] .tip { background-color: #0c1a3d; color: #d3ddff; box-shadow: 0 0 0 1px #6f9dff, 0 0 18px rgba(111, 157, 255, .3); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tip { background-color: #0c1a3d; color: #d3ddff; box-shadow: 0 0 0 1px #6f9dff, 0 0 18px rgba(111, 157, 255, .3); } }
 .tip.on { opacity: 1; }
 .tip .tv { font-size: 15px; font-weight: 800; display: block; letter-spacing: 0; }
 .tip .tn { display: block; color: #ffd84d; }
@@ -645,16 +645,16 @@ td button:hover { color: var(--ink); }
    data colours (validated against a dark surface) and phosphor text, scoped to the panel. */
 .screen-panel {
   --series-1: #4a78ec; --series-2: #d95926; --muted: #6f8f86; --surface: var(--screen);
-  --text: #d8ffe8; --text-2: #92d8b0; --grid: #10262a; --axis: #24454a;
+  --text: #e2e9ff; --text-2: #a9bbef; --grid: #101c33; --axis: #243659;
   background: var(--screen); border: 7px solid var(--bezel); border-radius: 12px; padding: 8px 10px 4px;
-  box-shadow: inset 0 0 18px rgba(61, 255, 138, .08); position: relative;
+  box-shadow: inset 0 0 18px rgba(111, 157, 255, .1); position: relative;
 }
 .screen-panel::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 5px;
   background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .25) 0 1px, transparent 1px 3px); }
 .screen-panel .chart-legend { color: var(--text-2); }
 .tip.screen { --series-1: #4a78ec; --series-2: #d95926; --muted: #6f8f86; }
 .screen-panel .gridline { stroke-dasharray: none; }
-#line path { filter: drop-shadow(0 0 3px rgba(80, 255, 150, .25)); }
+#line path { filter: drop-shadow(0 0 3px rgba(111, 157, 255, .3)); }
 </style>
 </head>
 <body>

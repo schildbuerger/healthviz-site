@@ -18,7 +18,7 @@
 <meta property="og:title" content="healthviz · European health data, visualised">
 <meta property="og:description" content="A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it.">
 <meta property="og:url" content="https://healthviz.eu/">
-<meta property="og:image" content="https://healthviz.eu/og.png?v=45f5f77814">
+<meta property="og:image" content="https://healthviz.eu/og.png?v=d5bd2949e2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="healthviz: European health data, one question at a time. The newest entry&#x27;s chart on a monitor, on ECG paper.">
@@ -29,8 +29,8 @@
 /* Shared by every healthviz page. Pasted inline at build time.
    Design: "the patient chart", tilted towards the EU's blue and gold. In light mode every
    page is a printout on ECG paper (red millimetre grid, tractor-feed paper) written on in
-   blue ballpoint with a gold highlighter; in dark mode it is a bedside monitor (phosphor
-   green on navy black, gold accents, scanlines). --ink is the room's accent (blue / gold);
+   blue ballpoint with a gold highlighter; in dark mode it is a bedside monitor (blue
+   phosphor on navy black, gold accents, scanlines). --ink is the room's accent (blue / gold);
    --mark marks the selection inside charts (red in both, apart from the blue data). Data colours (--series-*, --seq-*)
    are the validated palette and stay the same in both: only the room around them changes. */
 :root {
@@ -62,12 +62,12 @@
   --ecg-minor: rgba(222, 72, 72, 0.10);
   --ecg-major: rgba(222, 72, 72, 0.22);
   --hole: #f3ddd5;
-  --bar-paper: rgba(27, 140, 80, 0.07);
+  --bar-paper: rgba(29, 63, 154, 0.06);
   --glow: none;
   --paper-shadow: 0 1px 0 rgba(27, 22, 38, .06), 0 14px 30px -18px rgba(90, 20, 30, .35);
   /* The monitor strip (key figures) is a screen in both modes */
   --screen: #020a12; --bezel: #16213f;
-  --ch-1: #3dff8a; --ch-2: #ffd23d; --ch-3: #3fd6ff; --ch-4: #ff6b86;
+  --ch-1: #6f9dff; --ch-2: #ffd23d; --ch-3: #3fd6ff; --ch-4: #ff6b86;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --serif: ui-serif, "New York", "Iowan Old Style", Charter, Georgia, serif;
   --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -76,37 +76,37 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
-    --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+    --page: #02040b; --surface: #060d18; --text: #e2e9ff; --text-2: #a9bbef;
+    --muted: #7b8ab3; --grid: #0f1a30; --axis: #1e2d52; --border: rgba(111, 157, 255, 0.2);
     --land: #0d1820; --out: #13212c; --hatch: #2a424c;
-    --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+    --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(111, 157, 255, 0.08);
     --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
     --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
     --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
     --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
     --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
-    --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
-    --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
-    --glow: 0 0 10px rgba(80, 255, 150, 0.45);
-    --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
+    --ecg-minor: rgba(111, 157, 255, 0.04); --ecg-major: rgba(111, 157, 255, 0.09);
+    --hole: #000; --bar-paper: rgba(111, 157, 255, 0.06);
+    --glow: 0 0 10px rgba(111, 157, 255, 0.45);
+    --paper-shadow: 0 0 0 1px rgba(111, 157, 255, .14), 0 0 28px -8px rgba(111, 157, 255, .2);
     --screen: #01040c; --bezel: #101a36;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: #02040b; --surface: #060d18; --text: #d8ffe8; --text-2: #92d8b0;
-  --muted: #5f8c80; --grid: #0f2226; --axis: #1e3b40; --border: rgba(80, 255, 150, 0.18);
+  --page: #02040b; --surface: #060d18; --text: #e2e9ff; --text-2: #a9bbef;
+  --muted: #7b8ab3; --grid: #0f1a30; --axis: #1e2d52; --border: rgba(111, 157, 255, 0.2);
   --land: #0d1820; --out: #13212c; --hatch: #2a424c;
-  --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(80, 255, 150, 0.07);
+  --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(111, 157, 255, 0.08);
   --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
   --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
   --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
   --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
   --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
-  --ecg-minor: rgba(60, 255, 140, 0.035); --ecg-major: rgba(60, 255, 140, 0.08);
-  --hole: #000; --bar-paper: rgba(80, 255, 150, 0.05);
-  --glow: 0 0 10px rgba(80, 255, 150, 0.45);
-  --paper-shadow: 0 0 0 1px rgba(80, 255, 150, .12), 0 0 28px -8px rgba(60, 255, 140, .18);
+  --ecg-minor: rgba(111, 157, 255, 0.04); --ecg-major: rgba(111, 157, 255, 0.09);
+  --hole: #000; --bar-paper: rgba(111, 157, 255, 0.06);
+  --glow: 0 0 10px rgba(111, 157, 255, 0.45);
+  --paper-shadow: 0 0 0 1px rgba(111, 157, 255, .14), 0 0 28px -8px rgba(111, 157, 255, .2);
   --screen: #01040c; --bezel: #101a36;
 }
 
@@ -196,8 +196,8 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .trace { flex-basis: 100%; height: 46px; margin: 4px -24px 0; width: calc(100% + 48px); display: block; overflow: visible; }
 .trace path { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke;
   stroke-dasharray: 100 100; animation: hv-sweep 7s linear infinite; filter: drop-shadow(var(--glow-f, 0 0 0 transparent)); }
-:root[data-theme="dark"] .trace path { stroke: #3dff8a; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .trace path { stroke: #3dff8a; } }
+:root[data-theme="dark"] .trace path { stroke: #6f9dff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .trace path { stroke: #6f9dff; } }
 @keyframes hv-sweep { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -100; } }
 /* Reading progress: an IV line down the right edge, filling as you scroll */
 .drip { position: fixed; top: 0; right: 0; width: 5px; height: 100vh; z-index: 30; pointer-events: none;
@@ -365,16 +365,16 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .3) 0 1px, transparent 1px 3px); }
 .thumb svg { display: block; width: 100%; height: 100%; }
 /* Preview charts on the monitor: phosphor versions of the data colours */
-.thumb path { stroke: var(--screen); stroke-width: 1.5; fill: #10261a; }
-.thumb .b0 { fill: #0f5d36; } .thumb .b1 { fill: #138a4c; } .thumb .b2 { fill: #1fbf68; }
-.thumb .b3 { fill: #3dff8a; } .thumb .b4 { fill: #a8ffc9; } .thumb .b5 { fill: #e6fff0; }
-.thumb .out { fill: #17251d; }
-.thumb .s1 { fill: #3dff8a; } .thumb .s2 { fill: #ffd23d; } .thumb .s3 { fill: #3fd6ff; }
+.thumb path { stroke: var(--screen); stroke-width: 1.5; fill: #0e1a33; }
+.thumb .b0 { fill: #1c3a8c; } .thumb .b1 { fill: #2c55c4; } .thumb .b2 { fill: #4a78ec; }
+.thumb .b3 { fill: #6f9dff; } .thumb .b4 { fill: #abc0f7; } .thumb .b5 { fill: #e0e8fd; }
+.thumb .out { fill: #161f33; }
+.thumb .s1 { fill: #6f9dff; } .thumb .s2 { fill: #ffd23d; } .thumb .s3 { fill: #3fd6ff; }
 .thumb .ln { stroke: #ff6b86; stroke-width: 2; stroke-dasharray: 6 6; }
-.thumb .o1 { fill: none; stroke: #3dff8a; stroke-width: 1.5; stroke-opacity: .5; }
+.thumb .o1 { fill: none; stroke: #6f9dff; stroke-width: 1.5; stroke-opacity: .5; }
 .thumb .zone { fill: #ff6b86; fill-opacity: .16; }
-.thumb .foil { fill: #3dff8a; fill-opacity: .07; stroke: #3dff8a; stroke-opacity: .22; }
-.thumb .hz { stroke: #0f5d36; stroke-width: 2; }
+.thumb .foil { fill: #6f9dff; fill-opacity: .07; stroke: #6f9dff; stroke-opacity: .22; }
+.thumb .hz { stroke: #1c3a8c; stroke-width: 2; }
 .thumb .o3 { fill: #020a12; stroke: #3fd6ff; stroke-width: 2.5; }
 .thumb .ring { stroke: #020a12; stroke-width: 2; }
 .thumb .ret { fill: none; stroke: #ff6b86; stroke-width: 2.5; }
