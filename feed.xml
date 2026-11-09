@@ -5,8 +5,16 @@
     <link>https://healthviz.eu/</link>
     <description>A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 02 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 09 Nov 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://healthviz.eu/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Will your doctor retire soon?</title>
+      <link>https://healthviz.eu/retiring-doctors/</link>
+      <guid isPermaLink="true">https://healthviz.eu/retiring-doctors/</guid>
+      <pubDate>Mon, 09 Nov 2026 00:00:00 +0000</pubDate>
+      <category>Health workforce</category>
+      <description>How many of each European country&#x27;s doctors are 55 or over, and whether its medical schools turn out enough graduates to replace them.</description>
+    </item>
     <item>
       <title>When does Europe retire, and how many healthy years are left at 65?</title>
       <link>https://healthviz.eu/healthy-retirement/</link>

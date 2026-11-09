@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Will your doctor retire soon? · healthviz</title>
+<meta name="description" content="The share of doctors aged 55 or over in every EU country, and whether medical schools turn out enough graduates to replace them: an interactive ranking with Eurostat data.">
+<link rel="canonical" href="https://healthviz.eu/retiring-doctors/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="healthviz">
+<link rel="alternate" type="application/rss+xml" title="healthviz: new entries" href="https://healthviz.eu/feed.xml">
+<meta name="theme-color" content="#fbeee8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#030605" media="(prefers-color-scheme: dark)">
+<script>try{var t=localStorage.getItem('hv-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="healthviz">
+<meta property="og:title" content="Will your doctor retire soon? · healthviz">
+<meta property="og:description" content="The share of doctors aged 55 or over in every EU country, and whether medical schools turn out enough graduates to replace them: an interactive ranking with Eurostat data.">
+<meta property="og:url" content="https://healthviz.eu/retiring-doctors/">
+<meta property="og:image" content="https://healthviz.eu/retiring-doctors/og.png?v=b2eef81579">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Will your doctor retire soon? A healthviz chart of the data on a bedside monitor.">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Dataset", "name": "Will your doctor retire soon?", "description": "The share of doctors aged 55 or over in every EU country, and whether medical schools turn out enough graduates to replace them: an interactive ranking with Eurostat data.", "url": "https://healthviz.eu/retiring-doctors/", "keywords": ["doctors", "physicians", "age of doctors", "doctor shortage", "medical graduates", "health workforce", "Europe", "EU", "Eurostat"], "variableMeasured": ["Physicians by sex and age", "Medical graduates", "Share of physicians aged 55 or over"], "temporalCoverage": "2022/2024", "spatialCoverage": {"@type": "Place", "name": "Europe: EU-27 and other European countries"}, "license": "https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree": true, "datePublished": "2026-11-09", "dateModified": "2026-11-01", "isBasedOn": ["https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_phys/default/table", "https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_grd2/default/table", "https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_prs2/default/table"], "creditText": "Eurostat (hlth_rs_phys, hlth_rs_grd2, hlth_rs_prs2)", "distribution": {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://healthviz.eu/retiring-doctors/data.csv"}, "sourceOrganization": {"@type": "Organization", "name": "Eurostat", "url": "https://ec.europa.eu/eurostat"}, "@id": "https://healthviz.eu/retiring-doctors/#dataset"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "healthviz", "item": "https://healthviz.eu/"}, {"@type": "ListItem", "position": 2, "name": "Will your doctor retire soon?", "item": "https://healthviz.eu/retiring-doctors/"}]}]}</script>
+<style>
+/* Shared by every healthviz page. Pasted inline at build time.
+   Design: "the patient chart", tilted towards the EU's blue and gold. In light mode every
+   page is a printout on ECG paper (red millimetre grid, tractor-feed paper) written on in
+   blue ballpoint with a gold highlighter; in dark mode it is a bedside monitor (blue
+   phosphor on navy black, gold accents, scanlines). --ink is the room's accent (blue / gold);
+   --mark marks the selection inside charts (red in both, apart from the blue data). Data colours (--series-*, --seq-*)
+   are the validated palette and stay the same in both: only the room around them changes. */
+:root {
+  color-scheme: light;
+  --page: #f9f0e9;
+  --surface: #fffdf7;
+  --text: #141a3a;
+  --text-2: #434865;
+  --muted: #68647e;
+  --grid: #f1d3cc;
+  --axis: #d6a79e;
+  --border: rgba(20, 26, 58, 0.16);
+  --land: #efe7e0;
+  --out: #ddd4cb;
+  --hatch: #c4b8ae;
+  --series-1: #2d58d0;
+  --series-2: #eb6834;
+  --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4;
+  --wash: rgba(29, 63, 154, 0.07);
+  --seq-1: #8aa5ee; --seq-2: #6688e6; --seq-3: #4a6dda;
+  --seq-4: #3456c4; --seq-5: #22409e; --seq-6: #142b70;
+  /* The room: ink, paper, grid */
+  --ink: #1d3f9a;
+  --ink-soft: rgba(29, 63, 154, 0.14);
+  --on-ink: #fff;
+  --hl: rgba(255, 204, 0, 0.5);
+  --mark: #d0283a; --mark-soft: rgba(208, 40, 58, 0.12); --alert: #d0283a; --on-mark: #fff;
+  --flip: #ffcc00; /* accent on an inverted (text-coloured) background */
+  --ecg-minor: rgba(222, 72, 72, 0.10);
+  --ecg-major: rgba(222, 72, 72, 0.22);
+  --hole: #f3ddd5;
+  --bar-paper: rgba(29, 63, 154, 0.06);
+  --glow: none;
+  --paper-shadow: 0 1px 0 rgba(27, 22, 38, .06), 0 14px 30px -18px rgba(90, 20, 30, .35);
+  /* The monitor strip (key figures) is a screen in both modes */
+  --screen: #020a12; --bezel: #16213f;
+  --ch-1: #6f9dff; --ch-2: #ffd23d; --ch-3: #3fd6ff; --ch-4: #ff6b86;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --serif: ui-serif, "New York", "Iowan Old Style", Charter, Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hand: var(--serif); /* notes in the margin: always set in italic */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #02040b; --surface: #060d18; --text: #e2e9ff; --text-2: #a9bbef;
+    --muted: #7b8ab3; --grid: #0f1a30; --axis: #1e2d52; --border: rgba(111, 157, 255, 0.2);
+    --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+    --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(111, 157, 255, 0.08);
+    --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+    --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+    --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+    --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+    --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
+    --ecg-minor: rgba(111, 157, 255, 0.04); --ecg-major: rgba(111, 157, 255, 0.09);
+    --hole: #000; --bar-paper: rgba(111, 157, 255, 0.06);
+    --glow: 0 0 10px rgba(111, 157, 255, 0.45);
+    --paper-shadow: 0 0 0 1px rgba(111, 157, 255, .14), 0 0 28px -8px rgba(111, 157, 255, .2);
+    --screen: #01040c; --bezel: #101a36;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #02040b; --surface: #060d18; --text: #e2e9ff; --text-2: #a9bbef;
+  --muted: #7b8ab3; --grid: #0f1a30; --axis: #1e2d52; --border: rgba(111, 157, 255, 0.2);
+  --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+  --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(111, 157, 255, 0.08);
+  --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+  --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+  --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+  --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+  --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
+  --ecg-minor: rgba(111, 157, 255, 0.04); --ecg-major: rgba(111, 157, 255, 0.09);
+  --hole: #000; --bar-paper: rgba(111, 157, 255, 0.06);
+  --glow: 0 0 10px rgba(111, 157, 255, 0.45);
+  --paper-shadow: 0 0 0 1px rgba(111, 157, 255, .14), 0 0 28px -8px rgba(111, 157, 255, .2);
+  --screen: #01040c; --bezel: #101a36;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--text); background-color: var(--page);
+  /* ECG paper: 1 mm minor lines, 5 mm major lines */
+  background-image:
+    linear-gradient(var(--ecg-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ecg-major) 1px, transparent 1px),
+    linear-gradient(var(--ecg-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ecg-minor) 1px, transparent 1px);
+  background-size: 30px 30px, 30px 30px, 6px 6px, 6px 6px;
+  font: 15px/1.5 var(--sans);
+  overflow-x: clip;
+}
+::selection { background: var(--hl); color: var(--text); }
+main { max-width: 1440px; margin: 0 auto; padding: 8px 24px 48px; position: relative; }
+h1 {
+  font-family: var(--mono); font-weight: 800; text-transform: uppercase;
+  font-size: clamp(30px, 5.4vw, 70px); line-height: .98; letter-spacing: -0.055em;
+  margin: 14px 0 22px; text-shadow: var(--glow); max-width: 17ch; text-wrap: balance;
+}
+h1 .qm {
+  color: var(--ink); display: inline-block; font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: 1.5em; line-height: 0; transform: rotate(10deg) translateY(.06em); margin-left: .04em; letter-spacing: 0;
+}
+h2 { font-size: 16px; margin: 0; }
+.eyebrow {
+  margin: 0; display: inline-flex; gap: 0; font: 600 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em;
+  border: 1.5px solid var(--text); background: var(--surface);
+}
+.eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
+@media (hover: hover) { .eyebrow a:hover { background: var(--ink); color: var(--on-ink); } }
+.eyebrow { padding-right: 10px; align-items: center; }
+.lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); }
+.lede strong {
+  color: var(--text); font-weight: 700;
+  background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 94%, transparent 94%);
+}
+/* Opening sentences: one thought per line, each marked like an entry in a chart */
+.lede .thought { display: block; position: relative; padding-left: 1.3em; }
+.lede .thought + .thought { margin-top: .5em; }
+.lede .thought::before { content: ""; position: absolute; left: 0; top: .74em; width: .72em; height: 2px; background: var(--ink); }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.num { font-variant-numeric: tabular-nums; }
+a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3px; }
+
+/* Site header: brand, nav, theme switch, and a live heart trace across the page */
+.site-header {
+  max-width: 1440px; margin: 0 auto; padding: 18px 24px 0; position: relative;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.brand {
+  font: 800 19px/1 var(--mono); letter-spacing: -0.04em; text-decoration: none; text-transform: lowercase;
+  display: inline-flex; align-items: center; gap: 10px; text-shadow: var(--glow);
+}
+.brand::before {
+  content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--alert);
+  box-shadow: 0 0 0 3px var(--mark-soft); animation: hv-beat 1.1s infinite;
+}
+.brand::after {
+  content: "REC · LIVE DATA"; font: 600 10.5px/1 var(--mono); letter-spacing: .16em; color: var(--alert);
+  border: 1px solid var(--alert); padding: 3px 5px; border-radius: 3px;
+}
+@keyframes hv-beat { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.45); } 24% { transform: scale(.95); } 36% { transform: scale(1.2); } }
+.site-header nav { display: flex; gap: 6px; font: 600 13px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; align-items: center; }
+.site-header nav a { color: var(--text); text-decoration: none; padding: 7px 9px; border: 1.5px solid transparent; }
+.site-header nav a::before { content: "["; color: var(--ink); }
+.site-header nav a::after { content: "]"; color: var(--ink); }
+@media (hover: hover) { .site-header nav a:hover { border-color: var(--text); background: var(--surface); } }
+.theme-switch {
+  font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
+  color: var(--text); background: var(--surface); border: 1.5px solid var(--text); padding: 6px 8px; margin-left: 6px;
+  box-shadow: 2px 2px 0 var(--text);
+}
+.theme-switch:active { transform: translate(2px, 2px); box-shadow: none; }
+.theme-switch .t-dark { display: none; }
+:root[data-theme="dark"] .theme-switch .t-dark { display: inline; }
+:root[data-theme="dark"] .theme-switch .t-light { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-switch .t-dark { display: inline; }
+  :root:not([data-theme="light"]) .theme-switch .t-light { display: none; }
+}
+.trace { flex-basis: 100%; height: 46px; margin: 4px -24px 0; width: calc(100% + 48px); display: block; overflow: visible; }
+.trace path { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke;
+  stroke-dasharray: 100 100; animation: hv-sweep 7s linear infinite; filter: drop-shadow(var(--glow-f, 0 0 0 transparent)); }
+:root[data-theme="dark"] .trace path { stroke: #6f9dff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .trace path { stroke: #6f9dff; } }
+@keyframes hv-sweep { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -100; } }
+/* Reading progress: an IV line down the right edge, filling as you scroll */
+.drip { position: fixed; top: 0; right: 0; width: 5px; height: 100vh; z-index: 30; pointer-events: none;
+  background: var(--ink); transform-origin: top; transform: scaleY(0); animation: hv-drip linear both; animation-timeline: scroll(root); }
+@keyframes hv-drip { to { transform: scaleY(1); } }
+
+.site-footer {
+  max-width: 1440px; margin: 40px auto 0; padding: 26px 24px 56px; font: 13px/1.7 var(--mono); color: var(--text-2);
+  text-transform: uppercase; letter-spacing: .06em; position: relative;
+}
+.site-footer::before {
+  content: "— — — end of report — — —"; display: block; text-align: center; letter-spacing: .3em; color: var(--ink); margin-bottom: 22px;
+}
+.site-footer p { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; }
+.site-footer .sig { font: italic 26px/1 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink); transform: rotate(-4deg);
+  display: inline-block; border-bottom: 1px solid var(--text-2); padding: 0 18px 4px 4px; margin-right: 10px; }
+
+/* Data snapshot: an admission-style sheet beside an entry's title (below it on narrow screens),
+   like the home page's admission sheet: a title bar, ruled rows, one big figure, a handwritten note. */
+.snapshot {
+  margin: 0; font: 13px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .05em; background: var(--surface);
+  border: 1.5px solid var(--text); box-shadow: 6px 6px 0 var(--text); transform: rotate(1.6deg);
+}
+.snapshot-k {
+  margin: 0; padding: 8px 12px; background: var(--text); color: var(--page); font-weight: 800; letter-spacing: .2em; text-align: center;
+}
+.snapshot dl { margin: 0; }
+.snapshot dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 14px; border-bottom: 1px dashed var(--border); }
+.snapshot dt { color: var(--text-2); flex: none; }
+.snapshot dd { margin: 0; font-weight: 800; text-align: right; }
+.snapshot dl div:first-child { align-items: center; }
+.snapshot dl div:first-child dd { font-size: 22px; line-height: 1.05; color: var(--ink); text-shadow: var(--glow); letter-spacing: -0.01em; }
+.snapshot-note {
+  margin: 0; padding: 12px 18px 14px; font: italic 18px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink);
+  text-align: center; transform: rotate(-1.5deg);
+}
+.snapshot-note a { display: table; margin: 10px auto 0; font-size: 14.5px; white-space: nowrap; } /* its own line, centred */
+.sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
+.sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
+.sources li::before {
+  content: "Rx" counter(rx); position: absolute; left: 0; top: 1px; font: 700 13px/1 var(--mono); color: var(--ink);
+  border: 1.5px solid var(--ink); padding: 3px 4px; border-radius: 3px;
+}
+.sources code { font: 14px var(--mono); background: var(--wash); padding: 1px 4px; }
+
+/* Decorations every entry header may use */
+.chart-head {
+  position: relative; padding: 26px 0 8px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 320px; column-gap: 48px; align-items: start;
+}
+.chart-head > * { grid-column: 1; justify-self: start; }
+.chart-head > .snapshot { grid-column: 2; grid-row: 1 / span 5; justify-self: stretch; margin-top: 74px; }
+.chart-head::before { /* the entry's motif, huge and outlined behind the title */
+  content: attr(data-motif); position: absolute; right: -2vw; top: -10px; z-index: -1; pointer-events: none;
+  font: 900 clamp(150px, 30vw, 420px)/0.8 var(--mono); letter-spacing: -0.08em; color: transparent;
+  -webkit-text-stroke: 2px var(--ink-soft); white-space: nowrap;
+}
+.stamp {
+  position: absolute; right: 280px; top: 20px; margin: 0; transform: rotate(-11deg); pointer-events: none; z-index: 1;
+  font: 800 15px/1.1 var(--mono); text-transform: uppercase; letter-spacing: .14em; text-align: center; color: var(--ink);
+  border: 3px double var(--ink); border-radius: 8px; padding: 8px 12px; opacity: .78; mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
+          mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
+}
+.stamp small { display: block; font-size: 11px; letter-spacing: .2em; margin-top: 3px; }
+:root[data-theme="dark"] .stamp { mix-blend-mode: normal; }
+.scribble {
+  font: italic 21px/1.15 var(--hand); color: var(--ink); margin: 24px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
+  display: inline-block; max-width: 34ch;
+}
+.scribble::before { content: "↳ "; }
+
+@media (max-width: 960px) {
+  .chart-head { grid-template-columns: minmax(0, 1fr); }
+  .chart-head > .snapshot { grid-column: 1; grid-row: auto; justify-self: start; width: min(100%, 420px); margin: 28px 0 0 4px; transform: rotate(1deg); }
+  .stamp { right: 2%; top: 64px; }
+}
+@media (max-width: 760px) {
+  .stamp { display: none; }
+  .chart-head::before { top: 40px; }
+}
+@media (max-width: 600px) {
+  .site-header, .site-footer { padding-left: 16px; padding-right: 16px; }
+  .trace { margin: 4px -16px 0; width: calc(100% + 32px); }
+  .brand::after { display: none; }
+  .lede { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand::before, .trace path { animation: none; }
+  .trace path { stroke-dasharray: none; }
+}
+/* Touch screens: every control is at least 44px tall (Apple's 44pt, close to Material's 48dp; WCAG 2.2
+   asks for 24px). Links inside running text keep their size. */
+@media (pointer: coarse) {
+  .brand { padding: 8px 0; }
+  .site-header nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; }
+  .theme-switch { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; }
+  .eyebrow a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; }
+  .snapshot-note a { padding: 10px 6px; margin-top: 4px; }
+  .site-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+  a, button, summary, select, input { -webkit-tap-highlight-color: transparent; }
+}
+/* Monitor mode: scanlines over everything */
+:root[data-theme="dark"] body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
+  }
+  :root:not([data-theme="light"]) .stamp { mix-blend-mode: normal; }
+}
+
+/* Components shared by entry pages: filters, tiles, cards, chart axes, table, tooltip, notes.
+   Pasted inline at build time, after shell.css. Filters are a control panel of physical keys,
+   key figures a bedside monitor, cards tractor-feed printouts, the table bluebar paper,
+   the tooltip embossed label tape, and the notes a lined case-notes sheet. */
+
+/* Filters: a control panel above everything they scope. Every control has the same height
+   (--ctl-h) and type; on phones the toggles share one row that scrolls sideways, the year
+   slider gets its own row, and the text labels are kept for screen readers only. */
+.filters {
+  --ctl-h: 30px;
+  position: sticky; top: 0; z-index: 5;
+  display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center;
+  margin: 26px -24px 22px; padding: 8px 24px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  backdrop-filter: blur(6px);
+  border-top: 3px solid var(--text); border-bottom: 1.5px solid var(--text);
+  box-shadow: 0 8px 18px -14px rgba(0, 0, 0, .5);
+}
+.filters::before {
+  content: "CONTROLS"; font: 800 10px/1 var(--mono); letter-spacing: .22em; color: var(--surface); background: var(--ink);
+  padding: 4px 5px; writing-mode: vertical-rl; transform: rotate(180deg); align-self: stretch; text-align: center; margin: -2px 0;
+}
+.filter-row { display: contents; } /* one wrapping line with the year on desktop; its own row on phones */
+.filter { display: flex; align-items: center; gap: 7px; }
+.filter > .label { font: 700 11.5px/1 var(--mono); color: var(--text-2); text-transform: uppercase; letter-spacing: .1em; white-space: nowrap; }
+.seg { display: inline-flex; gap: 4px; padding: 0 0 2px; }
+.seg button {
+  height: var(--ctl-h, 30px); display: inline-flex; align-items: center; white-space: nowrap;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--text); font: 600 12.5px/1 var(--mono);
+  text-transform: uppercase; letter-spacing: .03em; padding: 0 9px; border-radius: 4px; cursor: pointer;
+  box-shadow: 0 2px 0 var(--text); transition: transform .06s, box-shadow .06s, background .1s;
+}
+@media (hover: hover) { .seg button:hover { background: var(--wash); } }
+.seg button[aria-pressed="true"] {
+  background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(2px); box-shadow: 0 0 0 var(--text);
+}
+select {
+  height: var(--ctl-h, 30px); max-width: 220px; text-overflow: ellipsis;
+  font: 700 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--text); background: var(--surface);
+  border: 1.5px solid var(--text); border-radius: 0; padding: 0 8px; box-shadow: 2px 2px 0 var(--ink); cursor: pointer;
+}
+.year { flex: 1 1 240px; min-width: 200px; }
+.year input { flex: 1; accent-color: var(--ink); min-width: 100px; margin: 0; }
+.year output {
+  font: 800 16px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 2.8em; color: var(--ink); text-shadow: var(--glow);
+}
+.icon-btn {
+  width: var(--ctl-h, 30px); height: var(--ctl-h, 30px); flex: none; display: grid; place-items: center; cursor: pointer;
+  border: 1.5px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 2px 0 var(--text);
+}
+@media (hover: hover) { .icon-btn:hover { filter: brightness(1.1); } }
+.icon-btn:active { transform: translateY(2px); box-shadow: none; }
+.icon-btn svg { width: 11px; height: 11px; fill: currentColor; }
+button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* Key figures: a bedside monitor with four channels, in both modes */
+.tiles {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin-bottom: 30px;
+  background: rgba(111, 157, 255, .16); border: 10px solid var(--bezel); border-radius: 18px; overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), 0 18px 34px -20px rgba(0, 0, 0, .7);
+  position: relative;
+}
+.tiles::after { /* screen glare and scanlines */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .07), transparent 40%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, .25) 0 1px, transparent 1px 3px);
+}
+.tile { background: var(--screen); padding: 14px 16px 12px; min-width: 0; color: var(--ch-1); position: relative; }
+.tile:nth-child(2) { color: var(--ch-2); }
+.tile:nth-child(3) { color: var(--ch-3); }
+.tile:nth-child(4) { color: var(--ch-4); }
+.tile .k { font: 700 12px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .12em; margin: 0 0 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile .k::before { content: "CH" counter(ch) " ▸ "; opacity: .55; }
+.tiles { counter-reset: ch; }
+.tile { counter-increment: ch; }
+.tile .v { font: 700 34px/1.15 var(--mono); letter-spacing: -0.04em; margin: 0; text-shadow: 0 0 12px currentColor; font-variant-numeric: tabular-nums; }
+.tile .v small { font-size: 14px; font-weight: 500; opacity: .85; margin-left: 4px; letter-spacing: 0; }
+.tile .s { font: 13px/1.5 var(--mono); color: #bcc8e8; opacity: .85; margin: 4px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Tiles are filled by the script: each line keeps its height from the start (no layout shift). */
+.tile .k, .tile .s { min-height: 1.5em; }
+.tile .v { min-height: 1.2em; }
+
+/* Cards: continuous tractor-feed printouts, sprocket holes down both edges */
+.card {
+  background: var(--surface); padding: 22px 46px 22px; position: relative;
+  box-shadow: var(--paper-shadow);
+}
+.card::before, .card::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 30px; pointer-events: none;
+  background: radial-gradient(circle at 15px 15px, var(--hole) 0 5px, transparent 5.5px) 0 0 / 30px 30px repeat-y;
+}
+.card::before { left: 0; border-right: 1.5px dashed var(--border); }
+.card::after { right: 0; border-left: 1.5px dashed var(--border); }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin-bottom: 14px; }
+.card-head h2, .card > h2 { font: 700 22px/1.2 var(--serif); letter-spacing: -0.01em; max-width: 40ch; }
+.card-head h2::before { content: "§ "; color: var(--ink); font-style: italic; }
+.card-head p { margin: 6px 0 0; max-width: 92ch; }
+.card-head .small.muted { color: var(--text-2); font-size: 14.5px; }
+.grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr); gap: 22px; margin-bottom: 22px; }
+
+/* Legend keys */
+.key { display: inline-flex; align-items: center; gap: 6px; font: 12.5px var(--mono); color: var(--text-2); text-transform: uppercase; letter-spacing: .03em; }
+.key i { width: 14px; height: 10px; border-radius: 2px; display: inline-block; }
+.keys { font-family: var(--mono) !important; text-transform: uppercase; letter-spacing: .03em; font-size: 12.5px !important; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.find input {
+  width: 100%; font: 600 14px var(--mono); text-transform: uppercase; color: var(--text); background: var(--page);
+  border: 1.5px solid var(--text); border-radius: 0; padding: 8px 10px; box-shadow: inset 3px 3px 0 var(--wash);
+}
+.find input:focus-visible { outline: 3px solid var(--ink); outline-offset: 1px; }
+
+/* Small charts */
+.chart-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font: 12.5px var(--mono); color: var(--text-2); text-transform: uppercase; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 14px; height: 2px; border-radius: 1px; display: inline-block; }
+svg text { font-family: var(--sans); }
+.tick { font: 11.5px var(--mono); fill: var(--muted); font-variant-numeric: tabular-nums; }
+.gridline { stroke: var(--grid); stroke-width: 1; stroke-dasharray: 2 3; }
+.baseline { stroke: var(--axis); stroke-width: 1; }
+.endlabel { font-size: 12.5px; fill: var(--text-2); }
+.endlabel tspan.v { fill: var(--text); font-weight: 600; }
+.col-head, .axis-title { font-family: var(--mono) !important; text-transform: uppercase; letter-spacing: .06em; }
+svg[role="img"] { cursor: crosshair; }
+
+/* Table view: bluebar printout (blue instead of green: the room stays EU blue) */
+details.card summary {
+  cursor: pointer; font: 800 14px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em; list-style: none;
+  display: flex; align-items: center; gap: 12px;
+}
+details.card summary::-webkit-details-marker { display: none; }
+details.card summary::before {
+  content: "+"; display: grid; place-items: center; width: 24px; height: 24px; border: 1.5px solid var(--text);
+  font-size: 16px; background: var(--page); transition: transform .15s;
+}
+details.card[open] summary::before { content: "−"; background: var(--ink); color: var(--on-ink); }
+details.card summary::after { content: "· print to screen"; color: var(--muted); font-weight: 500; letter-spacing: .06em; }
+.table-wrap { overflow-x: auto; margin-top: 16px; max-height: 560px; overflow-y: auto; border-top: 2px solid var(--text); }
+table { border-collapse: collapse; width: 100%; font: 13.5px var(--mono); }
+th, td { text-align: left; padding: 6px 10px; white-space: nowrap; }
+tbody tr:nth-child(4n+1) td, tbody tr:nth-child(4n+2) td { background: rgba(29, 63, 154, .07); }
+th { position: sticky; top: 0; background: var(--surface); color: var(--text); font-weight: 800; text-transform: uppercase;
+  letter-spacing: .06em; font-size: 12px; border-bottom: 1.5px solid var(--text); }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+tr.hl td { background: var(--mark) !important; color: var(--on-mark); }
+tr.hl td button { color: var(--on-mark); }
+td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
+  text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
+@media (hover: hover) { td button:hover { color: var(--ink); } }
+
+/* Tooltip: embossed label tape */
+.tip {
+  position: fixed; z-index: 20; pointer-events: none; opacity: 0; transition: opacity .1s;
+  background: #1d3f9a; color: #f4f6ff; border-radius: 3px; transform: rotate(-1.2deg);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 -1px 0 rgba(0, 0, 0, .6) inset, 4px 6px 0 rgba(0, 0, 0, .18);
+  padding: 9px 12px 9px 16px; font: 600 12.5px/1.55 var(--mono); text-transform: uppercase; letter-spacing: .04em; max-width: 280px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .8), 0 -1px 0 rgba(255, 255, 255, .25);
+  background-image: radial-gradient(circle at 6px 50%, #14306f 0 2px, transparent 2.5px);
+}
+:root[data-theme="dark"] .tip { background-color: #0c1a3d; color: #d3ddff; box-shadow: 0 0 0 1px #6f9dff, 0 0 18px rgba(111, 157, 255, .3); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tip { background-color: #0c1a3d; color: #d3ddff; box-shadow: 0 0 0 1px #6f9dff, 0 0 18px rgba(111, 157, 255, .3); } }
+.tip.on { opacity: 1; }
+.tip .tv { font-size: 15px; font-weight: 800; display: block; letter-spacing: 0; }
+.tip .tn { display: block; color: #ffd84d; }
+.tip .tm { display: block; opacity: .82; text-transform: none; font-weight: 500; }
+.tip .row { display: flex; align-items: center; gap: 8px; }
+.tip .row i { width: 12px; height: 3px; border-radius: 1px; flex: none; }
+.tip .row b { font-variant-numeric: tabular-nums; min-width: 2.6em; }
+
+/* Notes: a lined case-notes sheet with a margin rule */
+.notes {
+  margin-top: 40px; color: var(--text-2); max-width: 96ch; position: relative;
+  background: var(--surface); box-shadow: var(--paper-shadow); padding: 34px 34px 26px 92px;
+  font: 16px/28px var(--serif);
+  background-image: linear-gradient(90deg, transparent 70px, var(--mark-soft) 70px, var(--mark-soft) 72px, transparent 72px),
+    repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px);
+  background-position: 0 0, 0 33px;
+  transform: rotate(-.35deg);
+}
+.notes::before {
+  content: "case notes"; position: absolute; left: 14px; top: 32px; font: italic 22px/1 var(--hand); color: var(--ink);
+  writing-mode: vertical-rl; transform: rotate(180deg);
+}
+.notes h2 { font: 800 14px/28px var(--mono); text-transform: uppercase; letter-spacing: .2em; color: var(--ink); margin: 0; }
+.notes p { margin: 0 0 28px; }
+.notes .sources { font-size: 15px; line-height: 1.6; margin-bottom: 28px; }
+
+@media (max-width: 960px) {
+  .grid { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  main { padding: 20px 16px 40px; }
+  .filters { --ctl-h: 28px; flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 6px; margin: 18px -16px 16px; padding: 6px 0; }
+  .filters::before { display: none; }
+  .filter-row {
+    display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 2px; scrollbar-width: none; overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
+            mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .filter { flex: none; }
+  .filter > .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .year { flex: none; min-width: 0; padding: 0 16px; }
+  .seg button { padding: 0 8px; font-size: 12px; }
+  select { max-width: 150px; font-size: 12px; }
+  .tile .v { font-size: 24px; }
+  .tiles { border-width: 6px; border-radius: 12px; }
+  .card { padding: 18px 26px; }
+  .card::before, .card::after { width: 16px; background-size: 16px 22px;
+    background-image: radial-gradient(circle at 8px 11px, var(--hole) 0 3.5px, transparent 4px); }
+  .notes { padding: 26px 18px 18px 30px; transform: none;
+    background-image: linear-gradient(90deg, transparent 18px, var(--mark-soft) 18px, var(--mark-soft) 20px, transparent 20px),
+      repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
+  .notes::before { display: none; }
+}
+/* Touch screens: 44px controls (see shell.css), and 16px text in form fields so iOS Safari doesn't
+   zoom the page when one is tapped. Comes after the phone rules so it wins on small screens too. */
+@media (pointer: coarse) {
+  .filters { --ctl-h: 44px; }
+  .seg { gap: 6px; }
+  .seg button { min-width: 44px; justify-content: center; padding: 0 12px; }
+  select { font-size: 16px; }
+  .year input { height: var(--ctl-h); }
+  .icon-btn svg { width: 14px; height: 14px; }
+  .find input { font-size: 16px; min-height: 44px; }
+  details.card summary { min-height: 44px; }
+  details.card summary::before { width: 32px; height: 32px; }
+  td button { padding: 12px 0; margin: -12px 0; }
+  .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
+}
+@media (prefers-reduced-motion: reduce) { .seg button, details.card summary::before { transition: none; } }
+
+/* Below the fold: the browser skips rendering these until they come near the viewport. */
+.notes { content-visibility: auto; contain-intrinsic-size: auto 480px; }
+
+
+/* Ranking: share aged 55+ (two age groups) and graduates per doctor aged 55+ */
+#rank { display: block; width: 100%; }
+.b5564 { fill: var(--seq-3); }
+.b65 { fill: url(#hatch65); }
+.b-ratio { fill: var(--series-3); }
+.b5564, .b65 { stroke: var(--surface); stroke-width: 1.5; }
+.hatch-bg { fill: var(--seq-5); }
+.hatch-ln { stroke: var(--seq-3); stroke-width: 2; }
+.b-ratio-head { fill: var(--series-3); stroke: var(--surface); stroke-width: 2; }
+.b-ratio-head.short { fill: var(--surface); stroke: var(--series-3); stroke-width: 2.5; }
+.shortfall { fill: var(--mark-soft); opacity: .55; }
+.row-rule { stroke: var(--grid); stroke-dasharray: 1 3; }
+.ref { stroke: var(--text-2); stroke-width: 1; stroke-dasharray: 3 3; }
+.col-head { font-size: 13px; fill: var(--text-2); font-weight: 600; }
+.row-label { font-size: 13.5px; fill: var(--text-2); }
+.row-label.hl { fill: var(--text); font-weight: 600; }
+.row-label.nodata, .nodata-note { fill: var(--muted); }
+.nodata-note { font-size: 13px; font-style: italic; }
+.row-band { fill: var(--series-1); opacity: .07; }
+.row-value { font-size: 13px; fill: var(--text-2); font-variant-numeric: tabular-nums; }
+.row-value.hl { fill: var(--text); font-weight: 600; }
+.row-hit { fill: transparent; cursor: pointer; }
+.keys { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 6px 0 10px; font-size: 13.5px; color: var(--text-2); }
+.keys span { display: inline-flex; align-items: center; gap: 6px; }
+.keys svg { display: block; }
+
+
+/* Patient-chart styling for this page's chart */
+.row-band { fill: var(--mark); opacity: .1; }
+.row-label { font-family: var(--sans); }
+.row-label.hl { fill: var(--mark); font-weight: 800; }
+.row-value { font-family: var(--mono); font-size: 12.5px; }
+.row-value.hl { fill: var(--mark); font-weight: 800; }
+.nodata-note { font-family: var(--hand); font-style: italic; font-size: 14px; fill: var(--mark); opacity: .75; }
+.keys svg { overflow: visible; }
+.ref { stroke: var(--mark); stroke-width: 1.5; stroke-dasharray: 5 3; }
+.col-head { fill: var(--mark); font-size: 12px; }
+/* The ranking reads like a staff roster pinned to the board */
+#rank { margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="drip" aria-hidden="true"></div><header class="site-header"><a class="brand" href="../">healthviz</a><nav aria-label="Site"><a href="../#entries">Entries</a><a href="../#about">About</a><button type="button" class="theme-switch" onclick="var r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';try{localStorage.setItem('hv-theme',r.dataset.theme)}catch(e){}" aria-label="Switch between paper and monitor"><span class="t-light">◐ Monitor</span><span class="t-dark">◑ Paper</span></button></nav><svg class="trace" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true"><path d="M0 30H40c4 0 5-6 9-6s5 6 9 6H66l3 5 6-33 6 40 4-12H100c5 0 7-9 13-9s8 9 13 9H173c4 0 5-6 9-6s5 6 9 6H199l3 5 6-33 6 40 4-12H233c5 0 7-9 13-9s8 9 13 9H306c4 0 5-6 9-6s5 6 9 6H332l3 5 6-33 6 40 4-12H366c5 0 7-9 13-9s8 9 13 9H439c4 0 5-6 9-6s5 6 9 6H465l3 5 6-33 6 40 4-12H499c5 0 7-9 13-9s8 9 13 9H572c4 0 5-6 9-6s5 6 9 6H598l3 5 6-33 6 40 4-12H632c5 0 7-9 13-9s8 9 13 9H705c4 0 5-6 9-6s5 6 9 6H731l3 5 6-33 6 40 4-12H765c5 0 7-9 13-9s8 9 13 9H838c4 0 5-6 9-6s5 6 9 6H864l3 5 6-33 6 40 4-12H898c5 0 7-9 13-9s8 9 13 9H971c4 0 5-6 9-6s5 6 9 6H997l3 5 6-33 6 40 4-12H1031c5 0 7-9 13-9s8 9 13 9H1104c4 0 5-6 9-6s5 6 9 6H1130l3 5 6-33 6 40 4-12H1164c5 0 7-9 13-9s8 9 13 9H1237c4 0 5-6 9-6s5 6 9 6H1263l3 5 6-33 6 40 4-12H1297c5 0 7-9 13-9s8 9 13 9H1200" pathLength="100"/></svg></header>
+<main>
+  <header class="chart-head" data-motif="55+">
+    <p class="eyebrow"><a href="../#entries">← Entries</a>Health workforce</p>
+    <p class="stamp" aria-hidden="true">Shift change<small>2024 roster</small></p>
+    <h1>Will your doctor retire soon<span class="qm">?</span></h1>
+    <p class="lede" id="lede"><span class="thought">In Germany, <strong>32%</strong> of practising doctors were 55 or over in 2024: the 14th oldest of 27 EU countries (Luxembourg has no 2024 figures).</span> <span class="thought">At today's rate, its medical schools will turn out <strong>0.8 graduates</strong> in the next 10 years for every doctor aged 55 or over.</span></p>
+    <p class="scribble" aria-hidden="true">Pick a country up in the controls, or just tap its row in the chart.</p>
+    <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Data retrieved</dt><dd><time datetime="2026-11-01">1 Nov 2026</time></dd></div><div><dt>Source last updated</dt><dd><time datetime="2026-07-13">13 Jul 2026</time> · Eurostat</dd></div><div><dt>Covers</dt><dd>2024; graduates 2022–2024 · 33 countries</dd></div></dl><p class="snapshot-note">This entry stays as it is until its data is explicitly updated. <a href="#sources">Sources and notes</a></p></aside>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filters">
+    <div class="filter-row">
+      <div class="filter">
+        <label class="label" for="country">Country</label>
+        <select id="country"></select>
+      </div>
+      <div class="filter">
+        <span class="label" id="scope-label">Compare</span>
+        <div class="seg" id="scope" role="group" aria-labelledby="scope-label">
+          <button type="button" data-v="eu">EU-27</button>
+          <button type="button" data-v="all">All of Europe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="tiles" aria-label="Key figures">
+    <div class="tile"><p class="k">Oldest doctors</p><p class="v" id="t1v"></p><p class="s" id="t1s"></p></div>
+    <div class="tile"><p class="k">Youngest doctors</p><p class="v" id="t2v"></p><p class="s" id="t2s"></p></div>
+    <div class="tile"><p class="k">40% or more aged 55+</p><p class="v" id="t3v"></p><p class="s" id="t3s"></p></div>
+    <div class="tile"><p class="k" id="t4k">Germany</p><p class="v" id="t4v"></p><p class="s" id="t4s"></p></div>
+  </section>
+
+  <section class="card" aria-labelledby="rank-title">
+    <div class="card-head">
+      <div>
+        <h2 id="rank-title">Doctors aged 55 or over, and the graduates to replace them, 2024</h2>
+        <p class="small muted" id="rank-sub">Left: the share of doctors aged 55 or over, who will retire in the coming years. Right: medical graduates in the next 10 years at the rate of 2022–2024, for every doctor aged 55 or over; below 1, fewer graduates than doctors nearing retirement. Countries are ranked by the share aged 55 or over. Tap or click a row to pick a country.</p>
+      </div>
+    </div>
+    <div class="keys" aria-hidden="true">
+      <span><svg width="14" height="14" aria-hidden="true"><rect class="b5564" x="1" y="1" width="12" height="12" rx="2"/></svg>Aged 55–64</span>
+      <span><svg width="14" height="14" aria-hidden="true"><rect class="b65" x="1" y="1" width="12" height="12" rx="2"/></svg>Aged 65 or over</span>
+      <span><svg width="22" height="14" aria-hidden="true"><rect class="b-ratio" x="1" y="5.5" width="14" height="3" rx="1.5"/><circle class="b-ratio-head" cx="15" cy="7" r="5"/></svg>Graduates in 10 years per doctor aged 55+</span>
+      <span><svg width="22" height="14" aria-hidden="true"><rect class="shortfall" x="0" y="0" width="22" height="14"/><circle class="b-ratio-head short" cx="11" cy="7" r="4.5"/></svg>Below 1: fewer graduates than doctors nearing retirement</span>
+      <span>* not practising doctors: see the notes</span>
+    </div>
+    <svg id="rank" role="img" aria-labelledby="rank-title rank-sub" height="690"></svg>
+  </section>
+
+  <details class="card" id="table-card" style="margin-top:16px">
+    <summary>Table view: all countries</summary>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="r">Rank</th><th>Country</th><th>Count</th><th class="r">Doctors</th><th class="r">55 or over</th><th class="r">65 or over</th><th class="r">Graduates a year</th><th class="r">Graduates in 10 years per doctor 55+</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </details>
+
+  <section class="notes" id="sources">
+    <h2>Sources</h2>
+    <ul class="sources"><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_phys/default/table">Eurostat: Physicians by sex and age</a> (<code>hlth_rs_phys</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-13">13 jul 2026</time>, retrieved <time datetime="2026-11-01">1 nov 2026</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_grd2/default/table">Eurostat: Health graduates</a> (<code>hlth_rs_grd2</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-13">13 jul 2026</time>, retrieved <time datetime="2026-11-01">1 nov 2026</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_prs2/default/table">Eurostat: Health personnel</a> (<code>hlth_rs_prs2</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-13">13 jul 2026</time>, retrieved <time datetime="2026-11-01">1 nov 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
+    <h2>Notes</h2>
+    <p>Most countries report practising doctors: those who treat patients. Some report all professionally active doctors (including those in administration or research) or everyone licensed to practise, which includes retired doctors and makes the older age groups larger. Eurostat's age table doesn't say which count a country reports; this page finds it by matching each country's total to Eurostat's health personnel table, and marks countries that don't report practising doctors with an asterisk (Slovakia and Türkiye: professionally active doctors; Greece: doctors licensed to practise). Values Eurostat marks estimated, a break in series or a different definition are labelled so in the tooltip and the table. Luxembourg has no 2024 figures (its latest are from 2012); it is listed without bars and not ranked.</p>
+    <p>Graduates are people who completed medical school in the country in a year, averaged over 2022–2024. Not every graduate stays: some countries train many students from abroad, and some lose young doctors to other countries, while others rely on doctors trained elsewhere. The ratio of graduates to doctors aged 55 or over shows whether a country trains enough doctors to replace those nearing retirement, not whether it will keep them. It also ignores that a growing and ageing population needs more doctors than today. Eurostat publishes no age breakdown by speciality, so the page can't show how old general practitioners are.</p>
+    <p>Italy counts all practising doctors only since 2021; before, it counted doctors in its national health service, of whom 54% were 55 or over. The page shows one year only, so breaks like this don't affect it.</p>
+  </section>
+</main>
+<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+const D = {"year":2024,"grad_years":[2022,2023,2024],"replace_years":10,"areas":{"AT":{"name":"Austria","eu":true,"basis":"PRACT","flag":null,"total":51719,"age":{"T":[10744,11575,12220,11614,4698,868],"F":[5923,6521,6749,5151,1410,153],"M":[4821,5054,5471,6463,3288,715]},"share55":0.33217966317987585,"share65":0.10762002358900984,"grads_per_year":1538.0,"ratio":0.8952270081490105},"BE":{"name":"Belgium","eu":true,"basis":"PRACT","flag":"b","total":39610,"age":{"T":[6960,9315,8252,7878,5837,1368],"F":[4364,5826,4673,3304,1404,162],"M":[2596,3489,3579,4574,4433,1206]},"share55":0.38078767987881845,"share65":0.18189851047715225,"grads_per_year":1787.0,"ratio":1.184777564145064},"BG":{"name":"Bulgaria","eu":true,"basis":"PRACT","flag":null,"total":30086,"age":{"T":[5771,3717,4186,9366,5608,1438],"F":[3269,2026,2365,4932,3322,846],"M":[2502,1691,1821,4434,2286,592]},"share55":0.5455028917104301,"share65":0.23419530678721,"grads_per_year":1984.0,"ratio":1.2088715573970266},"CH":{"name":"Switzerland","eu":false,"basis":"PRACT","flag":null,"total":41929,"age":{"T":[4892,10061,11373,10222,5381,null],"F":[3142,5888,5634,3993,1283,null],"M":[1750,4173,5739,6229,4098,null]},"share55":0.37212907534164896,"share65":0.12833599656562283,"grads_per_year":1258.6666666666667,"ratio":0.8066824755923007},"CY":{"name":"Cyprus","eu":true,"basis":"PRACT","flag":null,"total":5357,"age":{"T":[972,1109,1222,947,825,282],"F":[605,521,420,385,254,36],"M":[367,588,802,562,571,246]},"share55":0.38342355796154565,"share65":0.2066455105469479,"grads_per_year":238.0,"ratio":1.1587147030185005},"CZ":{"name":"Czechia","eu":true,"basis":"PRACT","flag":null,"total":46827,"age":{"T":[8605,9902,9558,8488,7811,2463],"F":[5366,6328,5463,4703,3926,1276],"M":[3239,3574,4095,3785,3885,1187]},"share55":0.4006662822730476,"share65":0.21940333568240544,"grads_per_year":1774.6666666666667,"ratio":0.9458835234338913},"DE":{"name":"Germany","eu":true,"basis":"PRACT","flag":null,"total":397042,"age":{"T":[80334,108509,80225,88680,34602,4691],"F":[46165,59513,40915,39057,11726,939],"M":[34169,48996,39310,49623,22876,3753]},"share55":0.3223160270198115,"share65":0.09896434130394266,"grads_per_year":10313.0,"ratio":0.8058731138599549},"DK":{"name":"Denmark","eu":true,"basis":"PRACT","flag":null,"total":27878,"age":{"T":[6638,7107,6021,4081,3287,744],"F":[4156,4322,3496,2176,1095,122],"M":[2482,2785,2525,1905,2192,622]},"share55":0.2909821364516823,"share65":0.14459430375206256,"grads_per_year":1263.0,"ratio":1.5569526627218935},"EE":{"name":"Estonia","eu":true,"basis":"PRACT","flag":null,"total":4911,"age":{"T":[1065,963,669,1073,913,228],"F":[730,711,469,825,673,176],"M":[335,252,200,248,240,52]},"share55":0.4508246792913867,"share65":0.23233557320301365,"grads_per_year":160.0,"ratio":0.7226738934056007},"EL":{"name":"Greece","eu":true,"basis":"LIC","flag":null,"total":69937,"age":{"T":[15031,11144,20498,14198,7787,1279],"F":[8376,5595,9034,5892,2318,242],"M":[6655,5549,11464,8306,5469,1037]},"share55":0.3326422351544962,"share65":0.12963095357250096,"grads_per_year":1378.0,"ratio":0.592331499312242},"ES":{"name":"Spain","eu":true,"basis":"PRACT","flag":"e","total":226667,"age":{"T":[56733,49833,48667,50967,20174,293],"F":[36500,35800,26600,25867,5953,14],"M":[20233,14033,22067,25100,14221,279]},"share55":0.3151495365447992,"share65":0.09029545544785963,"grads_per_year":6517.0,"ratio":0.9123106643895064},"FI":{"name":"Finland","eu":true,"basis":"PRACT","flag":null,"total":20351,"age":{"T":[5074,5849,4365,4327,736,null],"F":[2887,3506,2781,2948,380,null],"M":[2187,2343,1584,1379,356,null]},"share55":0.2487838435457717,"share65":0.03616529900250602,"grads_per_year":737.3333333333334,"ratio":1.4563170715649485},"FR":{"name":"France","eu":true,"basis":"PRACT","flag":null,"total":270874,"age":{"T":[80148,56669,41809,48336,35565,8347],"F":[48841,34065,22287,21712,10416,1481],"M":[31307,22604,19522,26624,25149,6866]},"share55":0.34055686407702473,"share65":0.1621122736032251,"grads_per_year":8202.666666666666,"ratio":0.8891972364351168},"HR":{"name":"Croatia","eu":true,"basis":"PRACT","flag":null,"total":15865,"age":{"T":[4328,3861,2896,3431,1263,86],"F":[2797,2581,1878,2126,704,40],"M":[1531,1280,1018,1305,559,46]},"share55":0.3012921525370312,"share65":0.08502994011976048,"grads_per_year":656.3333333333334,"ratio":1.373082287308229},"HU":{"name":"Hungary","eu":true,"basis":"PRACT","flag":null,"total":35526,"age":{"T":[8135,6002,5645,6784,6530,2430],"F":[4971,3684,3153,3683,3689,1175],"M":[3164,2318,2492,3101,2841,1255]},"share55":0.4431683837189664,"share65":0.25220964927095646,"grads_per_year":1642.0,"ratio":1.0429369918699187},"IE":{"name":"Ireland","eu":true,"basis":"PRACT","flag":null,"total":20961,"age":{"T":[5833,6446,4357,2988,1141,196],"F":[3025,3346,2122,1104,276,31],"M":[2808,3100,2235,1884,865,165]},"share55":0.20633557559276752,"share65":0.0637851247554983,"grads_per_year":1331.6666666666667,"ratio":3.078998073217727},"IS":{"name":"Iceland","eu":false,"basis":"PRACT","flag":null,"total":1801,"age":{"T":[509,400,361,326,205,null],"F":[330,233,178,129,48,null],"M":[179,167,183,197,157,null]},"share55":0.29483620210993894,"share65":0.11382565241532482,"grads_per_year":47.0,"ratio":0.8851224105461394},"IT":{"name":"Italy","eu":true,"basis":"PRACT","flag":null,"total":339256,"age":{"T":[76419,60747,51729,71373,70179,8809],"F":[43311,37702,30685,31486,18428,816],"M":[33108,23045,21044,39887,51751,7993]},"share55":0.44320807885490604,"share65":0.232827127596859,"grads_per_year":9879.666666666666,"ratio":0.6570631125535654},"LI":{"name":"Liechtenstein","eu":false,"basis":"PRACT","flag":null,"total":134,"age":{"T":[12,19,39,41,19,4],"F":[5,10,13,15,3,0],"M":[7,9,26,26,16,4]},"share55":0.47761194029850745,"share65":0.17164179104477612,"grads_per_year":0.0,"ratio":0.0},"LT":{"name":"Lithuania","eu":true,"basis":"PRACT","flag":null,"total":13487,"age":{"T":[3612,2646,1869,2918,2112,330],"F":[2607,1899,1272,2053,1508,225],"M":[1005,747,597,865,604,105]},"share55":0.3974197375250241,"share65":0.1810632460888263,"grads_per_year":632.6666666666666,"ratio":1.1803482587064675},"LU":{"name":"Luxembourg","eu":true,"total":null,"latest":2012},"LV":{"name":"Latvia","eu":true,"basis":"PRACT","flag":null,"total":6360,"age":{"T":[1609,1011,841,1554,1114,231],"F":[1212,751,630,1151,836,162],"M":[397,260,211,403,278,69]},"share55":0.45581761006289306,"share65":0.21147798742138366,"grads_per_year":534.0,"ratio":1.842014487754398},"ME":{"name":"Montenegro","eu":false,"basis":"PRACT","flag":null,"total":1778,"age":{"T":[339,649,385,405,null,null],"F":[204,430,246,254,null,null],"M":[135,219,139,151,null,null]},"share55":0.22778402699662542,"share65":0.0,"grads_per_year":36.333333333333336,"ratio":0.8971193415637861},"MT":{"name":"Malta","eu":true,"basis":"PRACT","flag":null,"total":2606,"age":{"T":[1186,599,294,355,131,41],"F":[664,322,98,111,20,2],"M":[522,277,196,244,111,39]},"share55":0.2022256331542594,"share65":0.06600153491941672,"grads_per_year":164.0,"ratio":3.111954459203036},"NL":{"name":"Netherlands","eu":true,"basis":"PRACT","flag":null,"total":71184,"age":{"T":[20305,20353,13978,11355,4818,375],"F":[13950,13675,8256,5450,1208,51],"M":[6355,6678,5722,5905,3610,324]},"share55":0.23246797033041133,"share65":0.07295178691840863,"grads_per_year":2520.3333333333335,"ratio":1.5230440738054953},"NO":{"name":"Norway","eu":false,"basis":"PRACT","flag":null,"total":28271,"age":{"T":[6893,8672,6052,3845,2348,461],"F":[4555,5118,3232,1817,643,52],"M":[2338,3554,2820,2028,1705,409]},"share55":0.23536486151887093,"share65":0.09935976796010046,"grads_per_year":572.6666666666666,"ratio":0.8606352068930968},"PL":{"name":"Poland","eu":true,"basis":"PRACT","flag":null,"total":141193,"age":{"T":[35351,26111,23162,28943,21407,6219],"F":[22198,16619,13413,15632,12044,3556],"M":[13153,9492,9749,13311,9363,2663]},"share55":0.4006501738754754,"share65":0.1956612579943765,"grads_per_year":5779.666666666667,"ratio":1.0217021101074206},"PT":{"name":"Portugal","eu":true,"basis":"PRACT","flag":null,"total":46131,"age":{"T":[15172,15002,7177,5418,2901,461],"F":[10430,10171,4662,3181,1462,212],"M":[4742,4831,2515,2237,1439,249]},"share55":0.19032754546834016,"share65":0.07287940864061043,"grads_per_year":1795.6666666666667,"ratio":2.0451784358390284},"RO":{"name":"Romania","eu":true,"basis":"PRACT","flag":null,"total":72647,"age":{"T":[25665,17246,14639,10358,4640,99],"F":[18224,12175,10356,7182,3088,55],"M":[7441,5071,4283,3176,1552,44]},"share55":0.20781312373532287,"share65":0.06523325120101311,"grads_per_year":5275.0,"ratio":3.4940716698681857},"RS":{"name":"Serbia","eu":false,"basis":"PRACT","flag":"d","total":22037,"age":{"T":[5189,5450,5708,5231,451,8],"F":[3365,3734,3970,3525,249,1],"M":[1824,1716,1738,1706,202,7]},"share55":0.2582021146254027,"share65":0.020828606434632663,"grads_per_year":1069.3333333333333,"ratio":1.8793204452255416},"SE":{"name":"Sweden","eu":true,"basis":"PRACT","flag":null,"total":49242,"age":{"T":[10980,14306,11027,7758,4242,929],"F":[6364,8075,5892,3591,1566,262],"M":[4616,6231,5135,4167,2676,667]},"share55":0.26256041590512164,"share65":0.10501198164168798,"grads_per_year":1451.3333333333333,"ratio":1.1225410575708354},"SI":{"name":"Slovenia","eu":true,"basis":"PRACT","flag":"d","total":7593,"age":{"T":[1980,2193,1512,1368,504,36],"F":[1336,1465,993,860,245,12],"M":[644,728,519,508,259,24]},"share55":0.2512840774397471,"share65":0.07111813512445674,"grads_per_year":243.0,"ratio":1.2735849056603774},"SK":{"name":"Slovakia","eu":true,"basis":"PACT","flag":null,"total":21403,"age":{"T":[5134,4925,4469,3325,3550,null],"F":[3233,3157,2700,1838,1849,null],"M":[1901,1768,1769,1487,1701,null]},"share55":0.321216651871233,"share65":0.16586459842078213,"grads_per_year":1090.0,"ratio":1.5854545454545454},"TR":{"name":"Türkiye","eu":false,"basis":"PACT","flag":null,"total":221133,"age":{"T":[98725,46651,41628,25914,6863,1352],"F":[50554,19964,17260,7088,1348,264],"M":[48171,26687,24368,18826,5515,1088]},"share55":0.15433698272080604,"share65":0.03714958870905744,"grads_per_year":14536.0,"ratio":4.2591344604295465}}};
+const BASIS = { PRACT: "practising doctors", PACT: "professionally active doctors", LIC: "doctors licensed to practise" };
+const BASIS_SHORT = { PRACT: "Practising", PACT: "Professionally active", LIC: "Licensed" };
+const FLAG = { e: "estimated", b: "break in series", be: "break in series, estimated", d: "definition differs", de: "definition differs, estimated", bd: "break in series, definition differs", bde: "break in series, definition differs, estimated" };
+// Ranking geometry; the build reserves the same height for the default view (rank_height).
+const AXIS = 34, ROW = 24, BOTTOM = 8, BAR = 11;
+const NS = "http://www.w3.org/2000/svg";
+const state = { country: "DE", scope: "eu" };
+
+const $ = id => document.getElementById(id);
+const el = (tag, attrs = {}, parent) => {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+};
+const html = (tag, cls, text, parent) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  if (parent) parent.appendChild(n);
+  return n;
+};
+const A = g => D.areas[g];
+const name = g => A(g).name;
+const has = g => A(g).total != null;
+const pct = v => v == null ? "–" : `${Math.round(v * 100)}%`;
+const num = v => v == null ? "–" : Math.round(v).toLocaleString("en-GB");
+const ratio = v => v == null ? "–" : v.toFixed(1);
+const star = g => has(g) && A(g).basis !== "PRACT" ? "*" : "";
+const flag = g => FLAG[A(g).flag] || "";
+const inScope = g => state.scope === "all" || A(g).eu;
+const ordinal = n => n + (n % 100 >= 10 && n % 100 <= 20 ? "th" : { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th");
+const gradYears = `${D.grad_years[0]}–${D.grad_years.at(-1)}`;
+
+// Countries in scope with figures, oldest doctors first; equal shares share a rank, ties by name.
+// EU members without figures follow, unranked (`nodata`).
+let rows = [], nodata = [];
+function computeRows() {
+  rows = Object.keys(D.areas).filter(g => inScope(g) && has(g))
+    .sort((a, b) => A(b).share55 - A(a).share55 || name(a).localeCompare(name(b)))
+    .map(g => ({ g }));
+  for (const r of rows) r.rank = 1 + rows.filter(o => A(o.g).share55 > A(r.g).share55).length;
+  nodata = Object.keys(D.areas).filter(g => inScope(g) && !has(g)).sort((a, b) => name(a).localeCompare(name(b)));
+}
+const rankOf = g => rows.find(r => r.g === g)?.rank;
+// Scales are fixed for every view, so bars compare across scopes and countries.
+const withData = Object.keys(D.areas).filter(has);
+const SHARE_MAX = Math.ceil(Math.max(...withData.map(g => A(g).share55)) * 10) / 10;
+const RATIO_MAX = Math.ceil(Math.max(...withData.map(g => A(g).ratio ?? 0)));
+// "(Luxembourg has no 2024 figures)", as in the build's opening sentence (unranked_note).
+function unrankedNote() {
+  const names = Object.keys(D.areas).filter(g => A(g).eu && !has(g)).map(name);
+  if (!names.length) return "";
+  const who = names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}` : names[0];
+  return ` (${who} ${names.length > 1 ? "have" : "has"} no ${D.year} figures)`;
+}
+const noFigures = g => `No ${D.year} figures${A(g).latest ? ` (latest ${A(g).latest})` : ""}`;
+
+/* ---------- Tooltip ---------- */
+const tip = $("tip");
+function placeTip(evt) {
+  const pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = evt.clientX + pad, y = evt.clientY + pad;
+  if (x + w > innerWidth - 8) x = evt.clientX - w - pad;
+  if (y + h > innerHeight - 8) y = evt.clientY - h - pad;
+  tip.style.left = `${Math.max(8, x)}px`;
+  tip.style.top = `${Math.max(8, y)}px`;
+}
+const hideTip = () => tip.classList.remove("on");
+addEventListener("scroll", hideTip, { passive: true });
+// Touch: a tap selects like a click and also shows the tooltip a mouse gets on hover; a tap
+// anywhere else hides it again.
+let touch = false;
+addEventListener("pointerdown", e => {
+  touch = e.pointerType !== "mouse";
+  if (touch && !e.target.closest?.("svg[role=img], #insets")) hideTip();
+}, { capture: true, passive: true });
+function rowTip(evt, g) {
+  tip.replaceChildren();
+  if (!has(g)) {
+    html("span", "tv", noFigures(g), tip);
+    html("span", "tn", name(g), tip);
+  } else {
+    const a = A(g), r = rankOf(g);
+    html("span", "tv", `${pct(a.share55)} aged 55 or over`, tip);
+    html("span", "tn", name(g), tip);
+    if (r) html("span", "tm", `#${r} of ${rows.length}, oldest first`, tip);
+    html("span", "tm", `55–64: ${pct(a.share55 - a.share65)} · 65 or over: ${pct(a.share65)}`, tip);
+    html("span", "tm", `${num(a.total)} ${BASIS[a.basis]}${flag(g) ? ` (${flag(g)})` : ""}`, tip);
+    html("span", "tm", a.grads_per_year == null ? "No graduate figures"
+      : `${num(a.grads_per_year)} graduates a year (${gradYears}): ${ratio(a.ratio)} in 10 years per doctor aged 55+`, tip);
+  }
+  tip.classList.add("on");
+  placeTip(evt);
+}
+
+/* ---------- Main chart: ranking ---------- */
+function renderRank() {
+  const svg = $("rank");
+  svg.replaceChildren();
+  const W = svg.clientWidth || 900, narrow = W < 560;
+  const labelW = narrow ? 104 : 174, gap = narrow ? 14 : 32, valueW = 34;
+  const H = AXIS + (rows.length + nodata.length) * ROW + BOTTOM;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("height", H);
+  const p1 = (W - labelW - gap) * 0.55, p2 = W - labelW - gap - p1;
+  const x1 = v => labelW + v / SHARE_MAX * (p1 - valueW);
+  const x2 = v => labelW + p1 + gap + v / RATIO_MAX * (p2 - valueW);
+  // Texture for the 65+ part (it reads apart from 55–64 without colour) and the zone where fewer
+  // graduates come through than doctors near retirement.
+  const pat = el("pattern", { id: "hatch65", width: 5, height: 5, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, el("defs", {}, svg));
+  el("rect", { class: "hatch-bg", width: 5, height: 5 }, pat);
+  el("line", { class: "hatch-ln", x1: 0, x2: 0, y1: 0, y2: 5 }, pat);
+  el("rect", { class: "shortfall", x: x2(0), y: AXIS - 6, width: x2(1) - x2(0), height: H - BOTTOM - AXIS + 6 }, svg);
+  el("text", { class: "col-head", x: labelW, y: 12 }, svg).textContent = narrow ? "Aged 55+" : "Doctors aged 55 or over";
+  el("text", { class: "col-head", x: x2(0), y: 12 }, svg).textContent = narrow ? "Graduates per 55+" : "Graduates in 10 years per doctor 55+";
+  for (let v = 0; v <= SHARE_MAX + 1e-9; v += 0.2) {
+    el("line", { class: "gridline", x1: x1(v), x2: x1(v), y1: AXIS - 6, y2: H - BOTTOM }, svg);
+    el("text", { class: "tick", x: x1(v), y: AXIS - 10, "text-anchor": "middle" }, svg).textContent = pct(v);
+  }
+  for (let v = 0; v <= RATIO_MAX; v++) {
+    el("line", { class: "gridline", x1: x2(v), x2: x2(v), y1: AXIS - 6, y2: H - BOTTOM }, svg);
+    el("text", { class: "tick", x: x2(v), y: AXIS - 10, "text-anchor": "middle" }, svg).textContent = v;
+  }
+  el("line", { class: "ref", x1: x2(1), x2: x2(1), y1: AXIS - 6, y2: H - BOTTOM }, svg);
+
+  [...rows.map(r => r.g), ...nodata].forEach((g, i) => {
+    const top = AXIS + i * ROW, cy = top + ROW / 2, y = cy - BAR / 2;
+    const hl = g === state.country, cls = hl ? " hl" : "", r = rankOf(g);
+    if (hl) el("rect", { class: "row-band", x: 0, y: top, width: W, height: ROW, rx: 4 }, svg);
+    el("line", { class: "row-rule", x1: 0, x2: W, y1: top + ROW, y2: top + ROW }, svg);
+    const label = narrow && name(g).length > 11 ? name(g).slice(0, 10) + "…" : name(g);
+    el("text", { class: "row-label" + cls + (r ? "" : " nodata"), x: 0, y: cy + 4 }, svg).textContent =
+      r ? `${r}. ${label}${star(g)}` : label;
+    if (!has(g)) {
+      el("text", { class: "nodata-note", x: labelW, y: cy + 4 }, svg).textContent = noFigures(g);
+    } else {
+      const a = A(g);
+      el("rect", { class: "b5564", x: x1(0), y, width: x1(a.share55 - a.share65) - x1(0), height: BAR, rx: 3, "data-share": a.share55 - a.share65 }, svg);
+      el("rect", { class: "b65", x: x1(a.share55 - a.share65), y, width: x1(a.share65) - x1(0), height: BAR, rx: 3, "data-share": a.share65 }, svg);
+      el("text", { class: "row-value" + cls, x: x1(a.share55) + 6, y: cy + 4 }, svg).textContent = pct(a.share55);
+      // The ratio as a lollipop: a thin stem (its length is the value) and a head.
+      if (a.ratio != null) {
+        el("rect", { class: "b-ratio", x: x2(0), y: cy - 1.5, width: x2(a.ratio) - x2(0), height: 3, rx: 1.5, "data-ratio": a.ratio }, svg);
+        el("circle", { class: "b-ratio-head" + (a.ratio < 1 ? " short" : ""), cx: x2(a.ratio), cy, r: hl ? 6 : 5 }, svg);
+      }
+      el("text", { class: "row-value" + cls, x: x2(a.ratio ?? 0) + 10, y: cy + 4 }, svg).textContent = ratio(a.ratio);
+    }
+    el("rect", { class: "row-hit", x: 0, y: top, width: W, height: ROW, "data-g": g }, svg);
+  });
+}
+const rank = $("rank");
+const rankTip = evt => {
+  const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
+  if (g) rowTip(evt, g); else hideTip();
+};
+rank.addEventListener("pointermove", rankTip);
+rank.addEventListener("pointerleave", hideTip);
+rank.addEventListener("click", evt => {
+  const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
+  if (g) setCountry(g);
+  if (touch) rankTip(evt);
+});
+
+/* ---------- Tiles and lede ---------- */
+function setTile(n, value, sub) {
+  $(`t${n}v`).textContent = value;
+  $(`t${n}s`).textContent = sub;
+}
+function renderTiles() {
+  const top = rows[0]?.g, bottom = rows.at(-1)?.g;
+  setTile(1, top ? pct(A(top).share55) : "–", top ? `${name(top)}, aged 55+` : "");
+  setTile(2, bottom ? pct(A(bottom).share55) : "–", bottom ? `${name(bottom)}, aged 55+` : "");
+  const many = rows.filter(r => A(r.g).share55 >= 0.4).length;
+  setTile(3, `${many} of ${rows.length}`, "countries");
+  const g = state.country, r = rankOf(g);
+  $("t4k").textContent = name(g);
+  setTile(4, has(g) ? pct(A(g).share55) : "–",
+    has(g) ? `aged 55+ · ${r ? `#${r} of ${rows.length} · ` : ""}${ratio(A(g).ratio)} graduates per 55+` : noFigures(g));
+  renderLede();
+}
+function renderLede() {
+  const lede = $("lede"), g = state.country;
+  lede.replaceChildren();
+  // One span per thought, so each reads on its own line; a space between them keeps the text flowing.
+  let at = lede;
+  const thought = () => { if (at !== lede) lede.append(" "); at = html("span", "thought", null, lede); };
+  const b = t => html("strong", "", t, at);
+  thought();
+  if (!has(g)) {
+    at.append(`Eurostat has no ${D.year} figures on the age of doctors in ${name(g)}${A(g).latest ? `; its latest are from ${A(g).latest}` : ""}.`);
+    return;
+  }
+  const a = A(g);
+  at.append(`In ${name(g)}, `);
+  b(pct(a.share55));
+  at.append(` of ${BASIS[a.basis]} were 55 or over in ${D.year}`);
+  if (a.eu) {
+    // The rank among all EU members, as in the build's opening sentence; members without figures are named.
+    const eu = Object.keys(D.areas).filter(c => A(c).eu);
+    const rank = 1 + eu.filter(c => has(c) && A(c).share55 > a.share55).length;
+    at.append(`: the ${ordinal(rank)} oldest of ${eu.length} EU countries${unrankedNote()}.`);
+  } else at.append(".");
+  if (a.ratio != null) {
+    thought();
+    at.append("At today's rate, its medical schools will turn out ");
+    b(`${ratio(a.ratio)} graduates`);
+    at.append(` in the next ${D.replace_years} years for every doctor aged 55 or over.`);
+  }
+}
+
+/* ---------- Table view ---------- */
+function renderTable() {
+  if (!$("table-card").open) return;
+  const tb = $("tbody");
+  tb.replaceChildren();
+  for (const { g, rank } of [...rows, ...nodata.map(g => ({ g, rank: "" }))]) {
+    const tr = html("tr", g === state.country ? "hl" : "", null, tb), a = A(g);
+    html("td", "r", rank ? `#${rank}` : "", tr);
+    const btn = html("button", "", name(g), html("td", "", null, tr));
+    btn.type = "button";
+    btn.addEventListener("click", () => setCountry(g));
+    html("td", "", has(g) ? BASIS_SHORT[a.basis] + (a.flag ? ` (${a.flag})` : "") : noFigures(g), tr);
+    html("td", "r", has(g) ? num(a.total) : "–", tr);
+    html("td", "r", has(g) ? pct(a.share55) : "–", tr);
+    html("td", "r", has(g) ? pct(a.share65) : "–", tr);
+    html("td", "r", has(g) ? num(a.grads_per_year) : "–", tr);
+    html("td", "r", has(g) ? ratio(a.ratio) : "–", tr);
+  }
+}
+$("table-card").addEventListener("toggle", renderTable);
+
+/* ---------- Controls ---------- */
+function render() {
+  computeRows();
+  for (const b of $("scope").children) b.setAttribute("aria-pressed", b.dataset.v === state.scope);
+  renderRank(); renderTiles(); renderTable();
+}
+function setCountry(g) { state.country = g; $("country").value = g; render(); }
+function fillCountries() {
+  const s = $("country");
+  s.replaceChildren();
+  Object.keys(D.areas).filter(inScope).sort((a, b) => name(a).localeCompare(name(b)))
+    .forEach(g => { const o = html("option", "", name(g), s); o.value = g; });
+  s.value = state.country;
+}
+$("scope").addEventListener("click", e => {
+  const v = e.target.dataset?.v;
+  if (!v) return;
+  state.scope = v;
+  if (!inScope(state.country)) state.country = "DE";
+  fillCountries(); render();
+});
+$("country").addEventListener("change", e => setCountry(e.target.value));
+
+let lastW = 0;
+new ResizeObserver(() => {
+  const w = rank.clientWidth;
+  if (Math.abs(w - lastW) < 2) return;
+  lastW = w;
+  renderRank();
+}).observe(document.querySelector("main"));
+
+fillCountries();
+render();
+</script>
+</body>
+</html>
