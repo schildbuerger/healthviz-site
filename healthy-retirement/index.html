@@ -412,6 +412,21 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .card-head h2::before { content: "§ "; color: var(--ink); font-style: italic; }
 .card-head p { margin: 6px 0 0; max-width: 92ch; }
 .card-head .small.muted { color: var(--text-2); font-size: 14.5px; }
+/* Chart info: an (i) at the right of the chart's title opens its description in a popup */
+.card-head:has(> .info) { flex-wrap: nowrap; }
+.info { position: relative; flex: none; align-self: flex-start; }
+.info summary {
+  list-style: none; cursor: pointer; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--ink); box-shadow: 0 2px 0 var(--text);
+  font: italic 700 17px/1 var(--serif);
+}
+.info summary::-webkit-details-marker { display: none; }
+.info[open] summary { background: var(--ink); color: var(--on-ink); transform: translateY(2px); box-shadow: none; }
+.card-head .info-pop {
+  position: absolute; right: 0; top: calc(100% + 10px); z-index: 6; width: min(400px, calc(100vw - 48px)); margin: 0;
+  padding: 12px 14px; background: var(--surface); border: 1.5px solid var(--text); box-shadow: 5px 5px 0 var(--text);
+  font: 14.5px/1.5 var(--sans); color: var(--text-2);
+}
 .grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr); gap: 22px; margin-bottom: 22px; }
 
 /* Legend keys */
@@ -541,6 +556,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
   .icon-btn svg { width: 14px; height: 14px; }
   .find input { font-size: 16px; min-height: 44px; }
   details.card summary { min-height: 44px; }
+  .info summary { width: 44px; height: 44px; }
   details.card summary::before { width: 32px; height: 32px; }
   td button { padding: 12px 0; margin: -12px 0; }
   .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
@@ -642,8 +658,11 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <div class="card-head">
       <div>
         <h2 id="blocks-title">Life after 65, one block per year, 2024</h2>
-        <p class="small muted" id="blocks-sub">Each block is a year a 65-year-old can expect to live. Filled blocks are years without health limitations. The red marker is the average age at which people started their old-age pension. Countries are ranked by healthy years. Tap or click a row to pick a country.</p>
       </div>
+      <details class="info">
+        <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
+        <p class="info-pop" id="blocks-sub">Each block is a year a 65-year-old can expect to live. Filled blocks are years without health limitations. The red marker is the average age at which people started their old-age pension. Countries are ranked by healthy years. Tap or click a row to pick a country.</p>
+      </details>
     </div>
     <div class="keys" aria-hidden="true">
       <span><svg width="14" height="14" aria-hidden="true"><rect class="year-healthy" x="0" y="3" width="14" height="8" rx="4"/></svg>Healthy year (a pill)</span>
@@ -672,7 +691,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <p>Eurostat measures healthy years from age 65, not from the age people retire, so the chart starts the blocks at 65. They show how many years are healthy, not when: drawing the healthy years first is a simplification. The pension age is the average age at which people aged 65 to 74 in 2023 started receiving an old-age pension (EU Labour Force Survey), including early retirement. It measures when the pension started, not when people stopped working. The years between the pension age and 65 are not split into healthy and not healthy, because Eurostat publishes no healthy life years for those ages. Values Eurostat marks provisional or estimated are labelled so in the tooltip and the table. Luxembourg has no 2024 figures (latest: 9.8 healthy years of 21.0 at 65 in 2022); it is listed without blocks and not ranked.</p>
   </section>
 </main>
-<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer>
+<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer><script>addEventListener("pointerdown",e=>{for(const d of document.querySelectorAll("details.info[open]"))if(!d.contains(e.target))d.open=false});addEventListener("keydown",e=>{if(e.key==="Escape")for(const d of document.querySelectorAll("details.info[open]")){d.open=false;d.querySelector("summary").focus()}})</script>
 <div class="tip" id="tip" role="tooltip"></div>
 
 <script>

@@ -412,6 +412,21 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .card-head h2::before { content: "§ "; color: var(--ink); font-style: italic; }
 .card-head p { margin: 6px 0 0; max-width: 92ch; }
 .card-head .small.muted { color: var(--text-2); font-size: 14.5px; }
+/* Chart info: an (i) at the right of the chart's title opens its description in a popup */
+.card-head:has(> .info) { flex-wrap: nowrap; }
+.info { position: relative; flex: none; align-self: flex-start; }
+.info summary {
+  list-style: none; cursor: pointer; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--ink); box-shadow: 0 2px 0 var(--text);
+  font: italic 700 17px/1 var(--serif);
+}
+.info summary::-webkit-details-marker { display: none; }
+.info[open] summary { background: var(--ink); color: var(--on-ink); transform: translateY(2px); box-shadow: none; }
+.card-head .info-pop {
+  position: absolute; right: 0; top: calc(100% + 10px); z-index: 6; width: min(400px, calc(100vw - 48px)); margin: 0;
+  padding: 12px 14px; background: var(--surface); border: 1.5px solid var(--text); box-shadow: 5px 5px 0 var(--text);
+  font: 14.5px/1.5 var(--sans); color: var(--text-2);
+}
 .grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr); gap: 22px; margin-bottom: 22px; }
 
 /* Legend keys */
@@ -541,6 +556,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
   .icon-btn svg { width: 14px; height: 14px; }
   .find input { font-size: 16px; min-height: 44px; }
   details.card summary { min-height: 44px; }
+  .info summary { width: 44px; height: 44px; }
   details.card summary::before { width: 32px; height: 32px; }
   td button { padding: 12px 0; margin: -12px 0; }
   .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
@@ -716,8 +732,11 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <div class="card-head">
       <div>
         <h2 id="scatter-title">Spending and out-of-pocket share, 2024</h2>
-        <p class="small muted" id="scatter-sub">Each dot is a country. Further right: more spent on health (per person, price-adjusted (PPS)). Higher up: people pay a larger share themselves. Tap or click a dot to compare that country with the EU-27 below; play the years to see dots move.</p>
       </div>
+      <details class="info">
+        <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
+        <p class="info-pop" id="scatter-sub">Each dot is a country. Further right: more spent on health (per person, price-adjusted (PPS)). Higher up: people pay a larger share themselves. Tap or click a dot to compare that country with the EU-27 below; play the years to see dots move.</p>
+      </details>
     </div>
     <div class="keys" id="scatter-keys"><span class="key"><i class="k-dot"></i>Country</span><span class="key"><i class="k-line"></i>EU-27 average</span><span class="key"><i class="k-shade"></i>People pay more out of pocket than the EU-27 average</span><span class="key"><i class="k-trail"></i>Germany since 2016</span><span class="key"><i class="k-trail eu"></i>EU-27 since 2016</span></div>
     <svg id="scatter" role="img" aria-labelledby="scatter-title scatter-sub"></svg>
@@ -768,7 +787,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <p>Who pays: government and compulsory insurance covers public budgets and statutory health insurance (in Germany, mainly the GKV); voluntary insurance covers private policies people choose to take out; out of pocket is what people pay directly, including co-payments. A small rest, in a few countries, is paid from abroad or not assigned. The main chart puts each country's spending (across) against the share paid out of pocket (up); the out-of-pocket share is independent of how much a country spends, so countries of any size can be compared. "Of every €100" in the opening sentence uses Eurostat's shares, rounded. What the money goes to follows Eurostat's functions of care: medicines given in hospital count as treatment; "not assigned" is what Eurostat doesn't assign to a function (in some countries nothing). Amounts per person on each function are Eurostat's, in PPS; changes since 2016 are in percentage points of the share. Values Eurostat marks provisional are labelled so in the tooltip and marked "p" in the table. The jump in prevention spending in 2021–2022 reflects COVID-19 testing and vaccination.</p>
   </section>
 </main>
-<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer>
+<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer><script>addEventListener("pointerdown",e=>{for(const d of document.querySelectorAll("details.info[open]"))if(!d.contains(e.target))d.open=false});addEventListener("keydown",e=>{if(e.key==="Escape")for(const d of document.querySelectorAll("details.info[open]")){d.open=false;d.querySelector("summary").focus()}})</script>
 <div class="tip" id="tip" role="tooltip"></div>
 
 <script>

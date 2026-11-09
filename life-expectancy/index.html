@@ -412,6 +412,21 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .card-head h2::before { content: "§ "; color: var(--ink); font-style: italic; }
 .card-head p { margin: 6px 0 0; max-width: 92ch; }
 .card-head .small.muted { color: var(--text-2); font-size: 14.5px; }
+/* Chart info: an (i) at the right of the chart's title opens its description in a popup */
+.card-head:has(> .info) { flex-wrap: nowrap; }
+.info { position: relative; flex: none; align-self: flex-start; }
+.info summary {
+  list-style: none; cursor: pointer; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--ink); box-shadow: 0 2px 0 var(--text);
+  font: italic 700 17px/1 var(--serif);
+}
+.info summary::-webkit-details-marker { display: none; }
+.info[open] summary { background: var(--ink); color: var(--on-ink); transform: translateY(2px); box-shadow: none; }
+.card-head .info-pop {
+  position: absolute; right: 0; top: calc(100% + 10px); z-index: 6; width: min(400px, calc(100vw - 48px)); margin: 0;
+  padding: 12px 14px; background: var(--surface); border: 1.5px solid var(--text); box-shadow: 5px 5px 0 var(--text);
+  font: 14.5px/1.5 var(--sans); color: var(--text-2);
+}
 .grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr); gap: 22px; margin-bottom: 22px; }
 
 /* Legend keys */
@@ -541,6 +556,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
   .icon-btn svg { width: 14px; height: 14px; }
   .find input { font-size: 16px; min-height: 44px; }
   details.card summary { min-height: 44px; }
+  .info summary { width: 44px; height: 44px; }
   details.card summary::before { width: 32px; height: 32px; }
   td button { padding: 12px 0; margin: -12px 0; }
   .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
@@ -738,12 +754,15 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
       <div class="card-head">
         <div>
           <h2 id="map-title"></h2>
-          <p class="small muted">Years a newborn can expect to live, by NUTS 2 region. Hover or tap for values; select a region to see it over time.</p>
         </div>
+        <details class="info">
+          <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
+          <p class="info-pop" id="map-sub">Years a newborn can expect to live, by NUTS 2 region. Hover or tap for values; select a region to see it over time.</p>
+        </details>
       </div>
       <div class="legend" id="legend"></div>
       <div class="map-wrap">
-        <svg id="map" role="img" aria-labelledby="map-title"></svg>
+        <svg id="map" role="img" aria-labelledby="map-title map-sub"></svg>
         <!-- Required by the GISCO terms for the NUTS boundaries: credit on the map itself. -->
         <p class="map-attrib">© EuroGeographics for the administrative boundaries</p>
         <button type="button" class="zoom-btn" id="zoom"></button>
@@ -778,8 +797,11 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <div class="card-head">
       <div>
         <h2>Every region, by country</h2>
-        <p class="small muted" id="strip-sub">Each dot is a region; the line spans a country's lowest to highest region. Countries are ranked by their national value, which covers all their regions. The axis stays the same for women, men and total.</p>
       </div>
+      <details class="info">
+        <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
+        <p class="info-pop" id="strip-sub">Each dot is a region; the line spans a country's lowest to highest region. Countries are ranked by their national value, which covers all their regions. The axis stays the same for women, men and total.</p>
+      </details>
     </div>
     <svg id="strip" role="img" aria-label="Dot plot of all regions grouped by country" height="592"></svg>
   </section>
@@ -801,7 +823,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <p>Life expectancy at birth is the average number of years a newborn would live if current death rates by age stayed the same. It is a summary of mortality in that year, not a forecast. Regions follow NUTS 2024. Where Eurostat publishes older years only for former regions with different borders (Portugal, the Netherlands, Norway, Croatia), those years are shown as no data (hatched) rather than redrawn. The colour scale is set per sex and stays fixed across years. The dip in 2020–2022 reflects COVID-19; Turkey's 2023 low reflects the February earthquakes. Outermost regions are shown as insets below the map.</p>
   </section>
 </main>
-<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer>
+<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer><script>addEventListener("pointerdown",e=>{for(const d of document.querySelectorAll("details.info[open]"))if(!d.contains(e.target))d.open=false});addEventListener("keydown",e=>{if(e.key==="Escape")for(const d of document.querySelectorAll("details.info[open]")){d.open=false;d.querySelector("summary").focus()}})</script>
 <div class="tip" id="tip" role="tooltip"></div>
 
 <script>

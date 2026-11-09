@@ -412,6 +412,21 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .card-head h2::before { content: "§ "; color: var(--ink); font-style: italic; }
 .card-head p { margin: 6px 0 0; max-width: 92ch; }
 .card-head .small.muted { color: var(--text-2); font-size: 14.5px; }
+/* Chart info: an (i) at the right of the chart's title opens its description in a popup */
+.card-head:has(> .info) { flex-wrap: nowrap; }
+.info { position: relative; flex: none; align-self: flex-start; }
+.info summary {
+  list-style: none; cursor: pointer; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--ink); box-shadow: 0 2px 0 var(--text);
+  font: italic 700 17px/1 var(--serif);
+}
+.info summary::-webkit-details-marker { display: none; }
+.info[open] summary { background: var(--ink); color: var(--on-ink); transform: translateY(2px); box-shadow: none; }
+.card-head .info-pop {
+  position: absolute; right: 0; top: calc(100% + 10px); z-index: 6; width: min(400px, calc(100vw - 48px)); margin: 0;
+  padding: 12px 14px; background: var(--surface); border: 1.5px solid var(--text); box-shadow: 5px 5px 0 var(--text);
+  font: 14.5px/1.5 var(--sans); color: var(--text-2);
+}
 .grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr); gap: 22px; margin-bottom: 22px; }
 
 /* Legend keys */
@@ -541,6 +556,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
   .icon-btn svg { width: 14px; height: 14px; }
   .find input { font-size: 16px; min-height: 44px; }
   details.card summary { min-height: 44px; }
+  .info summary { width: 44px; height: 44px; }
   details.card summary::before { width: 32px; height: 32px; }
   td button { padding: 12px 0; margin: -12px 0; }
   .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
@@ -600,7 +616,6 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <p class="stamp" aria-hidden="true">Shift change<small>2024 roster</small></p>
     <h1>Will your doctor retire soon<span class="qm">?</span></h1>
     <p class="lede" id="lede"><span class="thought">In Germany, <strong>32%</strong> of practising doctors were 55 or over in 2024: the 14th oldest of 27 EU countries (Luxembourg has no 2024 figures).</span> <span class="thought">At today's rate, its medical schools will turn out <strong>0.8 graduates</strong> in the next 10 years for every doctor aged 55 or over.</span></p>
-    <p class="scribble" aria-hidden="true">Pick a country up in the controls, or just tap its row in the chart.</p>
     <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Data retrieved</dt><dd><time datetime="2026-11-01">1 Nov 2026</time></dd></div><div><dt>Source last updated</dt><dd><time datetime="2026-07-13">13 Jul 2026</time> · Eurostat</dd></div><div><dt>Covers</dt><dd>2024; graduates 2022–2024 · 33 countries</dd></div></dl><p class="snapshot-note">This entry stays as it is until its data is explicitly updated. <a href="#sources">Sources and notes</a></p></aside>
   </header>
 
@@ -631,8 +646,11 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <div class="card-head">
       <div>
         <h2 id="rank-title">Doctors aged 55 or over, and the graduates to replace them, 2024</h2>
-        <p class="small muted" id="rank-sub">Left: the share of doctors aged 55 or over, who will retire in the coming years. Right: medical graduates in the next 10 years at the rate of 2022–2024, for every doctor aged 55 or over; below 1, fewer graduates than doctors nearing retirement. Countries are ranked by the share aged 55 or over. Tap or click a row to pick a country.</p>
       </div>
+      <details class="info">
+        <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
+        <p class="info-pop" id="rank-sub">Left: the share of doctors aged 55 or over, who will retire in the coming years. Right: medical graduates in the next 10 years at the rate of 2022–2024, for every doctor aged 55 or over; below 1, fewer graduates than doctors nearing retirement. Countries are ranked by the share aged 55 or over. Tap or click a row to pick a country.</p>
+      </details>
     </div>
     <div class="keys" aria-hidden="true">
       <span><svg width="14" height="14" aria-hidden="true"><rect class="b5564" x="1" y="1" width="12" height="12" rx="2"/></svg>Aged 55–64</span>
@@ -663,7 +681,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <p>Italy counts all practising doctors only since 2021; before, it counted doctors in its national health service, of whom 54% were 55 or over. The page shows one year only, so breaks like this don't affect it.</p>
   </section>
 </main>
-<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer>
+<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer><script>addEventListener("pointerdown",e=>{for(const d of document.querySelectorAll("details.info[open]"))if(!d.contains(e.target))d.open=false});addEventListener("keydown",e=>{if(e.key==="Escape")for(const d of document.querySelectorAll("details.info[open]")){d.open=false;d.querySelector("summary").focus()}})</script>
 <div class="tip" id="tip" role="tooltip"></div>
 
 <script>
