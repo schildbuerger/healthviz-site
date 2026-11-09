@@ -143,15 +143,15 @@ h2 { font-size: 16px; margin: 0; }
 .eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
 @media (hover: hover) { .eyebrow a:hover { background: var(--ink); color: var(--on-ink); } }
 .eyebrow { padding-right: 10px; align-items: center; }
-.lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); }
+.lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); text-wrap: pretty; }
 .lede strong {
   color: var(--text); font-weight: 700;
   background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 94%, transparent 94%);
 }
 /* Opening sentences: one thought per line, each marked like an entry in a chart */
-.lede .thought { display: block; position: relative; padding-left: 1.3em; }
-.lede .thought + .thought { margin-top: .5em; }
-.lede .thought::before { content: ""; position: absolute; left: 0; top: .74em; width: .72em; height: 2px; background: var(--ink); }
+.lede .thought { display: block; position: relative; padding-left: 1.4em; color: var(--text); font-size: 20px; line-height: 1.6; }
+.lede .thought + .thought { margin-top: .9em; }
+.lede .thought::before { content: ""; position: absolute; left: 0; top: .8em; width: .75em; height: 2.5px; background: var(--ink); }
 .muted { color: var(--muted); }
 .small { font-size: 14px; }
 .num { font-variant-numeric: tabular-nums; }
@@ -234,7 +234,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   margin: 0; padding: 12px 18px 14px; font: italic 18px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink);
   text-align: center; transform: rotate(-1.5deg);
 }
-.snapshot-note a { display: table; margin: 10px auto 0; font-size: 14.5px; white-space: nowrap; } /* its own line, centred */
+.snapshot-note a { display: table; margin: 0 auto; font-size: 14.5px; white-space: nowrap; } /* centred */
 .sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
 .sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
 .sources li::before {
@@ -264,11 +264,6 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 }
 .stamp small { display: block; font-size: 11px; letter-spacing: .2em; margin-top: 3px; }
 :root[data-theme="dark"] .stamp { mix-blend-mode: normal; }
-.scribble {
-  font: italic 21px/1.15 var(--hand); color: var(--ink); margin: 24px 0 0 2px; transform: rotate(-2deg); transform-origin: left;
-  display: inline-block; max-width: 34ch;
-}
-.scribble::before { content: "↳ "; }
 
 @media (max-width: 960px) {
   .chart-head { grid-template-columns: minmax(0, 1fr); }
@@ -284,6 +279,17 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .trace { margin: 4px -16px 0; width: calc(100% + 32px); }
   .brand::after { display: none; }
   .lede { font-size: 17px; }
+  .lede .thought { font-size: 18px; line-height: 1.55; }
+  /* Header on one row: the theme switch shows its icon only (it keeps its label for screen readers),
+     the links drop their decorative brackets */
+  .site-header { gap: 8px; }
+  .site-header nav { gap: 0; letter-spacing: .06em; }
+  .site-header nav a { padding: 0 8px; }
+  .site-header nav a::before, .site-header nav a::after { content: none; }
+  .theme-switch .tw { display: none; }
+  .theme-switch { font-size: 17px; min-width: 40px; justify-content: center; margin-left: 4px; }
+  /* The tilted snapshot sheet and its shadow stay inside the screen */
+  .chart-head > .snapshot { width: calc(100% - 14px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .brand::before, .trace path { animation: none; }
@@ -413,8 +419,9 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .card-head p { margin: 6px 0 0; max-width: 92ch; }
 .card-head .small.muted { color: var(--text-2); font-size: 14.5px; }
 /* Chart info: an (i) at the right of the chart's title opens its description in a popup */
-.card-head:has(> .info) { flex-wrap: nowrap; }
-.info { position: relative; flex: none; align-self: flex-start; }
+.card-head:has(> .card-tools) { flex-wrap: nowrap; }
+.card-tools { display: flex; gap: 8px; flex: none; align-self: flex-start; }
+.info { position: relative; }
 .info summary {
   list-style: none; cursor: pointer; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
   border: 1.5px solid var(--text); background: var(--surface); color: var(--ink); box-shadow: 0 2px 0 var(--text);
@@ -500,7 +507,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
 
 /* Notes: a lined case-notes sheet with a margin rule */
 .notes {
-  margin-top: 40px; color: var(--text-2); max-width: 96ch; position: relative;
+  margin: 40px auto 0; color: var(--text-2); max-width: 96ch; position: relative;
   background: var(--surface); box-shadow: var(--paper-shadow); padding: 34px 34px 26px 92px;
   font: 16px/28px var(--serif);
   background-image: linear-gradient(90deg, transparent 70px, var(--mark-soft) 70px, var(--mark-soft) 72px, transparent 72px),
@@ -535,9 +542,19 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
   .year { flex: none; min-width: 0; padding: 0 16px; }
   .seg button { padding: 0 8px; font-size: 12px; }
   select { max-width: 150px; font-size: 12px; }
+  /* Filters scroll away with the page on phones: pinned, two rows of 44px keys took a sixth of the
+     screen. Charts have their own full-screen view for a closer look. */
+  .filters { position: static; }
+  /* Key figures: labels and sublines wrap instead of being cut off (up to 2 and 3 lines, reserved
+     before the script fills them, so nothing shifts) */
+  .tile { padding: 12px 12px 10px; }
+  .tile .k, .tile .s { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+  .tile .k { min-height: 3em; }
+  .tile .k::before { content: none; } /* the CH1 ▸ channel tag: decoration that would cost a line */
+  .tile .s { min-height: 4.5em; font-size: 12px; }
   .tile .v { font-size: 24px; }
   .tiles { border-width: 6px; border-radius: 12px; }
-  .card { padding: 18px 26px; }
+  .card { padding: 18px 22px; }
   .card::before, .card::after { width: 16px; background-size: 16px 22px;
     background-image: radial-gradient(circle at 8px 11px, var(--hole) 0 3.5px, transparent 4px); }
   .notes { padding: 26px 18px 18px 30px; transform: none;
@@ -545,6 +562,27 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
       repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
   .notes::before { display: none; }
 }
+/* Full screen: the chart's card covers the screen (true full screen where the browser allows it on
+   an element; an overlay elsewhere, e.g. on iPhone). Charts redraw for the new width. */
+.full-btn {
+  display: grid; place-items: center; width: 30px; height: 30px; padding: 0; cursor: pointer; border-radius: 50%;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--ink); box-shadow: 0 2px 0 var(--text);
+}
+.full-btn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.full-btn .i-close, .full-btn[aria-pressed="true"] .i-open { display: none; }
+.full-btn[aria-pressed="true"] .i-close { display: inline; }
+.full-btn[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+.card.is-full {
+  position: fixed; inset: 0; z-index: 50; margin: 0 !important; width: auto; max-width: none; overflow: auto;
+  transform: none; border-radius: 0; background-color: var(--surface);
+  padding: max(16px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+}
+.card.is-full::before, .card.is-full::after { display: none; }
+html.has-full { overflow: hidden; }
+.card.is-full #scatter { height: calc(100dvh - 190px); min-height: 320px; }
+.card.is-full #map { width: auto; max-width: 100%; height: calc(100dvh - 200px); margin: 0 auto; }
+.card.is-full .tip { z-index: 60; }
+
 /* Touch screens: 44px controls (see shell.css), and 16px text in form fields so iOS Safari doesn't
    zoom the page when one is tapped. Comes after the phone rules so it wins on small screens too. */
 @media (pointer: coarse) {
@@ -556,7 +594,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
   .icon-btn svg { width: 14px; height: 14px; }
   .find input { font-size: 16px; min-height: 44px; }
   details.card summary { min-height: 44px; }
-  .info summary { width: 44px; height: 44px; }
+  .info summary, .full-btn { width: 44px; height: 44px; }
   details.card summary::before { width: 32px; height: 32px; }
   td button { padding: 12px 0; margin: -12px 0; }
   .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
@@ -680,15 +718,14 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
 </style>
 </head>
 <body>
-<div class="drip" aria-hidden="true"></div><header class="site-header"><a class="brand" href="../">healthviz</a><nav aria-label="Site"><a href="../#entries">Entries</a><a href="../#about">About</a><button type="button" class="theme-switch" onclick="var r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';try{localStorage.setItem('hv-theme',r.dataset.theme)}catch(e){}" aria-label="Switch between paper and monitor"><span class="t-light">◐ Monitor</span><span class="t-dark">◑ Paper</span></button></nav><svg class="trace" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true"><path d="M0 30H40c4 0 5-6 9-6s5 6 9 6H66l3 5 6-33 6 40 4-12H100c5 0 7-9 13-9s8 9 13 9H173c4 0 5-6 9-6s5 6 9 6H199l3 5 6-33 6 40 4-12H233c5 0 7-9 13-9s8 9 13 9H306c4 0 5-6 9-6s5 6 9 6H332l3 5 6-33 6 40 4-12H366c5 0 7-9 13-9s8 9 13 9H439c4 0 5-6 9-6s5 6 9 6H465l3 5 6-33 6 40 4-12H499c5 0 7-9 13-9s8 9 13 9H572c4 0 5-6 9-6s5 6 9 6H598l3 5 6-33 6 40 4-12H632c5 0 7-9 13-9s8 9 13 9H705c4 0 5-6 9-6s5 6 9 6H731l3 5 6-33 6 40 4-12H765c5 0 7-9 13-9s8 9 13 9H838c4 0 5-6 9-6s5 6 9 6H864l3 5 6-33 6 40 4-12H898c5 0 7-9 13-9s8 9 13 9H971c4 0 5-6 9-6s5 6 9 6H997l3 5 6-33 6 40 4-12H1031c5 0 7-9 13-9s8 9 13 9H1104c4 0 5-6 9-6s5 6 9 6H1130l3 5 6-33 6 40 4-12H1164c5 0 7-9 13-9s8 9 13 9H1237c4 0 5-6 9-6s5 6 9 6H1263l3 5 6-33 6 40 4-12H1297c5 0 7-9 13-9s8 9 13 9H1200" pathLength="100"/></svg></header>
+<div class="drip" aria-hidden="true"></div><header class="site-header"><a class="brand" href="../">healthviz</a><nav aria-label="Site"><a href="../#entries">Entries</a><a href="../#about">About</a><button type="button" class="theme-switch" onclick="var r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';try{localStorage.setItem('hv-theme',r.dataset.theme)}catch(e){}" aria-label="Switch between paper and monitor"><span class="t-light">◐<span class="tw"> Monitor</span></span><span class="t-dark">◑<span class="tw"> Paper</span></span></button></nav><svg class="trace" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true"><path d="M0 30H40c4 0 5-6 9-6s5 6 9 6H66l3 5 6-33 6 40 4-12H100c5 0 7-9 13-9s8 9 13 9H173c4 0 5-6 9-6s5 6 9 6H199l3 5 6-33 6 40 4-12H233c5 0 7-9 13-9s8 9 13 9H306c4 0 5-6 9-6s5 6 9 6H332l3 5 6-33 6 40 4-12H366c5 0 7-9 13-9s8 9 13 9H439c4 0 5-6 9-6s5 6 9 6H465l3 5 6-33 6 40 4-12H499c5 0 7-9 13-9s8 9 13 9H572c4 0 5-6 9-6s5 6 9 6H598l3 5 6-33 6 40 4-12H632c5 0 7-9 13-9s8 9 13 9H705c4 0 5-6 9-6s5 6 9 6H731l3 5 6-33 6 40 4-12H765c5 0 7-9 13-9s8 9 13 9H838c4 0 5-6 9-6s5 6 9 6H864l3 5 6-33 6 40 4-12H898c5 0 7-9 13-9s8 9 13 9H971c4 0 5-6 9-6s5 6 9 6H997l3 5 6-33 6 40 4-12H1031c5 0 7-9 13-9s8 9 13 9H1104c4 0 5-6 9-6s5 6 9 6H1130l3 5 6-33 6 40 4-12H1164c5 0 7-9 13-9s8 9 13 9H1237c4 0 5-6 9-6s5 6 9 6H1263l3 5 6-33 6 40 4-12H1297c5 0 7-9 13-9s8 9 13 9H1200" pathLength="100"/></svg></header>
 <main>
   <header class="chart-head" data-motif="€">
     <p class="eyebrow"><a href="../#entries">← Entries</a>Health spending</p>
     <p class="stamp" aria-hidden="true">Billing dept.<small>who pays?</small></p>
     <h1>How much does Europe spend on health, and who pays<span class="qm">?</span></h1>
     <p class="lede" id="lede"><span class="thought">In 2024, Germany spent <strong>42% more than the EU-27 average</strong> on health per person, after adjusting for price levels: the most of all 27 EU countries.</span> <span class="thought">Of every €100 spent on health there, government and compulsory insurance paid <strong>€86</strong> and people paid <strong>€11</strong> out of their own pocket.</span></p>
-    <p class="scribble" aria-hidden="true">Press ▶ and watch the countries wander through the years.</p>
-    <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Data retrieved</dt><dd><time datetime="2026-10-26">26 Oct 2026</time></dd></div><div><dt>Source last updated</dt><dd><time datetime="2026-10-23">23 Oct 2026</time> · Eurostat</dd></div><div><dt>Covers</dt><dd>2016–2024 · 34 countries</dd></div></dl><p class="snapshot-note">This entry stays as it is until its data is explicitly updated. <a href="#sources">Sources and notes</a></p></aside>
+    <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Data retrieved</dt><dd><time datetime="2026-10-26">26 Oct 2026</time></dd></div><div><dt>Source last updated</dt><dd><time datetime="2026-10-23">23 Oct 2026</time> · Eurostat</dd></div><div><dt>Covers</dt><dd>2016–2024 · 34 countries</dd></div></dl><p class="snapshot-note"><a href="#sources">Sources and notes</a></p></aside>
   </header>
 
   <div class="filters" role="group" aria-label="Filters">
@@ -733,10 +770,13 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
       <div>
         <h2 id="scatter-title">Spending and out-of-pocket share, 2024</h2>
       </div>
-      <details class="info">
-        <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
-        <p class="info-pop" id="scatter-sub">Each dot is a country. Further right: more spent on health (per person, price-adjusted (PPS)). Higher up: people pay a larger share themselves. Tap or click a dot to compare that country with the EU-27 below; play the years to see dots move.</p>
-      </details>
+      <div class="card-tools">
+        <details class="info">
+          <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
+          <p class="info-pop" id="scatter-sub">Each dot is a country. Further right: more spent on health (per person, price-adjusted (PPS)). Higher up: people pay a larger share themselves. Tap or click a dot to compare that country with the EU-27 below; play the years to see dots move.</p>
+        </details>
+        <button type="button" class="full-btn" aria-pressed="false" aria-label="Show this chart full screen"><svg viewBox="0 0 14 14" aria-hidden="true"><path class="i-open" d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/><path class="i-close" d="M5 1v4H1M9 1v4h4M13 9H9v4M1 9h4v4"/></svg></button>
+      </div>
     </div>
     <div class="keys" id="scatter-keys"><span class="key"><i class="k-dot"></i>Country</span><span class="key"><i class="k-line"></i>EU-27 average</span><span class="key"><i class="k-shade"></i>People pay more out of pocket than the EU-27 average</span><span class="key"><i class="k-trail"></i>Germany since 2016</span><span class="key"><i class="k-trail eu"></i>EU-27 since 2016</span></div>
     <svg id="scatter" role="img" aria-labelledby="scatter-title scatter-sub"></svg>
@@ -747,6 +787,9 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
       <div>
         <h2 id="fn-title">What the money goes to</h2>
         <p class="small muted" id="fn-sub">Germany compared with the EU-27, 2024. Tap or click a category to compare every country on it.</p>
+      </div>
+      <div class="card-tools">
+        <button type="button" class="full-btn" aria-pressed="false" aria-label="Show this chart full screen"><svg viewBox="0 0 14 14" aria-hidden="true"><path class="i-open" d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/><path class="i-close" d="M5 1v4H1M9 1v4h4M13 9H9v4M1 9h4v4"/></svg></button>
       </div>
     </div>
     <div class="fn-grid">
@@ -787,7 +830,7 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
     <p>Who pays: government and compulsory insurance covers public budgets and statutory health insurance (in Germany, mainly the GKV); voluntary insurance covers private policies people choose to take out; out of pocket is what people pay directly, including co-payments. A small rest, in a few countries, is paid from abroad or not assigned. The main chart puts each country's spending (across) against the share paid out of pocket (up); the out-of-pocket share is independent of how much a country spends, so countries of any size can be compared. "Of every €100" in the opening sentence uses Eurostat's shares, rounded. What the money goes to follows Eurostat's functions of care: medicines given in hospital count as treatment; "not assigned" is what Eurostat doesn't assign to a function (in some countries nothing). Amounts per person on each function are Eurostat's, in PPS; changes since 2016 are in percentage points of the share. Values Eurostat marks provisional are labelled so in the tooltip and marked "p" in the table. The jump in prevention spending in 2021–2022 reflects COVID-19 testing and vaccination.</p>
   </section>
 </main>
-<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer><script>addEventListener("pointerdown",e=>{for(const d of document.querySelectorAll("details.info[open]"))if(!d.contains(e.target))d.open=false});addEventListener("keydown",e=>{if(e.key==="Escape")for(const d of document.querySelectorAll("details.info[open]")){d.open=false;d.querySelector("summary").focus()}})</script>
+<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer><script>addEventListener("pointerdown",e=>{for(const d of document.querySelectorAll("details.info[open]"))if(!d.contains(e.target))d.open=false});const hvFull=(card,on)=>{const b=card.querySelector(".full-btn"),tip=document.getElementById("tip");card.classList.toggle("is-full",on);document.documentElement.classList.toggle("has-full",on);b.setAttribute("aria-pressed",on);b.setAttribute("aria-label",on?"Close full screen":"Show this chart full screen");if(tip)(on?card:document.body).append(tip);if(on&&card.requestFullscreen)card.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen().catch(()=>{})};addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".full-btn");if(b){const c=b.closest(".card");hvFull(c,!c.classList.contains("is-full"))}});document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement)for(const c of document.querySelectorAll(".card.is-full"))hvFull(c,false)});addEventListener("keydown",e=>{if(e.key!=="Escape")return;for(const d of document.querySelectorAll("details.info[open]")){d.open=false;d.querySelector("summary").focus()}for(const c of document.querySelectorAll(".card.is-full")){hvFull(c,false);c.querySelector(".full-btn").focus()}})</script>
 <div class="tip" id="tip" role="tooltip"></div>
 
 <script>
@@ -1257,8 +1300,8 @@ stopPlay();
 
 let lastW = 0;
 new ResizeObserver(() => {
-  const w = scatter.clientWidth;
-  if (Math.abs(w - lastW) < 2) return;
+  const w = scatter.clientWidth + $("across").clientWidth / 10000; // either chart (one may be full screen)
+  if (Math.abs(w - lastW) < 1e-4) return;
   lastW = w;
   renderScatter(); renderAcross();
 }).observe(document.querySelector("main"));
