@@ -580,7 +580,14 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
 .card.is-full::before, .card.is-full::after { display: none; }
 html.has-full { overflow: hidden; }
 .card.is-full #scatter { height: calc(100dvh - 190px); min-height: 320px; }
-.card.is-full #map { width: auto; max-width: 100%; height: calc(100dvh - 200px); margin: 0 auto; }
+/* The map: its frame (with the zoom button and credit) is as wide as fits the screen's height at the
+   map's proportions, and the map fills it at full width (an <svg> sized by height alone with width:
+   auto falls back to 300px). Room is left for the title, legend and outermost regions; at least 320px
+   wide when a phone is held sideways (the card then scrolls). */
+.card.is-full .map-wrap { width: min(100%, max(calc((100vh - 240px) * var(--map-ratio)), 320px)); margin: 0 auto; }
+@supports (height: 100dvh) {
+  .card.is-full .map-wrap { width: min(100%, max(calc((100dvh - 240px) * var(--map-ratio)), 320px)); }
+}
 .card.is-full .tip { z-index: 60; }
 
 /* Touch screens: 44px controls (see shell.css), and 16px text in form fields so iOS Safari doesn't
