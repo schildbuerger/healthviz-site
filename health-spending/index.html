@@ -511,6 +511,11 @@ th { position: sticky; top: 0; background: var(--surface); color: var(--text); f
   letter-spacing: .06em; font-size: 12px; border-bottom: 1.5px solid var(--text); }
 td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 tr.hl td { background: var(--mark) !important; color: var(--on-mark); }
+/* The table view's key: what the red rows mean */
+.table-key { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 0 0 10px; font: 13px/1.5 var(--mono); color: var(--text-2); }
+.table-key span { display: inline-flex; align-items: center; gap: 7px; }
+.table-key i { width: 22px; height: 12px; flex: none; border-radius: 2px; }
+.table-key .tk-sel { background: var(--mark); }
 tr.hl td button { color: var(--on-mark); }
 td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
@@ -869,6 +874,7 @@ html.has-full { overflow: hidden; }
 
   <details class="card" id="table-card">
     <summary>Table view: all countries</summary>
+    <p class="table-key"><span><i class="tk-sel"></i>The selected country</span></p>
     <div class="table-wrap">
       <table>
         <thead><tr><th class="r">Rank</th><th>Country</th><th class="r" id="th-total">Spending</th><th class="r">Government &amp; compulsory</th><th class="r">Out of pocket</th><th class="r">Voluntary</th></tr></thead>
