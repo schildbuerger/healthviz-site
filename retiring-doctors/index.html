@@ -233,6 +233,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .snapshot-note a { display: table; margin: 0 auto; font-size: 14.5px; white-space: nowrap; } /* centred */
 .sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
 .sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
+.sources li:target { background: var(--hl); } /* reached from a chart's source credit */
 .sources li::before {
   content: "Rx" counter(rx); position: absolute; left: 0; top: 1px; font: 700 13px/1 var(--mono); color: var(--ink);
   border: 1.5px solid var(--ink); padding: 3px 4px; border-radius: 3px;
@@ -421,6 +422,14 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .term-note { margin: 4px 0 14px; padding: 8px 12px; max-width: none; font: 14px/1.4 var(--serif); color: var(--text-2);
   background: var(--wash); border-left: 4px solid var(--ink); }
 .term-note strong { font: 700 13px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink); }
+
+/* A chart's source credit, in its bottom-right corner: the sources it uses, numbered as in the sources
+   list at the bottom of the page (Rx1, Rx2, …), each a link to its item there */
+.chart-source { margin: 8px 0 0; text-align: right; font: 12px/1.6 var(--mono); color: var(--text-2); }
+.chart-source a { color: inherit; text-decoration: none; white-space: nowrap; }
+@media (hover: hover) { .chart-source a:hover { color: var(--ink); text-decoration: underline; } }
+.chart-source .rx { font-weight: 700; color: var(--ink); border: 1px solid var(--ink); border-radius: 3px; padding: 0 3px; }
+@media (pointer: coarse) { .chart-source a { display: inline-block; padding: 10px 0; } }
 
 /* Cards: continuous tractor-feed printouts, sprocket holes down both edges */
 .card {
@@ -743,6 +752,7 @@ html.has-full { overflow: hidden; }
       <span>* not practising doctors: see the notes</span>
     </div>
     <svg id="rank" role="img" aria-labelledby="rank-title rank-sub" height="690"></svg>
+    <p class="chart-source">Source: <a href="#src-1"><span class="rx">Rx1</span> Eurostat · hlth_rs_phys</a>, <a href="#src-2"><span class="rx">Rx2</span> Eurostat · hlth_rs_grd2</a>, <a href="#src-3"><span class="rx">Rx3</span> Eurostat · hlth_rs_prs2</a></p>
     <div class="insights" id="rank-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>Across the <mark class="hl eu">EU-27</mark>, doctors were oldest in <strong>Bulgaria</strong>: 55% of them were 55 or over in 2024.</li><li>Across the <mark class="hl eu">EU-27</mark>, doctors were youngest in <strong>Portugal</strong>, where 19% were 55 or over.</li><li class="extra">In <strong>7 of the 26</strong> countries of the <mark class="hl eu">EU-27</mark> with figures, at least 40% of doctors were 55 or over and will retire in the coming years.</li><li class="extra">In <strong>8 of the 26</strong> countries of the <mark class="hl eu">EU-27</mark>, medical schools will turn out fewer graduates in the next 10 years than there are doctors aged 55 or over.</li></ul><ul class="ins-list"><li>In <mark class="hl sel">Germany</mark>, <strong>32%</strong> of practising doctors were 55 or over in 2024, and <strong>10%</strong> were even 65 or over.</li><li>At today&#x27;s rate, the medical schools of <mark class="hl sel">Germany</mark> will turn out <strong>0.8 graduates</strong> in the next 10 years for every doctor aged 55 or over: not enough to replace them.</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
   </section>
 
@@ -758,7 +768,7 @@ html.has-full { overflow: hidden; }
 
   <section class="notes" id="sources">
     <h2>Sources</h2>
-    <ul class="sources"><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_phys/default/table">Eurostat: Physicians by sex and age</a> (<code>hlth_rs_phys</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-13">13 Jul 2026</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_grd2/default/table">Eurostat: Health graduates</a> (<code>hlth_rs_grd2</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-13">13 Jul 2026</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_prs2/default/table">Eurostat: Health personnel</a> (<code>hlth_rs_prs2</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-13">13 Jul 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
+    <ul class="sources"><li id="src-1"><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_phys/default/table">Eurostat: Physicians by sex and age</a> (<code>hlth_rs_phys</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-13">13 Jul 2026</time>.</span></li><li id="src-2"><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_grd2/default/table">Eurostat: Health graduates</a> (<code>hlth_rs_grd2</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-13">13 Jul 2026</time>.</span></li><li id="src-3"><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_prs2/default/table">Eurostat: Health personnel</a> (<code>hlth_rs_prs2</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-13">13 Jul 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
     <h2>Notes</h2>
     <p>Most countries report practising doctors: those who treat patients. Some report all professionally active doctors (including those in administration or research) or everyone licensed to practise, which includes retired doctors and makes the older age groups larger. Eurostat's age table doesn't say which count a country reports; this page finds it by matching each country's total to Eurostat's health personnel table, and marks countries that don't report practising doctors with an asterisk (Slovakia and Türkiye: professionally active doctors; Greece: doctors licensed to practise). Values Eurostat marks estimated, a break in series or a different definition are labelled so in the tooltip and the table. Luxembourg has no 2024 figures (its latest are from 2012); it is listed without bars and not ranked.</p>
     <p>Graduates are people who completed medical school in the country in a year, averaged over 2022–2024. Not every graduate stays: some countries train many students from abroad, and some lose young doctors to other countries, while others rely on doctors trained elsewhere. The ratio of graduates to doctors aged 55 or over shows whether a country trains enough doctors to replace those nearing retirement, not whether it will keep them. It also ignores that a growing and ageing population needs more doctors than today. Eurostat publishes no age breakdown by speciality, so the page can't show how old general practitioners are.</p>

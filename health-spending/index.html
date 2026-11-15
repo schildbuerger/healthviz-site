@@ -233,6 +233,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .snapshot-note a { display: table; margin: 0 auto; font-size: 14.5px; white-space: nowrap; } /* centred */
 .sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
 .sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
+.sources li:target { background: var(--hl); } /* reached from a chart's source credit */
 .sources li::before {
   content: "Rx" counter(rx); position: absolute; left: 0; top: 1px; font: 700 13px/1 var(--mono); color: var(--ink);
   border: 1.5px solid var(--ink); padding: 3px 4px; border-radius: 3px;
@@ -421,6 +422,14 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .term-note { margin: 4px 0 14px; padding: 8px 12px; max-width: none; font: 14px/1.4 var(--serif); color: var(--text-2);
   background: var(--wash); border-left: 4px solid var(--ink); }
 .term-note strong { font: 700 13px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink); }
+
+/* A chart's source credit, in its bottom-right corner: the sources it uses, numbered as in the sources
+   list at the bottom of the page (Rx1, Rx2, …), each a link to its item there */
+.chart-source { margin: 8px 0 0; text-align: right; font: 12px/1.6 var(--mono); color: var(--text-2); }
+.chart-source a { color: inherit; text-decoration: none; white-space: nowrap; }
+@media (hover: hover) { .chart-source a:hover { color: var(--ink); text-decoration: underline; } }
+.chart-source .rx { font-weight: 700; color: var(--ink); border: 1px solid var(--ink); border-radius: 3px; padding: 0 3px; }
+@media (pointer: coarse) { .chart-source a { display: inline-block; padding: 10px 0; } }
 
 /* Cards: continuous tractor-feed printouts, sprocket holes down both edges */
 .card {
@@ -822,6 +831,7 @@ html.has-full { overflow: hidden; }
     </div>
     <div class="keys" id="scatter-keys"><span class="key"><i class="k-dot"></i>Country</span><span class="key"><i class="k-line"></i>EU-27 average</span><span class="key"><i class="k-shade"></i>People pay more out of pocket than the EU-27 average</span><span class="key"><i class="k-trail"></i>Germany since 2016</span><span class="key"><i class="k-trail eu"></i>EU-27 since 2016</span></div>
     <svg id="scatter" role="img" aria-labelledby="scatter-title scatter-sub"></svg>
+    <p class="chart-source">Source: <a href="#src-1"><span class="rx">Rx1</span> Eurostat · hlth_sha11_hf</a></p>
     <div class="insights" id="scatter-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>In the <mark class="hl eu">EU-27</mark>, health spending came to <strong>4,075 PPS per person</strong> in 2024, after adjusting for price levels.</li><li>Across the <mark class="hl eu">EU-27</mark>, <strong>Germany</strong> spent the most (5,791 PPS per person) and <strong>Romania</strong> the least (1,969 PPS per person).</li><li class="extra">In the <mark class="hl eu">EU-27</mark>, people paid <strong>€15 of every €100</strong> spent on health out of their own pocket.</li><li class="extra">Across the <mark class="hl eu">EU-27</mark>, people paid the most out of their own pocket in <strong>Greece</strong> (€34 of every €100) and the least in <strong>Croatia</strong> (€9).</li></ul><ul class="ins-list"><li>In <mark class="hl sel">Germany</mark>, health spending came to <strong>5,791 PPS per person</strong> in 2024: 42% more than across the EU-27.</li><li>Of every €100 spent on health in <mark class="hl sel">Germany</mark>, government and compulsory insurance paid <strong>€86</strong> and people paid <strong>€11</strong> out of their own pocket.</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
   </section>
 
@@ -853,6 +863,7 @@ html.has-full { overflow: hidden; }
         <svg id="across" role="img" aria-labelledby="across-title across-sub" height="540"></svg>
       </div>
     </div>
+    <p class="chart-source">Source: <a href="#src-2"><span class="rx">Rx2</span> Eurostat · hlth_sha11_hc</a></p>
     <div class="insights" id="fn-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>In the <mark class="hl eu">EU-27</mark>, the largest part of health spending, <strong>53.3%</strong>, went to treatment and rehabilitation in 2024.</li><li>In the <mark class="hl eu">EU-27</mark>, <strong>17.2%</strong> of health spending went to long-term care.</li><li class="extra">Across the <mark class="hl eu">EU-27</mark>, the share that went to long-term care was largest in <strong>Netherlands</strong> (29.3%) and smallest in <strong>Slovakia</strong> (2.0%).</li><li class="extra">Since 2016, the share that went to long-term care has grown by <strong>1.7 percentage points</strong> in the <mark class="hl eu">EU-27</mark>.</li></ul><ul class="ins-list"><li>In <mark class="hl sel">Germany</mark>, <strong>21.9%</strong> of health spending went to long-term care in 2024, against 17.2% across the EU-27.</li><li>In <mark class="hl sel">Germany</mark>, the largest part of health spending, <strong>46.9%</strong>, went to treatment and rehabilitation.</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
   </section>
 
@@ -868,7 +879,7 @@ html.has-full { overflow: hidden; }
 
   <section class="notes" id="sources">
     <h2>Sources</h2>
-    <ul class="sources"><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hf/default/table">Eurostat: Health care expenditure by financing scheme</a> (<code>hlth_sha11_hf</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-23">23 Oct 2026</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hc/default/table">Eurostat: Health care expenditure by function</a> (<code>hlth_sha11_hc</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-23">23 Oct 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
+    <ul class="sources"><li id="src-1"><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hf/default/table">Eurostat: Health care expenditure by financing scheme</a> (<code>hlth_sha11_hf</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-23">23 Oct 2026</time>.</span></li><li id="src-2"><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hc/default/table">Eurostat: Health care expenditure by function</a> (<code>hlth_sha11_hc</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-23">23 Oct 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
     <h2>Notes</h2>
     <p>Figures are current health expenditure from Eurostat's System of Health Accounts: everything spent on health care in a year, from hospital stays and doctor visits to medicines and prevention, but not investments such as building hospitals. Prices differ a lot across Europe, so "price-adjusted" figures use Eurostat's purchasing power standard (PPS), an artificial currency that buys the same amount everywhere; across the EU as a whole, one PPS equals one euro. "Per person in €" shows the amounts actually spent, and "share of GDP" how much of a country's economy goes to health: a small economy can spend a high share and still little per person.</p>
     <p>Who pays: government and compulsory insurance covers public budgets and statutory health insurance (in Germany, mainly the GKV); voluntary insurance covers private policies people choose to take out; out of pocket is what people pay directly, including co-payments. A small rest, in a few countries, is paid from abroad or not assigned. The main chart puts each country's spending (across) against the share paid out of pocket (up); the out-of-pocket share is independent of how much a country spends, so countries of any size can be compared. "Of every €100" in the opening sentence uses Eurostat's shares, rounded. What the money goes to follows Eurostat's functions of care: medicines given in hospital count as treatment; "not assigned" is what Eurostat doesn't assign to a function (in some countries nothing). Amounts per person on each function are Eurostat's, in PPS; changes since 2016 are in percentage points of the share. Values Eurostat marks provisional are labelled so in the tooltip and marked "p" in the table. The jump in prevention spending in 2021–2022 reflects COVID-19 testing and vaccination.</p>

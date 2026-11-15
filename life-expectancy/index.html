@@ -233,6 +233,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .snapshot-note a { display: table; margin: 0 auto; font-size: 14.5px; white-space: nowrap; } /* centred */
 .sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
 .sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
+.sources li:target { background: var(--hl); } /* reached from a chart's source credit */
 .sources li::before {
   content: "Rx" counter(rx); position: absolute; left: 0; top: 1px; font: 700 13px/1 var(--mono); color: var(--ink);
   border: 1.5px solid var(--ink); padding: 3px 4px; border-radius: 3px;
@@ -421,6 +422,14 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .term-note { margin: 4px 0 14px; padding: 8px 12px; max-width: none; font: 14px/1.4 var(--serif); color: var(--text-2);
   background: var(--wash); border-left: 4px solid var(--ink); }
 .term-note strong { font: 700 13px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink); }
+
+/* A chart's source credit, in its bottom-right corner: the sources it uses, numbered as in the sources
+   list at the bottom of the page (Rx1, Rx2, …), each a link to its item there */
+.chart-source { margin: 8px 0 0; text-align: right; font: 12px/1.6 var(--mono); color: var(--text-2); }
+.chart-source a { color: inherit; text-decoration: none; white-space: nowrap; }
+@media (hover: hover) { .chart-source a:hover { color: var(--ink); text-decoration: underline; } }
+.chart-source .rx { font-weight: 700; color: var(--ink); border: 1px solid var(--ink); border-radius: 3px; padding: 0 3px; }
+@media (pointer: coarse) { .chart-source a { display: inline-block; padding: 10px 0; } }
 
 /* Cards: continuous tractor-feed printouts, sprocket holes down both edges */
 .card {
@@ -660,6 +669,7 @@ html.has-full { overflow: hidden; }
   @supports (height: 100svh) {
     .card.is-full > .map-wrap { width: min(calc(100vw - 400px), max(calc((100svh - 150px - var(--full-ctl, 0px)) * var(--map-ratio)), 320px)); }
   }
+  .card.is-full > .chart-source { grid-column: 1; grid-row: 6; }
   .card.is-full > .legend { grid-column: 2; grid-row: 3; }
   .card.is-full > .insets { grid-column: 2; grid-row: 4; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 4px; }
   .card.is-full > .insights { grid-column: 2; grid-row: 5; margin-top: 18px; }
@@ -871,6 +881,7 @@ html.has-full { overflow: hidden; }
         <button type="button" class="zoom-btn" id="zoom"></button>
       </div>
       <div class="insets" id="insets" role="group" aria-label="Outermost regions"></div>
+      <p class="chart-source">Source: <a href="#src-1"><span class="rx">Rx1</span> Eurostat · demo_r_mlifexp</a>, <a href="#src-2"><span class="rx">Rx2</span> Eurostat · demo_mlexpec</a>, <a href="#src-3"><span class="rx">Rx3</span> Eurostat GISCO · NUTS_RG_20M_2024_3035</a></p>
       <div class="insights" id="map-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>In the <mark class="hl eu">EU-27</mark>, a baby born in 2023 could expect to live <strong>81.4 years</strong> on average.</li><li>Across the <mark class="hl eu">EU-27</mark>, babies born in <strong>Comunidad de Madrid (Spain)</strong> could expect to live longest (86.1 years) and those born in <strong>Severozapaden (Bulgaria)</strong> shortest (73.9 years): a gap of 12.2 years.</li><li class="extra">In <strong>131 of the 242</strong> regions of the <mark class="hl eu">EU-27</mark>, babies could expect to live longer than the EU-27 average.</li><li class="extra">Since 2002, life expectancy at birth in the <mark class="hl eu">EU-27</mark> has risen by <strong>3.8 years</strong>.</li></ul><ul class="ins-list"><li>Across all of <mark class="hl sel">Germany</mark>, a baby born in 2023 could expect to live <strong>81.1 years</strong>, 0.3 years shorter than across the EU-27.</li><li>In <mark class="hl sel">Germany</mark>, babies could expect to live longest in <strong>Tübingen</strong> (82.8 years).</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
     </figure>
 
@@ -911,6 +922,7 @@ html.has-full { overflow: hidden; }
       </div>
     </div>
     <svg id="strip" role="img" aria-label="Dot plot of all regions grouped by country" height="592"></svg>
+    <p class="chart-source">Source: <a href="#src-1"><span class="rx">Rx1</span> Eurostat · demo_r_mlifexp</a>, <a href="#src-2"><span class="rx">Rx2</span> Eurostat · demo_mlexpec</a></p>
     <div class="insights" id="strip-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>Across the <mark class="hl eu">EU-27</mark>, life expectancy at birth was highest in <strong>Spain</strong> (84.0 years) and lowest in <strong>Latvia</strong> (75.6 years).</li><li>Within the countries of the <mark class="hl eu">EU-27</mark>, regions were furthest apart in <strong>France</strong>: 10.0 years between the longest- and the shortest-living region.</li><li class="extra">Within the countries of the <mark class="hl eu">EU-27</mark>, regions were closest together in <strong>Denmark and Ireland</strong> (1.0 years apart).</li><li class="extra">In <strong>16 of the 27</strong> countries of the <mark class="hl eu">EU-27</mark>, life expectancy at birth was above the EU-27 average.</li></ul><ul class="ins-list"><li>In <mark class="hl sel">Germany</mark>, life expectancy ranged from <strong>79.2 years</strong> in Sachsen-Anhalt to <strong>82.8 years</strong> in Tübingen.</li><li>In <strong>9 of the 38</strong> regions of <mark class="hl sel">Germany</mark>, life expectancy at birth was above the EU-27 average.</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
   </section>
 
@@ -926,7 +938,7 @@ html.has-full { overflow: hidden; }
 
   <section class="notes" id="sources">
     <h2>Sources</h2>
-    <ul class="sources"><li><a href="https://ec.europa.eu/eurostat/databrowser/view/demo_r_mlifexp/default/table">Eurostat: Life expectancy by age, sex and NUTS 2 region</a> (<code>demo_r_mlifexp</code>) via <a href="https://db.nomics.world/Eurostat/demo_r_mlifexp">DBnomics</a>. CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2025-06-05">5 Jun 2025</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpec/default/table">Eurostat: Life expectancy by age and sex (EU-27 average)</a> (<code>demo_mlexpec</code>) via <a href="https://db.nomics.world/Eurostat/demo_mlexpec">DBnomics</a>. CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2025-09-11">11 Sep 2025</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/web/gisco/geodata/statistical-units/territorial-units-statistics">Eurostat GISCO: NUTS 2024 boundaries, 1:20 million</a> (<code>NUTS_RG_20M_2024_3035</code>). © EuroGeographics for the administrative boundaries.</li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
+    <ul class="sources"><li id="src-1"><a href="https://ec.europa.eu/eurostat/databrowser/view/demo_r_mlifexp/default/table">Eurostat: Life expectancy by age, sex and NUTS 2 region</a> (<code>demo_r_mlifexp</code>) via <a href="https://db.nomics.world/Eurostat/demo_r_mlifexp">DBnomics</a>. CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2025-06-05">5 Jun 2025</time>.</span></li><li id="src-2"><a href="https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpec/default/table">Eurostat: Life expectancy by age and sex (EU-27 average)</a> (<code>demo_mlexpec</code>) via <a href="https://db.nomics.world/Eurostat/demo_mlexpec">DBnomics</a>. CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2025-09-11">11 Sep 2025</time>.</span></li><li id="src-3"><a href="https://ec.europa.eu/eurostat/web/gisco/geodata/statistical-units/territorial-units-statistics">Eurostat GISCO: NUTS 2024 boundaries, 1:20 million</a> (<code>NUTS_RG_20M_2024_3035</code>). © EuroGeographics for the administrative boundaries.</li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
     <h2>Notes</h2>
     <p>Life expectancy at birth is the average number of years a newborn would live if current death rates by age stayed the same. It is a summary of mortality in that year, not a forecast. Regions follow NUTS 2024. Where Eurostat publishes older years only for former regions with different borders (Portugal, the Netherlands, Norway, Croatia), those years are shown as no data (hatched) rather than redrawn. The colour scale is set per sex and stays fixed across years. The dip in 2020–2022 reflects COVID-19; Turkey's 2023 low reflects the February earthquakes. Outermost regions are shown as insets below the map.</p>
   </section>

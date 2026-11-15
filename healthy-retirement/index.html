@@ -233,6 +233,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .snapshot-note a { display: table; margin: 0 auto; font-size: 14.5px; white-space: nowrap; } /* centred */
 .sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
 .sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
+.sources li:target { background: var(--hl); } /* reached from a chart's source credit */
 .sources li::before {
   content: "Rx" counter(rx); position: absolute; left: 0; top: 1px; font: 700 13px/1 var(--mono); color: var(--ink);
   border: 1.5px solid var(--ink); padding: 3px 4px; border-radius: 3px;
@@ -421,6 +422,14 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .term-note { margin: 4px 0 14px; padding: 8px 12px; max-width: none; font: 14px/1.4 var(--serif); color: var(--text-2);
   background: var(--wash); border-left: 4px solid var(--ink); }
 .term-note strong { font: 700 13px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink); }
+
+/* A chart's source credit, in its bottom-right corner: the sources it uses, numbered as in the sources
+   list at the bottom of the page (Rx1, Rx2, …), each a link to its item there */
+.chart-source { margin: 8px 0 0; text-align: right; font: 12px/1.6 var(--mono); color: var(--text-2); }
+.chart-source a { color: inherit; text-decoration: none; white-space: nowrap; }
+@media (hover: hover) { .chart-source a:hover { color: var(--ink); text-decoration: underline; } }
+.chart-source .rx { font-weight: 700; color: var(--ink); border: 1px solid var(--ink); border-radius: 3px; padding: 0 3px; }
+@media (pointer: coarse) { .chart-source a { display: inline-block; padding: 10px 0; } }
 
 /* Cards: continuous tractor-feed printouts, sprocket holes down both edges */
 .card {
@@ -746,6 +755,7 @@ html.has-full { overflow: hidden; }
     </div>
     <p class="small muted term-note"><strong>Pension or retirement?</strong> Here, retiring means starting to receive an old-age pension. Stopping work can happen at a different time: some people leave work years before their pension starts, others keep working while they draw it.</p>
     <svg id="blocks" role="img" aria-labelledby="blocks-title blocks-sub" height="776"></svg>
+    <p class="chart-source">Source: <a href="#src-1"><span class="rx">Rx1</span> Eurostat · hlth_hlye</a>, <a href="#src-2"><span class="rx">Rx2</span> Eurostat · lfso_23pens03</a></p>
     <div class="insights" id="blocks-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>In the <mark class="hl eu">EU-27</mark>, people aged 65 can expect <strong>20.2 more years</strong> of life, <strong>10.3</strong> of them without health limitations.</li><li>Across the <mark class="hl eu">EU-27</mark>, people at 65 can expect the most healthy years in <strong>Sweden</strong> (14.2) and the fewest in <strong>Latvia</strong> (4.2).</li><li class="extra">Across the <mark class="hl eu">EU-27</mark>, people now aged 65 to 74 started their old-age pension earliest in <strong>Slovenia</strong> (at 58.4 on average) and latest in <strong>Denmark</strong> (at 65.7).</li><li class="extra">In <strong>16 of the 26</strong> countries of the <mark class="hl eu">EU-27</mark>, fewer than half of the years people have left at 65 are healthy ones.</li></ul><ul class="ins-list"><li>At 65, people in <mark class="hl sel">Germany</mark> can expect <strong>19.7 more years</strong> of life, <strong>8.6</strong> of them without health limitations: fewer healthy years than across the EU-27 (10.3).</li><li>In <mark class="hl sel">Germany</mark>, people now aged 65 to 74 started their old-age pension at <strong>62.6</strong> on average.</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
   </section>
 
@@ -761,7 +771,7 @@ html.has-full { overflow: hidden; }
 
   <section class="notes" id="sources">
     <h2>Sources</h2>
-    <ul class="sources"><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table">Eurostat: Healthy life years by sex (from 2004 onwards)</a> (<code>hlth_hlye</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-17">17 Jul 2026</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/lfso_23pens03/default/table">Eurostat: Age at which the person started receiving an old-age pension (2023)</a> (<code>lfso_23pens03</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-09-10">10 Sep 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
+    <ul class="sources"><li id="src-1"><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table">Eurostat: Healthy life years by sex (from 2004 onwards)</a> (<code>hlth_hlye</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-07-17">17 Jul 2026</time>.</span></li><li id="src-2"><a href="https://ec.europa.eu/eurostat/databrowser/view/lfso_23pens03/default/table">Eurostat: Age at which the person started receiving an old-age pension (2023)</a> (<code>lfso_23pens03</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-09-10">10 Sep 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
     <h2>Notes</h2>
     <p>Healthy life years are the years a person can expect to live without being limited in usual activities because of a health problem for at least six months, as people report it themselves in the EU statistics on income and living conditions (EU-SILC). Eurostat combines these answers with mortality data. Because the answers are self-reported, cultural differences in how people judge their health affect comparisons between countries; changes within a country are more reliable than small gaps between countries.</p>
     <p>Eurostat measures healthy years from age 65, not from the age people retire, so the chart starts the blocks at 65. They show how many years are healthy, not when: drawing the healthy years first is a simplification. The pension age is the average age at which people aged 65 to 74 in 2023 started receiving an old-age pension (EU Labour Force Survey), including early retirement. It measures when the pension started, not when people stopped working. The years between the pension age and 65 are not split into healthy and not healthy, because Eurostat publishes no healthy life years for those ages. Values Eurostat marks provisional or estimated are labelled so in the tooltip and the table. Luxembourg has no 2024 figures (latest: 9.8 healthy years of 21.0 at 65 in 2022); it is listed without blocks and not ranked.</p>
