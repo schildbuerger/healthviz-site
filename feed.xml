@@ -3,7 +3,7 @@
   <channel>
     <title>healthviz</title>
     <link>https://healthviz.eu/</link>
-    <description>A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it.</description>
+    <description>A playground of interactive visualisations built on open European health data. Each assessment takes one question and the public data to answer it.</description>
     <language>en</language>
     <lastBuildDate>Mon, 09 Nov 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://healthviz.eu/feed.xml" rel="self" type="application/rss+xml"/>

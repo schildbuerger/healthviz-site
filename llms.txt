@@ -1,8 +1,8 @@
 # healthviz
 
-> A playground of interactive visualisations built on open European health data. Each entry takes one question and the public data to answer it. Entries are dated snapshots of public data; each page states when the source last updated its data.
+> A playground of interactive visualisations built on open European health data. Each assessment takes one question and the public data to answer it. Assessments are dated snapshots of public data; each page states when the source last updated its data.
 
-## Entries
+## Assessments
 
 - [Will your doctor retire soon?](https://healthviz.eu/retiring-doctors/): Doctors by age and sex for 33 countries in Europe (2024), with the share aged 55 or over and medical graduates per year (2022-2024) against the doctors aged 55 or over. In 2024 the share of doctors aged 55 or over ranged from 19% in Portugal to 55% in Bulgaria. Most countries count practising doctors; the page flags those that count professionally active or licensed doctors. Source: Eurostat hlth_rs_phys, hlth_rs_grd2 and hlth_rs_prs2, last updated by Eurostat 2026-07-13; licence CC BY 4.0. Data as CSV: https://healthviz.eu/retiring-doctors/data.csv
 - [When does Europe retire, and how many healthy years are left at 65?](https://healthviz.eu/healthy-retirement/): Healthy life years and life expectancy at 65 for 28 countries in Europe (2024), for women, men and in total, next to the average age at which people aged 65-74 started their old-age pension (2023). In 2024 healthy years at 65 ranged from 4.2 in Latvia to 14.2 in Sweden; EU-27 10.3 healthy years of 20.2 remaining. Source: Eurostat hlth_hlye and lfso_23pens03; licence CC BY 4.0. Data as CSV: https://healthviz.eu/healthy-retirement/data.csv
