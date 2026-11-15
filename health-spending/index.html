@@ -24,7 +24,7 @@
 <meta property="og:image:alt" content="How much does Europe spend on health, and who pays? A healthviz chart of the data on a bedside monitor.">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Dataset", "name": "How much does Europe spend on health, and who pays?", "description": "Health spending in every EU country since 2016: per person, who pays, and what the money goes to. Interactive charts with Eurostat data.", "url": "https://healthviz.eu/health-spending/", "keywords": ["health expenditure", "health spending", "out-of-pocket payments", "long-term care", "Europe", "EU", "System of Health Accounts", "Eurostat"], "variableMeasured": ["Current health expenditure per inhabitant (PPS, EUR)", "Health expenditure as % of GDP", "Share of health expenditure by financing scheme", "Share of health expenditure by function", "Health expenditure per inhabitant by function (PPS)"], "temporalCoverage": "2016/2024", "spatialCoverage": {"@type": "Place", "name": "Europe: EU-27 and other European countries"}, "license": "https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree": true, "datePublished": "2026-10-26", "dateModified": "2026-10-26", "isBasedOn": ["https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hf/default/table", "https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hc/default/table"], "creditText": "Eurostat (hlth_sha11_hf, hlth_sha11_hc)", "distribution": {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://healthviz.eu/health-spending/data.csv"}, "sourceOrganization": {"@type": "Organization", "name": "Eurostat", "url": "https://ec.europa.eu/eurostat"}, "@id": "https://healthviz.eu/health-spending/#dataset"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "healthviz", "item": "https://healthviz.eu/"}, {"@type": "ListItem", "position": 2, "name": "How much does Europe spend on health, and who pays?", "item": "https://healthviz.eu/health-spending/"}]}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Dataset", "name": "How much does Europe spend on health, and who pays?", "description": "Health spending in every EU country since 2016: per person, who pays, and what the money goes to. Interactive charts with Eurostat data.", "url": "https://healthviz.eu/health-spending/", "keywords": ["health expenditure", "health spending", "out-of-pocket payments", "long-term care", "Europe", "EU", "System of Health Accounts", "Eurostat"], "variableMeasured": ["Current health expenditure per inhabitant (PPS, EUR)", "Health expenditure as % of GDP", "Share of health expenditure by financing scheme", "Share of health expenditure by function", "Health expenditure per inhabitant by function (PPS)"], "temporalCoverage": "2016/2024", "spatialCoverage": {"@type": "Place", "name": "Europe: EU-27 and other European countries"}, "license": "https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree": true, "datePublished": "2026-10-26", "dateModified": "2026-10-23", "isBasedOn": ["https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hf/default/table", "https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hc/default/table"], "creditText": "Eurostat (hlth_sha11_hf, hlth_sha11_hc)", "distribution": {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://healthviz.eu/health-spending/data.csv"}, "sourceOrganization": {"@type": "Organization", "name": "Eurostat", "url": "https://ec.europa.eu/eurostat"}, "@id": "https://healthviz.eu/health-spending/#dataset"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "healthviz", "item": "https://healthviz.eu/"}, {"@type": "ListItem", "position": 2, "name": "How much does Europe spend on health, and who pays?", "item": "https://healthviz.eu/health-spending/"}]}]}</script>
 <style>
 /* Shared by every healthviz page. Pasted inline at build time.
    Design: "the patient chart", tilted towards the EU's blue and gold. In light mode every
@@ -34,6 +34,8 @@
    --mark marks the selection inside charts (red in both, apart from the blue data). Data colours (--series-*, --seq-*)
    are the validated palette and stay the same in both: only the room around them changes. */
 :root {
+  /* The lightbulb that marks opening sentences and insights (an SVG mask in the ink colour) */
+  --bulb: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-3 -3 30 30' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4a6 6 0 0 0-3.5 10.9c.7.5 1.1 1.3 1.1 2.1v.5h4.8V17c0-.8.4-1.6 1.1-2.1A6 6 0 0 0 12 4z'/%3E%3Cpath d='M10 20.2h4M10.8 22.6h2.4M10.6 12.8l1.4-2 1.4 2'/%3E%3Cpath d='M12 .2v1.3M3.4 3.6l1 1M20.6 3.6l-1 1M.6 10.4h1.4M22 10.4h1.4'/%3E%3C/svg%3E");
   color-scheme: light;
   --page: #f9f0e9;
   --surface: #fffdf7;
@@ -131,6 +133,14 @@ h1 {
   font-size: clamp(30px, 5.4vw, 70px); line-height: .98; letter-spacing: -0.055em;
   margin: 14px 0 22px; text-shadow: var(--glow); max-width: 17ch; text-wrap: balance;
 }
+/* An entry's introduction under its title: what it explores, in a sentence or three */
+/* On a slip of paper over the grid, so the ECG lines don't run through the text */
+.chart-head .intro { margin: -6px 0 8px; max-width: 64ch; padding: 10px 16px 11px; font: 18.5px/1.55 var(--serif); color: var(--text);
+  background: var(--surface); border-left: 3px solid var(--ink); border-radius: 2px; box-shadow: var(--paper-shadow); text-wrap: pretty; }
+.chart-head .intro::before { /* a small label, like a heading on a chart's notes */
+  content: "What's it about"; display: block; margin-bottom: 4px; font: 800 10.5px/1.3 var(--mono);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
+@media (max-width: 600px) { .chart-head .intro { font-size: 17px; } }
 h1 .qm {
   color: var(--ink); display: inline-block; font-family: var(--serif); font-style: italic; font-weight: 400;
   font-size: 1.5em; line-height: 0; transform: rotate(10deg) translateY(.06em); margin-left: .04em; letter-spacing: 0;
@@ -143,21 +153,12 @@ h2 { font-size: 16px; margin: 0; }
 .eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
 @media (hover: hover) { .eyebrow a:hover { background: var(--ink); color: var(--on-ink); } }
 .eyebrow { padding-right: 10px; align-items: center; }
-.lede { margin: 0; max-width: 60ch; color: var(--text-2); font: 19px/1.5 var(--serif); text-wrap: pretty; }
-.lede strong {
-  color: var(--text); font-weight: 700;
-  background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 94%, transparent 94%);
-}
-/* Opening sentences: one thought per line, each marked like an entry in a chart */
-.lede .thought { display: block; position: relative; padding-left: 1.4em; color: var(--text); font-size: 20px; line-height: 1.6; }
-.lede .thought + .thought { margin-top: .9em; }
-.lede .thought::before { content: ""; position: absolute; left: 0; top: .8em; width: .75em; height: 2.5px; background: var(--ink); }
 .muted { color: var(--muted); }
 .small { font-size: 14px; }
 .num { font-variant-numeric: tabular-nums; }
 a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3px; }
 
-/* Site header: brand, nav, theme switch, and a live heart trace across the page */
+/* Site header: brand, nav, theme switch */
 .site-header {
   max-width: 1440px; margin: 0 auto; padding: 18px 24px 0; position: relative;
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
@@ -169,10 +170,6 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .brand::before {
   content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--alert);
   box-shadow: 0 0 0 3px var(--mark-soft); animation: hv-beat 1.1s infinite;
-}
-.brand::after {
-  content: "REC · LIVE DATA"; font: 600 10.5px/1 var(--mono); letter-spacing: .16em; color: var(--alert);
-  border: 1px solid var(--alert); padding: 3px 5px; border-radius: 3px;
 }
 @keyframes hv-beat { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.45); } 24% { transform: scale(.95); } 36% { transform: scale(1.2); } }
 .site-header nav { display: flex; gap: 6px; font: 600 13px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; align-items: center; }
@@ -193,12 +190,9 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   :root:not([data-theme="light"]) .theme-switch .t-dark { display: inline; }
   :root:not([data-theme="light"]) .theme-switch .t-light { display: none; }
 }
-.trace { flex-basis: 100%; height: 46px; margin: 4px -24px 0; width: calc(100% + 48px); display: block; overflow: visible; }
-.trace path { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke;
-  stroke-dasharray: 100 100; animation: hv-sweep 7s linear infinite; filter: drop-shadow(var(--glow-f, 0 0 0 transparent)); }
-:root[data-theme="dark"] .trace path { stroke: #6f9dff; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .trace path { stroke: #6f9dff; } }
-@keyframes hv-sweep { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -100; } }
+/* Heart traces (the control monitor's): drawn by site.TRACE_JS, a 2px line with a red dot at its tip */
+.beat-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.beat-dot { fill: var(--alert); filter: drop-shadow(0 0 4px var(--alert)); }
 /* Reading progress: an IV line down the right edge, filling as you scroll */
 .drip { position: fixed; top: 0; right: 0; width: 5px; height: 100vh; z-index: 30; pointer-events: none;
   background: var(--ink); transform-origin: top; transform: scaleY(0); animation: hv-drip linear both; animation-timeline: scroll(root); }
@@ -229,6 +223,8 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
 .snapshot dt { color: var(--text-2); flex: none; }
 .snapshot dd { margin: 0; font-weight: 800; text-align: right; }
 .snapshot dl div:first-child { align-items: center; }
+.snapshot dl div:first-child dt { flex: 0 1 auto; } /* the label may wrap; the big date never does */
+.snapshot dl div:first-child dd { flex: none; white-space: nowrap; }
 .snapshot dl div:first-child dd { font-size: 22px; line-height: 1.05; color: var(--ink); text-shadow: var(--glow); letter-spacing: -0.01em; }
 .snapshot-note {
   margin: 0; padding: 12px 18px 14px; font: italic 18px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink);
@@ -249,37 +245,14 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   display: grid; grid-template-columns: minmax(0, 1fr) 320px; column-gap: 48px; align-items: start;
 }
 .chart-head > * { grid-column: 1; justify-self: start; }
-.chart-head > .snapshot { grid-column: 2; grid-row: 1 / span 5; justify-self: stretch; margin-top: 74px; }
-.chart-head::before { /* the entry's motif, huge and outlined behind the title */
-  content: attr(data-motif); position: absolute; right: -2vw; top: -10px; z-index: -1; pointer-events: none;
-  font: 900 clamp(150px, 30vw, 420px)/0.8 var(--mono); letter-spacing: -0.08em; color: transparent;
-  -webkit-text-stroke: 2px var(--ink-soft); white-space: nowrap;
-}
-.stamp {
-  position: absolute; right: 280px; top: 20px; margin: 0; transform: rotate(-11deg); pointer-events: none; z-index: 1;
-  font: 800 15px/1.1 var(--mono); text-transform: uppercase; letter-spacing: .14em; text-align: center; color: var(--ink);
-  border: 3px double var(--ink); border-radius: 8px; padding: 8px 12px; opacity: .78; mix-blend-mode: multiply;
-  -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
-          mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.55) 75%, #000 92%);
-}
-.stamp small { display: block; font-size: 11px; letter-spacing: .2em; margin-top: 3px; }
-:root[data-theme="dark"] .stamp { mix-blend-mode: normal; }
+.chart-head > .snapshot { grid-column: 2; grid-row: 1 / span 5; justify-self: stretch; align-self: end; }
 
 @media (max-width: 960px) {
   .chart-head { grid-template-columns: minmax(0, 1fr); }
   .chart-head > .snapshot { grid-column: 1; grid-row: auto; justify-self: start; width: min(100%, 420px); margin: 28px 0 0 4px; transform: rotate(1deg); }
-  .stamp { right: 2%; top: 64px; }
-}
-@media (max-width: 760px) {
-  .stamp { display: none; }
-  .chart-head::before { top: 40px; }
 }
 @media (max-width: 600px) {
   .site-header, .site-footer { padding-left: 16px; padding-right: 16px; }
-  .trace { margin: 4px -16px 0; width: calc(100% + 32px); }
-  .brand::after { display: none; }
-  .lede { font-size: 17px; }
-  .lede .thought { font-size: 18px; line-height: 1.55; }
   /* Header on one row: the theme switch shows its icon only (it keeps its label for screen readers),
      the links drop their decorative brackets */
   .site-header { gap: 8px; }
@@ -292,8 +265,7 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
   .chart-head > .snapshot { width: calc(100% - 14px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .brand::before, .trace path { animation: none; }
-  .trace path { stroke-dasharray: none; }
+  .brand::before { animation: none; }
 }
 /* Touch screens: every control is at least 44px tall (Apple's 44pt, close to Material's 48dp; WCAG 2.2
    asks for 24px). Links inside running text keep their size. */
@@ -316,7 +288,6 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
     content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
     background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
   }
-  :root:not([data-theme="light"]) .stamp { mix-blend-mode: normal; }
 }
 
 /* Components shared by entry pages: filters, tiles, cards, chart axes, table, tooltip, notes.
@@ -324,83 +295,132 @@ a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3p
    key figures a bedside monitor, cards tractor-feed printouts, the table bluebar paper,
    the tooltip embossed label tape, and the notes a lined case-notes sheet. */
 
-/* Filters: a control panel above everything they scope. Every control has the same height
-   (--ctl-h) and type; on phones the toggles share one row that scrolls sideways, the year
-   slider gets its own row, and the text labels are kept for screen readers only. */
+/* Filters: the bedside monitor, a dark screen in its bezel in both modes, above everything they scope.
+   Every control has the same height (--ctl-h) and type; on phones the toggles share one row that scrolls
+   sideways, the year slider gets its own row, and the text labels are kept for screen readers only. */
 .filters {
   --ctl-h: 30px;
-  position: sticky; top: 0; z-index: 5;
+  --scr-text: #d3ddff; --scr-dim: #8fa3d6; --scr-line: rgba(111, 157, 255, .45); --scr-key: #6f9dff; --scr-gold: #ffd23d;
+  position: sticky; top: 0; z-index: 5; color-scheme: dark; color: var(--scr-text);
   display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center;
-  margin: 26px -24px 22px; padding: 8px 24px;
-  background: color-mix(in srgb, var(--surface) 94%, transparent);
-  backdrop-filter: blur(6px);
-  border-top: 3px solid var(--text); border-bottom: 1.5px solid var(--text);
-  box-shadow: 0 8px 18px -14px rgba(0, 0, 0, .5);
+  /* Full width of the page: the controls line up with the content column (main: max 1440px, 24px padding) */
+  margin: 26px calc(50% - 50vw) 22px; padding: 10px max(24px, calc(50vw - 696px));
+  background: var(--screen); border: 8px solid var(--bezel); border-width: 8px 0; border-radius: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), 0 14px 26px -18px rgba(0, 0, 0, .7);
+}
+.filters::after { /* screen glare and scanlines */
+  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 6px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .06), transparent 40%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
 }
 .filters::before {
-  content: "CONTROLS"; font: 800 10px/1 var(--mono); letter-spacing: .22em; color: var(--surface); background: var(--ink);
+  content: "CONTROLS"; font: 800 10px/1 var(--mono); letter-spacing: .22em; color: var(--screen); background: var(--scr-key);
   padding: 4px 5px; writing-mode: vertical-rl; transform: rotate(180deg); align-self: stretch; text-align: center; margin: -2px 0;
 }
 .filter-row { display: contents; } /* one wrapping line with the year on desktop; its own row on phones */
 .filter { display: flex; align-items: center; gap: 7px; }
-.filter > .label { font: 700 11.5px/1 var(--mono); color: var(--text-2); text-transform: uppercase; letter-spacing: .1em; white-space: nowrap; }
-.seg { display: inline-flex; gap: 4px; padding: 0 0 2px; }
+.filter > .label { font: 700 11.5px/1 var(--mono); color: var(--scr-dim); text-transform: uppercase; letter-spacing: .1em; white-space: nowrap; }
+.seg { display: inline-flex; gap: 4px; padding: 0; }
 .seg button {
   height: var(--ctl-h, 30px); display: inline-flex; align-items: center; white-space: nowrap;
-  border: 1.5px solid var(--text); background: var(--surface); color: var(--text); font: 600 12.5px/1 var(--mono);
+  border: 1.5px solid var(--scr-line); background: transparent; color: var(--scr-text); font: 600 12.5px/1 var(--mono);
   text-transform: uppercase; letter-spacing: .03em; padding: 0 9px; border-radius: 4px; cursor: pointer;
-  box-shadow: 0 2px 0 var(--text); transition: transform .06s, box-shadow .06s, background .1s;
+  transition: background .1s, box-shadow .1s;
 }
-@media (hover: hover) { .seg button:hover { background: var(--wash); } }
+@media (hover: hover) { .seg button:hover { background: rgba(111, 157, 255, .14); } }
 .seg button[aria-pressed="true"] {
-  background: var(--ink); color: var(--on-ink); border-color: var(--text); transform: translateY(2px); box-shadow: 0 0 0 var(--text);
+  background: var(--scr-key); color: var(--screen); border-color: var(--scr-key); box-shadow: 0 0 12px rgba(111, 157, 255, .55);
 }
 select {
   height: var(--ctl-h, 30px); max-width: 220px; text-overflow: ellipsis;
-  font: 700 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--text); background: var(--surface);
-  border: 1.5px solid var(--text); border-radius: 0; padding: 0 8px; box-shadow: 2px 2px 0 var(--ink); cursor: pointer;
+  font: 700 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--scr-text); background: rgba(111, 157, 255, .1);
+  border: 1.5px solid var(--scr-line); border-radius: 4px; padding: 0 8px; cursor: pointer;
 }
 .year { flex: 1 1 240px; min-width: 200px; }
-.year input { flex: 1; accent-color: var(--ink); min-width: 100px; margin: 0; }
+.year input { flex: 1; accent-color: var(--scr-key); min-width: 100px; margin: 0; }
 .year output {
-  font: 800 16px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 2.8em; color: var(--ink); text-shadow: var(--glow);
+  font: 800 16px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 2.8em; color: var(--scr-gold); text-shadow: 0 0 10px rgba(255, 210, 61, .45);
 }
 .icon-btn {
   width: var(--ctl-h, 30px); height: var(--ctl-h, 30px); flex: none; display: grid; place-items: center; cursor: pointer;
-  border: 1.5px solid var(--text); border-radius: 50%; background: var(--ink); color: var(--on-ink); box-shadow: 0 2px 0 var(--text);
+  border: 1.5px solid var(--scr-key); border-radius: 50%; background: var(--scr-key); color: var(--screen); box-shadow: 0 0 10px rgba(111, 157, 255, .45);
 }
 @media (hover: hover) { .icon-btn:hover { filter: brightness(1.1); } }
-.icon-btn:active { transform: translateY(2px); box-shadow: none; }
+.icon-btn:active { transform: translateY(1px); }
 .icon-btn svg { width: 11px; height: 11px; fill: currentColor; }
 button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.filters :focus-visible { outline-color: var(--scr-gold); }
+/* Decoration, not a control: a dim heart trace sweeping in the room right of the controls (as in the
+   header, with its red dot), behind a thin divider; no frame, no label, no pointer, hidden from screen
+   readers. Still for reduced motion. */
+.monitor-deco { flex: 1 1 160px; min-width: 120px; align-self: stretch; min-height: 30px; position: relative; overflow: hidden;
+  border-left: 1px solid rgba(111, 157, 255, .22); margin-left: 4px; opacity: .45; pointer-events: none; }
+.monitor-deco[hidden] { display: none; } /* no room left in the controls' row: see site.TRACE_JS */
+.monitor-deco svg { position: absolute; left: 6px; top: 2px; width: calc(100% - 6px); height: calc(100% - 4px); overflow: visible; }
+.mon-trace .beat-line { stroke: var(--scr-key); filter: drop-shadow(0 0 3px rgba(111, 157, 255, .6)); }
+.monitor-deco .beat-dot { fill: #ff4d61; filter: drop-shadow(0 0 5px #ff4d61); }
 
-/* Key figures: a bedside monitor with four channels, in both modes */
+/* Key figures: a patient wristband. One band with rounded ends, a snap button at the left and a barcode
+   at the right, the four readings side by side with dotted lines between them. */
 .tiles {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin-bottom: 30px;
-  background: rgba(111, 157, 255, .16); border: 10px solid var(--bezel); border-radius: 18px; overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), 0 18px 34px -20px rgba(0, 0, 0, .7);
-  position: relative;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-bottom: 30px;
+  border-radius: 999px; padding: 4px 76px 4px 52px; background: var(--surface);
+  border: 1.5px solid var(--border); box-shadow: var(--paper-shadow); position: relative;
 }
-.tiles::after { /* screen glare and scanlines */
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(160deg, rgba(255, 255, 255, .07), transparent 40%),
-    repeating-linear-gradient(0deg, rgba(0, 0, 0, .25) 0 1px, transparent 1px 3px);
+.tiles::before { /* the snap */
+  content: ""; position: absolute; left: 16px; top: 50%; width: 20px; height: 20px; margin-top: -10px;
+  border-radius: 50%; background: var(--ink); box-shadow: inset 0 0 0 5px var(--surface), 0 0 0 1.5px var(--ink);
 }
-.tile { background: var(--screen); padding: 14px 16px 12px; min-width: 0; color: var(--ch-1); position: relative; }
-.tile:nth-child(2) { color: var(--ch-2); }
-.tile:nth-child(3) { color: var(--ch-3); }
-.tile:nth-child(4) { color: var(--ch-4); }
+.tiles::after { /* the barcode */
+  content: ""; position: absolute; right: 26px; top: 24%; bottom: 24%; width: 34px; opacity: .75;
+  background: repeating-linear-gradient(90deg, var(--text) 0 2px, transparent 2px 3px, var(--text) 3px 4px, transparent 4px 7px,
+    var(--text) 7px 10px, transparent 10px 12px);
+}
+.tile { background: transparent; padding: 14px 18px 12px; min-width: 0; color: var(--ink); position: relative; }
+.tile + .tile { border-left: 1.5px dotted var(--border); }
+/* Two readings per row on narrower screens: a band with softer ends, no barcode, dotted lines between the rows */
+@media (max-width: 960px) {
+  .tiles { border-radius: 30px; padding: 4px 16px 4px 46px; }
+  .tiles::after { display: none; }
+  .tile:nth-child(3) { border-left: 0; }
+  .tile:nth-child(n+3) { border-top: 1.5px dotted var(--border); }
+}
 .tile .k { font: 700 12px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .12em; margin: 0 0 4px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tile .k::before { content: "CH" counter(ch) " ▸ "; opacity: .55; }
-.tiles { counter-reset: ch; }
-.tile { counter-increment: ch; }
-.tile .v { font: 700 34px/1.15 var(--mono); letter-spacing: -0.04em; margin: 0; text-shadow: 0 0 12px currentColor; font-variant-numeric: tabular-nums; }
+.tile .v { font: 700 34px/1.15 var(--mono); letter-spacing: -0.04em; margin: 0; color: var(--text); font-variant-numeric: tabular-nums; }
 .tile .v small { font-size: 14px; font-weight: 500; opacity: .85; margin-left: 4px; letter-spacing: 0; }
-.tile .s { font: 13px/1.5 var(--mono); color: #bcc8e8; opacity: .85; margin: 4px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tile .s { font: 13px/1.5 var(--mono); color: var(--text-2); margin: 4px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* Tiles are filled by the script: each line keeps its height from the start (no layout shift). */
 .tile .k, .tile .s { min-height: 1.5em; }
 .tile .v { min-height: 1.2em; }
+
+/* Insights under each chart, as lightbulb bullets. Whose number a sentence is about is highlighted in it:
+   the EU-27 (or Europe) on a blue tint, the selected country on the selection red's tint. The EU-27's bullets
+   come first, then the selected country's; two of each show, "Show more insights" opens the rest in place. */
+.insights { margin: 16px 0 0; padding-top: 14px; border-top: 1.5px dashed var(--border); }
+.ins-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.ins-list + .ins-list { margin-top: 14px; } /* the EU-27's bullets, then the selected country's */
+.ins-list li { position: relative; padding-left: 1.6em; font: 16.5px/1.55 var(--serif); color: var(--text); } /* the full width of the chart */
+.ins-list li::before {
+  content: ""; position: absolute; left: 0; top: .22em; width: 1.1em; height: 1.1em; background: var(--ink); transform: rotate(-14deg);
+  -webkit-mask: var(--bulb) center / contain no-repeat; mask: var(--bulb) center / contain no-repeat;
+}
+.ins-list li.extra { display: none; }
+.insights.open .ins-list li.extra { display: block; }
+.ins-list mark.hl { color: var(--text); font-weight: 700; padding: 0 .22em; border-radius: 3px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.ins-list mark.eu { background: color-mix(in srgb, var(--series-1) 24%, transparent); }
+.ins-list mark.sel { background: color-mix(in srgb, var(--mark) 22%, transparent); }
+.ins-more { margin: 10px 0 0 1.6em; padding: 0; border: 0; background: none; cursor: pointer; color: var(--ink);
+  font: italic 15.5px var(--serif); text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
+.ins-more .c, .insights.open .ins-more .o { display: none; }
+.insights.open .ins-more .c { display: inline; }
+@media (pointer: coarse) { .ins-more { min-height: 44px; } }
+
+/* Hints inside a chart card (a term explained, e.g. "Pension or retirement?"): the full width of the chart,
+   on a wash with an ink bar at the left */
+.term-note { margin: 4px 0 14px; padding: 8px 12px; max-width: none; font: 14px/1.4 var(--serif); color: var(--text-2);
+  background: var(--wash); border-left: 4px solid var(--ink); }
+.term-note strong { font: 700 13px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink); }
 
 /* Cards: continuous tractor-feed printouts, sprocket holes down both edges */
 .card {
@@ -414,7 +434,8 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .card::before { left: 0; border-right: 1.5px dashed var(--border); }
 .card::after { right: 0; border-left: 1.5px dashed var(--border); }
 .card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin-bottom: 14px; }
-.card-head h2, .card > h2 { font: 700 22px/1.2 var(--serif); letter-spacing: -0.01em; max-width: 40ch; }
+.card-head h2, .card > h2 { font: 700 22px/1.2 var(--serif); letter-spacing: -0.01em; }
+.card-head > div:first-child { flex: 1 1 auto; min-width: 0; } /* titles use the width up to the tools: no early line breaks */
 .card-head h2::before { content: "§ "; color: var(--ink); font-style: italic; }
 .card-head p { margin: 6px 0 0; max-width: 92ch; }
 .card-head .small.muted { color: var(--text-2); font-size: 14.5px; }
@@ -500,7 +521,9 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
 .tip.on { opacity: 1; }
 .tip .tv { font-size: 15px; font-weight: 800; display: block; letter-spacing: 0; }
 .tip .tn { display: block; color: #ffd84d; }
-.tip .tm { display: block; opacity: .82; text-transform: none; font-weight: 500; }
+/* Every fact in a tooltip is its own bullet point */
+.tip .tm { display: block; opacity: .82; text-transform: none; font-weight: 500; position: relative; padding-left: 1em; }
+.tip .tm::before { content: "•"; position: absolute; left: 0; }
 .tip .row { display: flex; align-items: center; gap: 8px; }
 .tip .row i { width: 12px; height: 3px; border-radius: 1px; flex: none; }
 .tip .row b { font-variant-numeric: tabular-nums; min-width: 2.6em; }
@@ -529,31 +552,33 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
 }
 @media (max-width: 600px) {
   main { padding: 20px 16px 40px; }
-  .filters { --ctl-h: 28px; flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 6px; margin: 18px -16px 16px; padding: 6px 0; }
+  .filters { --ctl-h: 28px; flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 6px; margin: 18px -16px 16px; padding: 8px 0; border-width: 6px 0; }
+  .monitor-deco { display: none; }
   .filters::before { display: none; }
   .filter-row {
-    display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 2px; scrollbar-width: none; overscroll-behavior-x: contain;
+    display: flex; gap: 8px; overflow-x: auto; padding: 0 10px 2px; scrollbar-width: none; overscroll-behavior-x: contain;
     -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
             mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
   }
   .filter-row::-webkit-scrollbar { display: none; }
   .filter { flex: none; }
   .filter > .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .year { flex: none; min-width: 0; padding: 0 16px; }
+  .year { flex: none; min-width: 0; padding: 0 10px; }
   .seg button { padding: 0 8px; font-size: 12px; }
   select { max-width: 150px; font-size: 12px; }
   /* Filters scroll away with the page on phones: pinned, two rows of 44px keys took a sixth of the
      screen. Charts have their own full-screen view for a closer look. */
-  .filters { position: static; }
+  .filters { position: relative; }
+  /* The (i) and full-screen buttons sit in their own row above the title, which keeps the full width */
+  .card-head:has(> .card-tools) { flex-wrap: wrap; }
+  .card-tools { order: -1; margin-left: auto; }
   /* Key figures: labels and sublines wrap instead of being cut off (up to 2 and 3 lines, reserved
      before the script fills them, so nothing shifts) */
   .tile { padding: 12px 12px 10px; }
   .tile .k, .tile .s { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
   .tile .k { min-height: 3em; }
-  .tile .k::before { content: none; } /* the CH1 ▸ channel tag: decoration that would cost a line */
   .tile .s { min-height: 4.5em; font-size: 12px; }
   .tile .v { font-size: 24px; }
-  .tiles { border-width: 6px; border-radius: 12px; }
   .card { padding: 18px 22px; }
   .card::before, .card::after { width: 16px; background-size: 16px 22px;
     background-image: radial-gradient(circle at 8px 11px, var(--hole) 0 3.5px, transparent 4px); }
@@ -562,16 +587,18 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
       repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
   .notes::before { display: none; }
 }
-/* Full screen: the chart's card covers the screen (true full screen where the browser allows it on
-   an element; an overlay elsewhere, e.g. on iPhone). Charts redraw for the new width. */
+/* Full screen: the chart's card covers the browser window (an overlay, not the browser's own full
+   screen). The button says what it does: "Full screen", then "Exit full screen". The page's filters
+   move into the card under the title (site.PAGE_JS) and --full-ctl holds their height. */
 .full-btn {
-  display: grid; place-items: center; width: 30px; height: 30px; padding: 0; cursor: pointer; border-radius: 50%;
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px 0 9px; cursor: pointer;
+  border-radius: 999px; white-space: nowrap; font: 700 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em;
   border: 1.5px solid var(--text); background: var(--surface); color: var(--ink); box-shadow: 0 2px 0 var(--text);
 }
-.full-btn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
-.full-btn .i-close, .full-btn[aria-pressed="true"] .i-open { display: none; }
-.full-btn[aria-pressed="true"] .i-close { display: inline; }
-.full-btn[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+.full-btn svg { width: 13px; height: 13px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.full-btn .i-close, .full-btn .l-close, .full-btn.on .i-open, .full-btn.on .l-open { display: none; }
+.full-btn.on .i-close, .full-btn.on .l-close { display: inline; }
+.full-btn.on { background: var(--ink); color: var(--on-ink); }
 .card.is-full {
   position: fixed; inset: 0; z-index: 50; margin: 0 !important; width: auto; max-width: none; overflow: auto;
   transform: none; border-radius: 0; background-color: var(--surface); overscroll-behavior: contain;
@@ -579,17 +606,21 @@ td button { font: inherit; font-weight: 700; color: var(--text); background: non
 }
 .card.is-full::before, .card.is-full::after { display: none; }
 html.has-full { overflow: hidden; }
+/* The filters in the card: the screen across the card's width, pinned to its top while it scrolls (not on phones,
+   where they would take too much of the screen, as on the page) */
+.card.is-full > .filters { margin: 0 0 12px; padding: 10px 16px; border-width: 8px; border-radius: 14px; }
+@media (min-width: 601px) { .card.is-full > .filters { position: sticky; top: 0; } }
 /* Heights use the small viewport (svh): with dvh, charts resized whenever the browser's bars slid in or
-   out, which happens constantly around a turn of the phone. */
-.card.is-full #scatter { height: calc(100vh - 190px); min-height: 320px; }
+   out, which happens constantly around a turn of the phone. The filters' height comes off too. */
+.card.is-full #scatter { height: calc(100vh - 202px - var(--full-ctl, 0px)); min-height: 320px; }
 /* The map: its frame (with the zoom button and credit) is as wide as fits the screen's height at the
    map's proportions, and the map fills it at full width (an <svg> sized by height alone with width:
-   auto falls back to 300px). Room is left for the title, legend and outermost regions; at least 320px
-   wide when a phone is held sideways (the card then scrolls). */
-.card.is-full .map-wrap { width: min(100%, max(calc((100vh - 240px) * var(--map-ratio)), 320px)); margin: 0 auto; }
+   auto falls back to 300px). Room is left for the title, filters, legend and outermost regions; at
+   least 320px wide when a phone is held sideways (the card then scrolls). */
+.card.is-full .map-wrap { width: min(100%, max(calc((100vh - 252px - var(--full-ctl, 0px)) * var(--map-ratio)), 320px)); margin: 0 auto; }
 @supports (height: 100svh) {
-  .card.is-full #scatter { height: calc(100svh - 190px); }
-  .card.is-full .map-wrap { width: min(100%, max(calc((100svh - 240px) * var(--map-ratio)), 320px)); }
+  .card.is-full #scatter { height: calc(100svh - 202px - var(--full-ctl, 0px)); }
+  .card.is-full .map-wrap { width: min(100%, max(calc((100svh - 252px - var(--full-ctl, 0px)) * var(--map-ratio)), 320px)); }
 }
 .card.is-full .tip { z-index: 60; }
 
@@ -604,7 +635,8 @@ html.has-full { overflow: hidden; }
   .icon-btn svg { width: 14px; height: 14px; }
   .find input { font-size: 16px; min-height: 44px; }
   details.card summary { min-height: 44px; }
-  .info summary, .full-btn { width: 44px; height: 44px; }
+  .info summary { width: 44px; height: 44px; }
+  .full-btn { height: 44px; padding: 0 14px 0 12px; }
   details.card summary::before { width: 32px; height: 32px; }
   td button { padding: 12px 0; margin: -12px 0; }
   .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
@@ -728,14 +760,13 @@ html.has-full { overflow: hidden; }
 </style>
 </head>
 <body>
-<div class="drip" aria-hidden="true"></div><header class="site-header"><a class="brand" href="../">healthviz</a><nav aria-label="Site"><a href="../#entries">Entries</a><a href="../#about">About</a><button type="button" class="theme-switch" onclick="var r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';try{localStorage.setItem('hv-theme',r.dataset.theme)}catch(e){}" aria-label="Switch between paper and monitor"><span class="t-light">◐<span class="tw"> Monitor</span></span><span class="t-dark">◑<span class="tw"> Paper</span></span></button></nav><svg class="trace" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true"><path d="M0 30H40c4 0 5-6 9-6s5 6 9 6H66l3 5 6-33 6 40 4-12H100c5 0 7-9 13-9s8 9 13 9H173c4 0 5-6 9-6s5 6 9 6H199l3 5 6-33 6 40 4-12H233c5 0 7-9 13-9s8 9 13 9H306c4 0 5-6 9-6s5 6 9 6H332l3 5 6-33 6 40 4-12H366c5 0 7-9 13-9s8 9 13 9H439c4 0 5-6 9-6s5 6 9 6H465l3 5 6-33 6 40 4-12H499c5 0 7-9 13-9s8 9 13 9H572c4 0 5-6 9-6s5 6 9 6H598l3 5 6-33 6 40 4-12H632c5 0 7-9 13-9s8 9 13 9H705c4 0 5-6 9-6s5 6 9 6H731l3 5 6-33 6 40 4-12H765c5 0 7-9 13-9s8 9 13 9H838c4 0 5-6 9-6s5 6 9 6H864l3 5 6-33 6 40 4-12H898c5 0 7-9 13-9s8 9 13 9H971c4 0 5-6 9-6s5 6 9 6H997l3 5 6-33 6 40 4-12H1031c5 0 7-9 13-9s8 9 13 9H1104c4 0 5-6 9-6s5 6 9 6H1130l3 5 6-33 6 40 4-12H1164c5 0 7-9 13-9s8 9 13 9H1237c4 0 5-6 9-6s5 6 9 6H1263l3 5 6-33 6 40 4-12H1297c5 0 7-9 13-9s8 9 13 9H1200" pathLength="100"/></svg></header>
+<div class="drip" aria-hidden="true"></div><header class="site-header"><a class="brand" href="../">healthviz</a><nav aria-label="Site"><a href="../#entries">Entries</a><a href="../#about">About</a><button type="button" class="theme-switch" onclick="var r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';try{localStorage.setItem('hv-theme',r.dataset.theme)}catch(e){}" aria-label="Switch between paper and monitor"><span class="t-light">◐<span class="tw"> Monitor</span></span><span class="t-dark">◑<span class="tw"> Paper</span></span></button></nav></header>
 <main>
-  <header class="chart-head" data-motif="€">
+  <header class="chart-head">
     <p class="eyebrow"><a href="../#entries">← Entries</a>Health spending</p>
-    <p class="stamp" aria-hidden="true">Billing dept.<small>who pays?</small></p>
     <h1>How much does Europe spend on health, and who pays<span class="qm">?</span></h1>
-    <p class="lede" id="lede"><span class="thought">In 2024, Germany spent <strong>42% more than the EU-27 average</strong> on health per person, after adjusting for price levels: the most of all 27 EU countries.</span> <span class="thought">Of every €100 spent on health there, government and compulsory insurance paid <strong>€86</strong> and people paid <strong>€11</strong> out of their own pocket.</span></p>
-    <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Data retrieved</dt><dd><time datetime="2026-10-26">26 Oct 2026</time></dd></div><div><dt>Source last updated</dt><dd><time datetime="2026-10-23">23 Oct 2026</time> · Eurostat</dd></div><div><dt>Covers</dt><dd>2016–2024 · 34 countries</dd></div></dl><p class="snapshot-note"><a href="#sources">Sources and notes</a></p></aside>
+    <p class="intro">How much each European country spends on health per person, and how much of it people pay out of their own pocket. It follows every country since 2016 and breaks the spending down by what it pays for.</p>
+    <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Source last updated</dt><dd><time datetime="2026-10-23">23 Oct 2026</time></dd></div><div><dt>Source</dt><dd>Eurostat</dd></div><div><dt>Covers</dt><dd>2016–2024 · 34 countries</dd></div></dl><p class="snapshot-note"><a href="#sources">Sources and notes</a></p></aside>
   </header>
 
   <div class="filters" role="group" aria-label="Filters">
@@ -766,6 +797,7 @@ html.has-full { overflow: hidden; }
       <input type="range" id="year" aria-label="Year">
       <output id="year-out" for="year"></output>
     </div>
+    <div class="monitor-deco" aria-hidden="true"><svg class="mon-trace beat" aria-hidden="true"><defs><clipPath id="clip-mon-trace"><rect width="0" height="0"/></clipPath></defs><path class="beat-line" clip-path="url(#clip-mon-trace)"/><circle class="beat-dot" r="4" cx="-10" cy="-10"/></svg></div>
   </div>
 
   <section class="tiles" aria-label="Key figures">
@@ -785,11 +817,12 @@ html.has-full { overflow: hidden; }
           <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
           <p class="info-pop" id="scatter-sub">Each dot is a country. Further right: more spent on health (per person, price-adjusted (PPS)). Higher up: people pay a larger share themselves. Tap or click a dot to compare that country with the EU-27 below; play the years to see dots move.</p>
         </details>
-        <button type="button" class="full-btn" aria-pressed="false" aria-label="Show this chart full screen"><svg viewBox="0 0 14 14" aria-hidden="true"><path class="i-open" d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/><path class="i-close" d="M5 1v4H1M9 1v4h4M13 9H9v4M1 9h4v4"/></svg></button>
+        <button type="button" class="full-btn"><svg viewBox="0 0 14 14" aria-hidden="true"><path class="i-open" d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/><path class="i-close" d="M5 1v4H1M9 1v4h4M13 9H9v4M1 9h4v4"/></svg><span class="l-open">Full screen</span><span class="l-close">Exit full screen</span></button>
       </div>
     </div>
     <div class="keys" id="scatter-keys"><span class="key"><i class="k-dot"></i>Country</span><span class="key"><i class="k-line"></i>EU-27 average</span><span class="key"><i class="k-shade"></i>People pay more out of pocket than the EU-27 average</span><span class="key"><i class="k-trail"></i>Germany since 2016</span><span class="key"><i class="k-trail eu"></i>EU-27 since 2016</span></div>
     <svg id="scatter" role="img" aria-labelledby="scatter-title scatter-sub"></svg>
+    <div class="insights" id="scatter-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>In the <mark class="hl eu">EU-27</mark>, health spending came to <strong>4,075 PPS per person</strong> in 2024, after adjusting for price levels.</li><li>Across the <mark class="hl eu">EU-27</mark>, <strong>Germany</strong> spent the most (5,791 PPS per person) and <strong>Romania</strong> the least (1,969 PPS per person).</li><li class="extra">In the <mark class="hl eu">EU-27</mark>, people paid <strong>€15 of every €100</strong> spent on health out of their own pocket.</li><li class="extra">Across the <mark class="hl eu">EU-27</mark>, people paid the most out of their own pocket in <strong>Greece</strong> (€34 of every €100) and the least in <strong>Croatia</strong> (€9).</li></ul><ul class="ins-list"><li>In <mark class="hl sel">Germany</mark>, health spending came to <strong>5,791 PPS per person</strong> in 2024: 42% more than across the EU-27.</li><li>Of every €100 spent on health in <mark class="hl sel">Germany</mark>, government and compulsory insurance paid <strong>€86</strong> and people paid <strong>€11</strong> out of their own pocket.</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
   </section>
 
   <section class="card fn-card" aria-labelledby="fn-title">
@@ -799,7 +832,7 @@ html.has-full { overflow: hidden; }
         <p class="small muted" id="fn-sub">Germany compared with the EU-27, 2024. Tap or click a category to compare every country on it.</p>
       </div>
       <div class="card-tools">
-        <button type="button" class="full-btn" aria-pressed="false" aria-label="Show this chart full screen"><svg viewBox="0 0 14 14" aria-hidden="true"><path class="i-open" d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/><path class="i-close" d="M5 1v4H1M9 1v4h4M13 9H9v4M1 9h4v4"/></svg></button>
+        <button type="button" class="full-btn"><svg viewBox="0 0 14 14" aria-hidden="true"><path class="i-open" d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/><path class="i-close" d="M5 1v4H1M9 1v4h4M13 9H9v4M1 9h4v4"/></svg><span class="l-open">Full screen</span><span class="l-close">Exit full screen</span></button>
       </div>
     </div>
     <div class="fn-grid">
@@ -820,6 +853,7 @@ html.has-full { overflow: hidden; }
         <svg id="across" role="img" aria-labelledby="across-title across-sub" height="540"></svg>
       </div>
     </div>
+    <div class="insights" id="fn-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>In the <mark class="hl eu">EU-27</mark>, the largest part of health spending, <strong>53.3%</strong>, went to treatment and rehabilitation in 2024.</li><li>In the <mark class="hl eu">EU-27</mark>, <strong>17.2%</strong> of health spending went to long-term care.</li><li class="extra">Across the <mark class="hl eu">EU-27</mark>, the share that went to long-term care was largest in <strong>Netherlands</strong> (29.3%) and smallest in <strong>Slovakia</strong> (2.0%).</li><li class="extra">Since 2016, the share that went to long-term care has grown by <strong>1.7 percentage points</strong> in the <mark class="hl eu">EU-27</mark>.</li></ul><ul class="ins-list"><li>In <mark class="hl sel">Germany</mark>, <strong>21.9%</strong> of health spending went to long-term care in 2024, against 17.2% across the EU-27.</li><li>In <mark class="hl sel">Germany</mark>, the largest part of health spending, <strong>46.9%</strong>, went to treatment and rehabilitation.</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
   </section>
 
   <details class="card" id="table-card">
@@ -834,13 +868,51 @@ html.has-full { overflow: hidden; }
 
   <section class="notes" id="sources">
     <h2>Sources</h2>
-    <ul class="sources"><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hf/default/table">Eurostat: Health care expenditure by financing scheme</a> (<code>hlth_sha11_hf</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-23">23 oct 2026</time>, retrieved <time datetime="2026-10-26">26 oct 2026</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hc/default/table">Eurostat: Health care expenditure by function</a> (<code>hlth_sha11_hc</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-23">23 oct 2026</time>, retrieved <time datetime="2026-10-26">26 oct 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
+    <ul class="sources"><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hf/default/table">Eurostat: Health care expenditure by financing scheme</a> (<code>hlth_sha11_hf</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-23">23 Oct 2026</time>.</span></li><li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hc/default/table">Eurostat: Health care expenditure by function</a> (<code>hlth_sha11_hc</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-23">23 Oct 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
     <h2>Notes</h2>
     <p>Figures are current health expenditure from Eurostat's System of Health Accounts: everything spent on health care in a year, from hospital stays and doctor visits to medicines and prevention, but not investments such as building hospitals. Prices differ a lot across Europe, so "price-adjusted" figures use Eurostat's purchasing power standard (PPS), an artificial currency that buys the same amount everywhere; across the EU as a whole, one PPS equals one euro. "Per person in €" shows the amounts actually spent, and "share of GDP" how much of a country's economy goes to health: a small economy can spend a high share and still little per person.</p>
     <p>Who pays: government and compulsory insurance covers public budgets and statutory health insurance (in Germany, mainly the GKV); voluntary insurance covers private policies people choose to take out; out of pocket is what people pay directly, including co-payments. A small rest, in a few countries, is paid from abroad or not assigned. The main chart puts each country's spending (across) against the share paid out of pocket (up); the out-of-pocket share is independent of how much a country spends, so countries of any size can be compared. "Of every €100" in the opening sentence uses Eurostat's shares, rounded. What the money goes to follows Eurostat's functions of care: medicines given in hospital count as treatment; "not assigned" is what Eurostat doesn't assign to a function (in some countries nothing). Amounts per person on each function are Eurostat's, in PPS; changes since 2016 are in percentage points of the share. Values Eurostat marks provisional are labelled so in the tooltip and marked "p" in the table. The jump in prevention spending in 2021–2022 reflects COVID-19 testing and vaccination.</p>
   </section>
 </main>
-<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer><script>addEventListener("pointerdown",e=>{for(const d of document.querySelectorAll("details.info[open]"))if(!d.contains(e.target))d.open=false});const hvFull=(card,on)=>{const b=card.querySelector(".full-btn"),tip=document.getElementById("tip");if(tip)tip.classList.remove("on");if(on){card.scrollTop=0;card.hvTurn=0}card.classList.toggle("is-full",on);document.documentElement.classList.toggle("has-full",on);if(!on&&card.hvTurn)card.scrollIntoView({block:"center"});b.setAttribute("aria-pressed",on);b.setAttribute("aria-label",on?"Close full screen":"Show this chart full screen");if(tip)(on?card:document.body).append(tip);if(on&&card.requestFullscreen)card.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen().catch(()=>{})};addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".full-btn");if(b){const c=b.closest(".card");hvFull(c,!c.classList.contains("is-full"))}});window.matchMedia?.("(orientation: portrait)").addEventListener?.("change",()=>{const t=document.getElementById("tip");if(t)t.classList.remove("on");for(const c of document.querySelectorAll(".card.is-full")){c.scrollTop=0;c.hvTurn=1}});document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement)for(const c of document.querySelectorAll(".card.is-full"))hvFull(c,false)});addEventListener("keydown",e=>{if(e.key!=="Escape")return;for(const d of document.querySelectorAll("details.info[open]")){d.open=false;d.querySelector("summary").focus()}for(const c of document.querySelectorAll(".card.is-full")){hvFull(c,false);c.querySelector(".full-btn").focus()}})</script>
+<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer><script>addEventListener("pointerdown",e=>{for(const d of document.querySelectorAll("details.info[open]"))if(!d.contains(e.target))d.open=false});let hvSpot=null;const hvCtl=()=>{const c=document.querySelector(".card.is-full"),f=c&&c.querySelector(".filters");if(c)c.style.setProperty("--full-ctl",f?f.offsetHeight+"px":"0px")};const hvFull=(card,on)=>{const b=card.querySelector(".full-btn"),tip=document.getElementById("tip"),f=document.querySelector(".filters");if(tip)tip.classList.remove("on");if(on){card.scrollTop=0;card.hvTurn=0}if(f&&on){hvSpot=document.createComment("filters");f.before(hvSpot);b.closest(".card-head").after(f)}else if(f&&hvSpot){hvSpot.replaceWith(f);hvSpot=null}card.classList.toggle("is-full",on);document.documentElement.classList.toggle("has-full",on);b.classList.toggle("on",on);if(tip)(on?card:document.body).append(tip);if(on)hvCtl();else{card.style.removeProperty("--full-ctl");if(card.hvTurn)card.scrollIntoView({block:"center"})}};addEventListener("resize",hvCtl);addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".full-btn");if(b){const c=b.closest(".card");hvFull(c,!c.classList.contains("is-full"))}});window.matchMedia?.("(orientation: portrait)").addEventListener?.("change",()=>{const t=document.getElementById("tip");if(t)t.classList.remove("on");for(const c of document.querySelectorAll(".card.is-full")){c.scrollTop=0;c.hvTurn=1}});addEventListener("keydown",e=>{if(e.key!=="Escape")return;for(const d of document.querySelectorAll("details.info[open]")){d.open=false;d.querySelector("summary").focus()}for(const c of document.querySelectorAll(".card.is-full")){hvFull(c,false);c.querySelector(".full-btn").focus()}});(()=>{const BEAT=100,SPEED=BEAT*70/60;
+// The monitor's trace only shares the controls' row: where the controls fill the row, it would wrap
+// into a row of its own, so it is left out (checked again whenever the bar changes width).
+const decos=[...document.querySelectorAll(".monitor-deco")];
+const placeDeco=()=>{for(const d of decos){d.hidden=false;const f=d.parentElement.querySelector(".filter");if(f&&d.getBoundingClientRect().top>=f.getBoundingClientRect().bottom-2)d.hidden=true}};
+placeDeco();if(window.ResizeObserver){const ro=new ResizeObserver(placeDeco);for(const d of decos)ro.observe(d.parentElement)}else addEventListener("resize",placeDeco);
+// One beat, 100px wide: P wave (small bump), Q (short dip), R (tall spike), S (dip below the line), T wave
+// (rounder bump). Negative is up, as in SVG; 1 is the spike's height.
+const SHAPE=[[0,0],[30,0],[33,-.12],[36,-.2],[39,-.2],[42,-.12],[45,0],[54,0],[56,.12],[60,-1],[64,.28],[67,0],[76,0],[80,-.18],[84,-.3],[88,-.3],[92,-.18],[96,0]];
+const still=!!window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+const T=[...document.querySelectorAll("svg.beat")].map(svg=>({svg,line:svg.querySelector(".beat-line"),dot:svg.querySelector(".beat-dot"),clip:svg.querySelector("clipPath rect"),pts:[],W:0,H:0}));
+const fit=t=>{const W=t.svg.clientWidth,H=t.svg.clientHeight;if(!W||!H||(W===t.W&&H===t.H))return;t.W=W;t.H=H;
+t.svg.setAttribute("viewBox",`0 0 ${W} ${H}`);const base=H*.68,A=H*.6,p=[];
+for(let x0=0;x0<W+BEAT;x0+=BEAT)for(const[x,v]of SHAPE)p.push([x0+x,base+v*A]);
+t.pts=p;t.line.setAttribute("d","M"+p.map(q=>q[0].toFixed(1)+" "+q[1].toFixed(1)).join("L"));t.clip.setAttribute("height",H)};
+const yAt=(p,x)=>{for(let i=1;i<p.length;i++)if(p[i][0]>=x){const[a,b]=p[i-1],[c,d]=p[i];return b+(d-b)*(x-a)/((c-a)||1)}return p[p.length-1][1]};
+const draw=now=>{for(const t of T){fit(t);if(!t.W)continue;
+if(still||now==null){t.clip.setAttribute("x",0);t.clip.setAttribute("width",t.W);t.dot.style.opacity=0;continue}
+const D=t.W/SPEED*1000,ph=(now%(2*D))/D;
+if(ph<1){const x=ph*t.W;t.clip.setAttribute("x",0);t.clip.setAttribute("width",x);t.dot.setAttribute("cx",x);t.dot.setAttribute("cy",yAt(t.pts,x));t.dot.style.opacity=1}
+else{const x=(ph-1)*t.W;t.clip.setAttribute("x",x);t.clip.setAttribute("width",t.W-x);t.dot.style.opacity=0}}};
+if(still||!window.IntersectionObserver){draw(null);addEventListener("resize",()=>draw(null));return}let on=0,raf=0;const loop=now=>{draw(now);raf=on?requestAnimationFrame(loop):0};const io=new IntersectionObserver(es=>{for(const e of es)e.target.hvOn=e.isIntersecting;on=T.filter(t=>t.svg.hvOn).length;if(on&&!raf)raf=requestAnimationFrame(loop)});for(const t of T)io.observe(t.svg)})();;const HV=(()=>{const SHOWN=2;
+const r1=v=>(Math.round(v*10)/10).toFixed(1),r0=v=>String(Math.round(v));
+const signed1=v=>`${v>0?"+":v<0?"−":"±"}${r1(Math.abs(v))}`;
+const byName=(a,b)=>a<b?-1:a>b?1:0;
+const joinNames=ns=>ns.length>3?`${ns.slice(0,2).join(", ")} and ${ns.length-2} others`:ns.length>1?`${ns.slice(0,-1).join(", ")} and ${ns[ns.length-1]}`:ns[0];
+const B=t=>({b:t}),EU=t=>({eu:t}),SEL=t=>({sel:t}),ins=(eu,...parts)=>({eu,parts});
+const area=scope=>scope==="eu"?["the ",EU("EU-27")]:[EU("Europe")];
+const el=(tag,cls,text,parent)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;parent.appendChild(n);return n};
+function render(id,list){const box=document.getElementById(id);box.replaceChildren();
+const groups=[list.filter(it=>it.eu),list.filter(it=>!it.eu)].filter(g=>g.length);
+for(const group of groups){const ul=el("ul","ins-list",null,box);
+group.forEach((it,i)=>{const li=el("li",i>=SHOWN?"extra":"",null,ul);
+for(const p of it.parts){if(typeof p==="string")li.append(p);else if(p.b!=null)el("strong","",p.b,li);else el("mark",`hl ${p.eu!=null?"eu":"sel"}`,p.eu??p.sel,li)}})}
+if(groups.some(g=>g.length>SHOWN)){const bt=el("button","ins-more",null,box);bt.type="button";
+bt.setAttribute("aria-expanded",box.classList.contains("open"));el("span","o","Show more insights",bt);el("span","c","Show fewer insights",bt)}}
+document.addEventListener("click",e=>{const m=e.target.closest&&e.target.closest(".ins-more");if(!m)return;
+const box=m.closest(".insights"),open=box.classList.toggle("open");m.setAttribute("aria-expanded",open)});
+return{SHOWN,r1,r0,signed1,byName,joinNames,B,EU,SEL,ins,area,render}})();</script>
 <div class="tip" id="tip" role="tooltip"></div>
 
 <script>
@@ -935,7 +1007,7 @@ function countryTip(evt, g) {
   html("span", "tv", `${fmtU(total(g))}${provisional(g) ? " (provisional)" : ""}`, tip);
   html("span", "tn", name(g), tip);
   const r = rankOf(g);
-  if (r) html("span", "tm", `#${r} of ${rows.length} · by spending`, tip);
+  if (r) html("span", "tm", `#${r} of ${rows.length} by spending`, tip);
   for (const p of PAYERS) {
     const row = html("span", "row", null, tip);
     html("i", "", null, row).style.background = p.color;
@@ -1096,7 +1168,7 @@ scatter.addEventListener("click", evt => {
   if (touch) scatterTip(evt);
 });
 
-/* ---------- Tiles and lede ---------- */
+/* ---------- Tiles ---------- */
 function setTile(n, value, sub) {
   $(`t${n}v`).textContent = value;
   $(`t${n}s`).textContent = sub;
@@ -1116,41 +1188,75 @@ function renderTiles() {
   setTile(4, fmtU(total(g)), total(g) == null ? `No data for ${year}` :
     `#${r} of ${byTotal.length} · ${pct(share(g, "HF3"))} out of pocket`);
 
-  renderLede(byTotal);
 }
 
-// The opening sentence: the selected country against the EU-27, in plain words.
-const ordinal = n => n + (n % 100 >= 10 && n % 100 <= 20 ? "th" : { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th");
-function renderLede(byTotal) {
-  const lede = $("lede"), g = state.country, v = total(g), avg = total(EU), year = YEARS[state.y];
-  lede.replaceChildren();
-  // One span per thought, so each reads on its own line; a space between them keeps the text flowing.
-  let at = lede;
-  const thought = () => { if (at !== lede) lede.append(" "); at = html("span", "thought", null, lede); };
-  const b = t => html("strong", "", t, at);
-  thought();
-  if (v == null || avg == null) { at.append(`No ${year} figures for ${name(g)}.`); return; }
-  const n = byTotal.length, r = 1 + byTotal.filter(o => total(o) > v).length;
-  const place = r === 1 ? `the most of all ${n} ${scopeWord()} countries` :
-    r === n ? `the least of all ${n} ${scopeWord()} countries` : `${ordinal(r)} of ${n} ${scopeWord()} countries`;
-  if (state.unit === "PC_GDP") {
-    at.append(`In ${year}, ${name(g)} spent `);
-    b(`${v.toFixed(1)}% of its economic output (GDP)`);
-    at.append(` on health, against ${avg.toFixed(1)}% for the EU-27 as a whole: ${place}.`);
-  } else {
+/* ---------- Insights under the charts (the build writes the default view's: scatter_insights, fn_insights) ---------- */
+// Shares are rounded half up like the build (HV.r1), so the build's and the script's sentences match.
+const FN_ORDER = ["HC1_2", "HC3", "HC4", "HC5", "HC6", "HC7"];
+const FN_TEXT = { HC1_2: "treatment and rehabilitation", HC3: "long-term care", HC4: "lab tests, imaging and transport",
+  HC5: "medicines and medical aids", HC6: "prevention", HC7: "administration" };
+const wentTo = k => k === "OTHER" ? "was not assigned to a category" : `went to ${FN_TEXT[k]}`;
+const shareOf = k => k === "OTHER" ? "the share not assigned to a category" : `the share that went to ${FN_TEXT[k]}`;
+const amount = (v, u = state.unit) => u === "PC_GDP" ? `${HV.r1(v)}% of economic output (GDP)` : u === "EUR_HAB" ? `€${num(v)} per person` : `${num(v)} PPS per person`;
+const extremes = (list, f) => {
+  const vals = list.map(f), hi = Math.max(...vals), lo = Math.min(...vals);
+  const at = v => list.filter(c => f(c) === v).map(name).sort(HV.byName);
+  return { hi, lo, his: HV.joinNames(at(hi)), los: HV.joinNames(at(lo)) };
+};
+function scatterInsights() {
+  const { B, SEL, ins } = HV, EUH = HV.EU, u = state.unit, year = YEARS[state.y], g = state.country, area = HV.area(state.scope), out = [];
+  const avg = total(EU), list = Object.keys(D.areas).filter(c => inScope(c) && total(c) != null);
+  if (avg != null) out.push(ins(true, "In the ", EUH("EU-27"), ", health spending came to ", B(amount(avg)), ` in ${year}${u === "PPS_HAB" ? ", after adjusting for price levels" : ""}.`));
+  if (list.length) {
+    const e = extremes(list, c => total(c));
+    out.push(ins(true, "Across ", ...area, ", ", B(e.his), ` spent the most (${amount(e.hi)}) and `, B(e.los), ` the least (${amount(e.lo)}).`));
+  }
+  const eo = share(EU, "HF3");
+  if (eo != null) out.push(ins(true, "In the ", EUH("EU-27"), ", people paid ", B(`€${Math.round(eo)} of every €100`), " spent on health out of their own pocket."));
+  const ol = list.filter(c => share(c, "HF3") != null);
+  if (ol.length) {
+    const e = extremes(ol, c => share(c, "HF3"));
+    out.push(ins(true, "Across ", ...area, ", people paid the most out of their own pocket in ", B(e.his), ` (€${Math.round(e.hi)} of every €100) and the least in `, B(e.los), ` (€${Math.round(e.lo)}).`));
+  }
+  const v = total(g);
+  if (v == null || avg == null) {
+    out.push(ins(false, `Eurostat has no ${year} figures on health spending for `, SEL(name(g)), "."));
+    return out;
+  }
+  if (u === "PC_GDP") out.push(ins(false, "In ", SEL(name(g)), ", health spending came to ", B(amount(v)), ` in ${year}, against ${HV.r1(avg)}% across the EU-27.`));
+  else {
     const vs = Math.round((v / avg - 1) * 100);
-    at.append(`In ${year}, ${name(g)} spent `);
-    b(Math.abs(vs) < 3 ? "about as much as the EU-27 average" : `${Math.abs(vs)}% ${vs > 0 ? "more" : "less"} than the EU-27 average`);
-    at.append(` on health per person${state.unit === "PPS_HAB" ? ", after adjusting for price levels" : " in euros"}: ${place}.`);
+    out.push(ins(false, "In ", SEL(name(g)), ", health spending came to ", B(amount(v)), ` in ${year}: ${Math.abs(vs) < 3 ? "about as much as" : `${Math.abs(vs)}% ${vs > 0 ? "more" : "less"} than`} across the EU-27.`));
   }
   if (share(g, "HF1") != null && share(g, "HF3") != null) {
-    thought();
-    at.append("Of every €100 spent on health there, government and compulsory insurance paid ");
-    b(`€${Math.round(share(g, "HF1"))}`);
-    at.append(" and people paid ");
-    b(`€${Math.round(share(g, "HF3"))}`);
-    at.append(" out of their own pocket.");
+    out.push(ins(false, "Of every €100 spent on health in ", SEL(name(g)), ", government and compulsory insurance paid ", B(`€${Math.round(share(g, "HF1"))}`), " and people paid ", B(`€${Math.round(share(g, "HF3"))}`), " out of their own pocket."));
   }
+  return out;
+}
+function fnInsights() {
+  const { B, SEL, ins, r1 } = HV, EUH = HV.EU, k = state.fn, year = YEARS[state.y], g = state.country, area = HV.area(state.scope), out = [];
+  const largest = c => FN_ORDER.reduce((m, f) => (fnShare(c, f) ?? -1) > (fnShare(c, m) ?? -1) ? f : m, FN_ORDER[0]);
+  const top = largest(EU);
+  if (fnShare(EU, top) != null) out.push(ins(true, "In the ", EUH("EU-27"), ", the largest part of health spending, ", B(`${r1(fnShare(EU, top))}%`), `, went to ${FN_TEXT[top]} in ${year}.`));
+  if (k !== top && fnShare(EU, k) != null) out.push(ins(true, "In the ", EUH("EU-27"), ", ", B(`${r1(fnShare(EU, k))}%`), ` of health spending ${wentTo(k)}.`));
+  const list = Object.keys(D.areas).filter(c => inScope(c) && fnShare(c, k) != null);
+  if (list.length) {
+    const e = extremes(list, c => fnShare(c, k));
+    out.push(ins(true, "Across ", ...area, `, ${shareOf(k)} was largest in `, B(e.his), ` (${r1(e.hi)}%) and smallest in `, B(e.los), ` (${r1(e.lo)}%).`));
+  }
+  if (state.y > 0 && fnShare(EU, k) != null && fnShare(EU, k, 0) != null) {
+    const d = fnShare(EU, k) - fnShare(EU, k, 0);
+    out.push(Math.abs(d) < 0.05 ? ins(true, `Since ${YEARS[0]}, ${shareOf(k)} has stayed about the same in the `, EUH("EU-27"), ".")
+      : ins(true, `Since ${YEARS[0]}, ${shareOf(k)} has ${d > 0 ? "grown" : "shrunk"} by `, B(`${r1(Math.abs(d))} percentage points`), " in the ", EUH("EU-27"), "."));
+  }
+  if (fnShare(g, k) == null) {
+    out.push(ins(false, `Eurostat has no ${year} figures on what health spending in `, SEL(name(g)), " goes to."));
+    return out;
+  }
+  out.push(ins(false, "In ", SEL(name(g)), ", ", B(`${r1(fnShare(g, k))}%`), ` of health spending ${wentTo(k)} in ${year}${fnShare(EU, k) != null ? `, against ${r1(fnShare(EU, k))}% across the EU-27` : ""}.`));
+  const mine = largest(g);
+  out.push(ins(false, "In ", SEL(name(g)), ", the largest part of health spending, ", B(`${r1(fnShare(g, mine))}%`), `, went to ${FN_TEXT[mine]}.`));
+  return out;
 }
 
 /* ---------- What the money goes to ---------- */
@@ -1211,7 +1317,7 @@ function renderFunctions() {
 }
 $("fn-rows").addEventListener("click", e => {
   const row = e.target.closest(".fn-row");
-  if (row) { state.fn = row.dataset.k; renderFunctions(); }
+  if (row) { state.fn = row.dataset.k; renderFunctions(); HV.render("fn-ins", fnInsights()); }
 });
 
 function renderAcross() {
@@ -1273,6 +1379,7 @@ function render() {
   $("year").value = state.y;
   $("year-out").textContent = YEARS[state.y];
   renderScatter(); renderTiles(); renderFunctions(); renderTable();
+  HV.render("scatter-ins", scatterInsights()); HV.render("fn-ins", fnInsights());
 }
 function setYear(i) { state.y = i; render(); }
 function setCountry(g) { state.country = g; $("country").value = g; render(); }
