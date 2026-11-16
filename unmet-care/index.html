@@ -1,0 +1,1275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who can't get the care they need, and why? · healthviz</title>
+<meta name="description" content="People who went without a medical or dental examination they needed, in every EU country: by reason (cost, waiting list, distance) and by income, an interactive ranking with Eurostat data.">
+<link rel="canonical" href="https://healthviz.eu/unmet-care/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="healthviz">
+<link rel="alternate" type="application/rss+xml" title="healthviz: new assessments" href="https://healthviz.eu/feed.xml">
+<meta name="theme-color" content="#fbeee8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#030605" media="(prefers-color-scheme: dark)">
+<script>try{var t=localStorage.getItem('hv-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="healthviz">
+<meta property="og:title" content="Who can&#x27;t get the care they need, and why? · healthviz">
+<meta property="og:description" content="People who went without a medical or dental examination they needed, in every EU country: by reason (cost, waiting list, distance) and by income, an interactive ranking with Eurostat data.">
+<meta property="og:url" content="https://healthviz.eu/unmet-care/">
+<meta property="og:image" content="https://healthviz.eu/unmet-care/og.png?v=99d321e7c1">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Who can&#x27;t get the care they need, and why? A healthviz chart of the data on a bedside monitor.">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Dataset", "name": "Who can't get the care they need, and why?", "description": "People who went without a medical or dental examination they needed, in every EU country: by reason (cost, waiting list, distance) and by income, an interactive ranking with Eurostat data.", "url": "https://healthviz.eu/unmet-care/", "keywords": ["unmet health care needs", "access to health care", "waiting lists", "cost of care", "dental care", "income inequality", "Europe", "EU", "EU-SILC", "Eurostat"], "variableMeasured": ["Self-reported unmet needs for medical examination by main reason and income quintile", "Self-reported unmet needs for dental examination by main reason and income quintile"], "temporalCoverage": "2025", "spatialCoverage": {"@type": "Place", "name": "Europe: EU-27 and other European countries"}, "license": "https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree": true, "datePublished": "2026-11-16", "dateModified": "2026-10-20", "isBasedOn": ["https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_08/default/table", "https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_09/default/table"], "creditText": "Eurostat (hlth_silc_08, hlth_silc_09)", "distribution": {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://healthviz.eu/unmet-care/data.csv"}, "sourceOrganization": {"@type": "Organization", "name": "Eurostat", "url": "https://ec.europa.eu/eurostat"}, "@id": "https://healthviz.eu/unmet-care/#dataset"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "healthviz", "item": "https://healthviz.eu/"}, {"@type": "ListItem", "position": 2, "name": "Who can't get the care they need, and why?", "item": "https://healthviz.eu/unmet-care/"}]}]}</script>
+<style>
+/* Shared by every healthviz page. Pasted inline at build time.
+   Design: "the patient chart", tilted towards the EU's blue and gold. In light mode every
+   page is a printout on ECG paper (red millimetre grid, tractor-feed paper) written on in
+   blue ballpoint with a gold highlighter; in dark mode it is a bedside monitor (blue
+   phosphor on navy black, gold accents, scanlines). --ink is the room's accent (blue / gold);
+   --mark marks the selection inside charts (red in both, apart from the blue data). Data colours (--series-*, --seq-*)
+   are the validated palette and stay the same in both: only the room around them changes. */
+:root {
+  /* The lightbulb that marks opening sentences and insights (an SVG mask in the ink colour) */
+  --bulb: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-3 -3 30 30' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4a6 6 0 0 0-3.5 10.9c.7.5 1.1 1.3 1.1 2.1v.5h4.8V17c0-.8.4-1.6 1.1-2.1A6 6 0 0 0 12 4z'/%3E%3Cpath d='M10 20.2h4M10.8 22.6h2.4M10.6 12.8l1.4-2 1.4 2'/%3E%3Cpath d='M12 .2v1.3M3.4 3.6l1 1M20.6 3.6l-1 1M.6 10.4h1.4M22 10.4h1.4'/%3E%3C/svg%3E");
+  color-scheme: light;
+  --page: #f9f0e9;
+  --surface: #fffdf7;
+  --text: #141a3a;
+  --text-2: #434865;
+  --muted: #68647e;
+  --grid: #f1d3cc;
+  --axis: #d6a79e;
+  --border: rgba(20, 26, 58, 0.16);
+  --land: #efe7e0;
+  --out: #ddd4cb;
+  --hatch: #c4b8ae;
+  --series-1: #2d58d0;
+  --series-2: #eb6834;
+  --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4;
+  --wash: rgba(29, 63, 154, 0.07);
+  --seq-1: #8aa5ee; --seq-2: #6688e6; --seq-3: #4a6dda;
+  --seq-4: #3456c4; --seq-5: #22409e; --seq-6: #142b70;
+  /* The room: ink, paper, grid */
+  --ink: #1d3f9a;
+  --ink-soft: rgba(29, 63, 154, 0.14);
+  --on-ink: #fff;
+  --hl: rgba(255, 204, 0, 0.5);
+  --mark: #d0283a; --mark-soft: rgba(208, 40, 58, 0.12); --alert: #d0283a; --on-mark: #fff;
+  --flip: #ffcc00; /* accent on an inverted (text-coloured) background */
+  --ecg-minor: rgba(222, 72, 72, 0.10);
+  --ecg-major: rgba(222, 72, 72, 0.22);
+  --hole: #f3ddd5;
+  --bar-paper: rgba(29, 63, 154, 0.06);
+  --glow: none;
+  --paper-shadow: 0 1px 0 rgba(27, 22, 38, .06), 0 14px 30px -18px rgba(90, 20, 30, .35);
+  /* The monitor strip (key figures) is a screen in both modes */
+  --screen: #020a12; --bezel: #16213f;
+  --ch-1: #6f9dff; --ch-2: #ffd23d; --ch-3: #3fd6ff; --ch-4: #ff6b86;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --serif: ui-serif, "New York", "Iowan Old Style", Charter, Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hand: var(--serif); /* notes in the margin: always set in italic */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #02040b; --surface: #060d18; --text: #e2e9ff; --text-2: #a9bbef;
+    --muted: #7b8ab3; --grid: #0f1a30; --axis: #1e2d52; --border: rgba(111, 157, 255, 0.2);
+    --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+    --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(111, 157, 255, 0.08);
+    --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+    --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+    --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+    --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+    --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
+    --ecg-minor: rgba(111, 157, 255, 0.04); --ecg-major: rgba(111, 157, 255, 0.09);
+    --hole: #000; --bar-paper: rgba(111, 157, 255, 0.06);
+    --glow: 0 0 10px rgba(111, 157, 255, 0.45);
+    --paper-shadow: 0 0 0 1px rgba(111, 157, 255, .14), 0 0 28px -8px rgba(111, 157, 255, .2);
+    --screen: #01040c; --bezel: #101a36;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #02040b; --surface: #060d18; --text: #e2e9ff; --text-2: #a9bbef;
+  --muted: #7b8ab3; --grid: #0f1a30; --axis: #1e2d52; --border: rgba(111, 157, 255, 0.2);
+  --land: #0d1820; --out: #13212c; --hatch: #2a424c;
+  --series-1: #4a78ec; --series-2: #d95926; --wash: rgba(111, 157, 255, 0.08);
+  --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+  --seq-1: #25439f; --seq-2: #3459c8; --seq-3: #4f75e2;
+  --seq-4: #7d9df0; --seq-5: #abc0f7; --seq-6: #d9e3fd;
+  --ink: #ffcc33; --ink-soft: rgba(255, 204, 51, 0.18); --on-ink: #0a1024; --hl: rgba(255, 204, 51, 0.24);
+  --mark: #ff4d61; --mark-soft: rgba(255, 77, 97, 0.16); --alert: #ff4d61; --on-mark: #0a1024; --flip: #1d3f9a;
+  --ecg-minor: rgba(111, 157, 255, 0.04); --ecg-major: rgba(111, 157, 255, 0.09);
+  --hole: #000; --bar-paper: rgba(111, 157, 255, 0.06);
+  --glow: 0 0 10px rgba(111, 157, 255, 0.45);
+  --paper-shadow: 0 0 0 1px rgba(111, 157, 255, .14), 0 0 28px -8px rgba(111, 157, 255, .2);
+  --screen: #01040c; --bezel: #101a36;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--text); background-color: var(--page);
+  /* ECG paper: 1 mm minor lines, 5 mm major lines */
+  background-image:
+    linear-gradient(var(--ecg-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ecg-major) 1px, transparent 1px),
+    linear-gradient(var(--ecg-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ecg-minor) 1px, transparent 1px);
+  background-size: 30px 30px, 30px 30px, 6px 6px, 6px 6px;
+  font: 15px/1.5 var(--sans);
+  overflow-x: clip;
+}
+::selection { background: var(--hl); color: var(--text); }
+main { max-width: 1440px; margin: 0 auto; padding: 8px 24px 48px; position: relative; }
+h1 {
+  font-family: var(--mono); font-weight: 800; text-transform: uppercase;
+  font-size: clamp(30px, 5.4vw, 70px); line-height: .98; letter-spacing: -0.055em;
+  margin: 14px 0 22px; text-shadow: var(--glow); max-width: 17ch; text-wrap: balance;
+}
+/* An entry's introduction under its title: what it explores, in a sentence or three */
+/* On a slip of paper over the grid, so the ECG lines don't run through the text */
+.chart-head .intro { margin: -6px 0 8px; max-width: 64ch; padding: 10px 16px 11px; font: 18.5px/1.55 var(--serif); color: var(--text);
+  background: var(--surface); border-left: 3px solid var(--ink); border-radius: 2px; box-shadow: var(--paper-shadow); text-wrap: pretty; }
+.chart-head .intro::before { /* a small label, like a heading on a chart's notes */
+  content: "What's it about"; display: block; margin-bottom: 4px; font: 800 10.5px/1.3 var(--mono);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
+@media (max-width: 600px) { .chart-head .intro { font-size: 17px; } }
+h1 .qm {
+  color: var(--ink); display: inline-block; font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: 1.5em; line-height: 0; transform: rotate(10deg) translateY(.06em); margin-left: .04em; letter-spacing: 0;
+}
+h2 { font-size: 16px; margin: 0; }
+.eyebrow {
+  margin: 0; display: inline-flex; gap: 0; font: 600 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em;
+  border: 1.5px solid var(--text); background: var(--surface);
+}
+.eyebrow a { background: var(--text); color: var(--page); padding: 6px 9px; text-decoration: none; margin-right: 9px; }
+@media (hover: hover) { .eyebrow a:hover { background: var(--ink); color: var(--on-ink); } }
+.eyebrow { padding-right: 10px; align-items: center; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.num { font-variant-numeric: tabular-nums; }
+a { color: inherit; text-decoration-color: var(--ink); text-underline-offset: 3px; }
+
+/* Site header: brand, nav, theme switch */
+.site-header {
+  max-width: 1440px; margin: 0 auto; padding: 18px 24px 0; position: relative;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.brand {
+  font: 800 19px/1 var(--mono); letter-spacing: -0.04em; text-decoration: none; text-transform: lowercase;
+  display: inline-flex; align-items: center; gap: 10px; text-shadow: var(--glow);
+}
+.brand::before {
+  content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--alert);
+  box-shadow: 0 0 0 3px var(--mark-soft); animation: hv-beat 1.1s infinite;
+}
+@keyframes hv-beat { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.45); } 24% { transform: scale(.95); } 36% { transform: scale(1.2); } }
+.site-header nav { display: flex; gap: 6px; font: 600 13px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; align-items: center; }
+.site-header nav a { color: var(--text); text-decoration: none; padding: 7px 9px; border: 1.5px solid transparent; }
+.site-header nav a::before { content: "["; color: var(--ink); }
+.site-header nav a::after { content: "]"; color: var(--ink); }
+@media (hover: hover) { .site-header nav a:hover { border-color: var(--text); background: var(--surface); } }
+.theme-switch {
+  font: 600 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
+  color: var(--text); background: var(--surface); border: 1.5px solid var(--text); padding: 6px 8px; margin-left: 6px;
+  box-shadow: 2px 2px 0 var(--text);
+}
+.theme-switch:active { transform: translate(2px, 2px); box-shadow: none; }
+.theme-switch .t-dark { display: none; }
+:root[data-theme="dark"] .theme-switch .t-dark { display: inline; }
+:root[data-theme="dark"] .theme-switch .t-light { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-switch .t-dark { display: inline; }
+  :root:not([data-theme="light"]) .theme-switch .t-light { display: none; }
+}
+/* Heart traces (the control monitor's): drawn by site.TRACE_JS, a 2px line with a red dot at its tip */
+.beat-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.beat-dot { fill: var(--alert); filter: drop-shadow(0 0 4px var(--alert)); }
+/* Reading progress: an IV line down the right edge, filling as you scroll */
+.drip { position: fixed; top: 0; right: 0; width: 5px; height: 100vh; z-index: 30; pointer-events: none;
+  background: var(--ink); transform-origin: top; transform: scaleY(0); animation: hv-drip linear both; animation-timeline: scroll(root); }
+@keyframes hv-drip { to { transform: scaleY(1); } }
+
+.site-footer {
+  max-width: 1440px; margin: 40px auto 0; padding: 26px 24px 56px; font: 13px/1.7 var(--mono); color: var(--text-2);
+  text-transform: uppercase; letter-spacing: .06em; position: relative;
+}
+.site-footer::before {
+  content: "— — — end of report — — —"; display: block; text-align: center; letter-spacing: .3em; color: var(--ink); margin-bottom: 22px;
+}
+.site-footer p { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; }
+.site-footer .sig { font: italic 26px/1 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink); transform: rotate(-4deg);
+  display: inline-block; border-bottom: 1px solid var(--text-2); padding: 0 18px 4px 4px; margin-right: 10px; }
+
+/* Data snapshot: an admission-style sheet beside an entry's title (below it on narrow screens),
+   like the home page's admission sheet: a title bar, ruled rows, one big figure, a handwritten note. */
+.snapshot {
+  margin: 0; font: 13px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .05em; background: var(--surface);
+  border: 1.5px solid var(--text); box-shadow: 6px 6px 0 var(--text); transform: rotate(1.6deg);
+}
+.snapshot-k {
+  margin: 0; padding: 8px 12px; background: var(--text); color: var(--page); font-weight: 800; letter-spacing: .2em; text-align: center;
+}
+.snapshot dl { margin: 0; }
+.snapshot dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 14px; border-bottom: 1px dashed var(--border); }
+.snapshot dt { color: var(--text-2); flex: none; }
+.snapshot dd { margin: 0; font-weight: 800; text-align: right; }
+.snapshot dl div:first-child { align-items: center; }
+.snapshot dl div:first-child dt { flex: 0 1 auto; } /* the label may wrap; the big date never does */
+.snapshot dl div:first-child dd { flex: none; white-space: nowrap; }
+.snapshot dl div:first-child dd { font-size: 22px; line-height: 1.05; color: var(--ink); text-shadow: var(--glow); letter-spacing: -0.01em; }
+.snapshot-note {
+  margin: 0; padding: 12px 18px 14px; font: italic 18px/1.25 var(--hand); text-transform: none; letter-spacing: 0; color: var(--ink);
+  text-align: center; transform: rotate(-1.5deg);
+}
+.snapshot-note a { display: table; margin: 0 auto; font-size: 14.5px; white-space: nowrap; } /* centred */
+.sources { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: rx; }
+.sources li { margin-bottom: 8px; padding-left: 46px; position: relative; counter-increment: rx; }
+.sources li:target { background: var(--hl); } /* reached from a chart's source credit */
+.sources li::before {
+  content: "Rx" counter(rx); position: absolute; left: 0; top: 1px; font: 700 13px/1 var(--mono); color: var(--ink);
+  border: 1.5px solid var(--ink); padding: 3px 4px; border-radius: 3px;
+}
+.sources code { font: 14px var(--mono); background: var(--wash); padding: 1px 4px; }
+
+/* Decorations every entry header may use */
+.chart-head {
+  position: relative; padding: 26px 0 8px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 320px; column-gap: 48px; align-items: start;
+}
+.chart-head > * { grid-column: 1; justify-self: start; }
+.chart-head > .snapshot { grid-column: 2; grid-row: 1 / span 5; justify-self: stretch; align-self: end; }
+
+@media (max-width: 960px) {
+  .chart-head { grid-template-columns: minmax(0, 1fr); }
+  .chart-head > .snapshot { grid-column: 1; grid-row: auto; justify-self: start; width: min(100%, 420px); margin: 28px 0 0 4px; transform: rotate(1deg); }
+}
+@media (max-width: 600px) {
+  .site-header, .site-footer { padding-left: 16px; padding-right: 16px; }
+  /* Header on one row: the theme switch shows its icon only (it keeps its label for screen readers),
+     the links drop their decorative brackets */
+  .site-header { gap: 8px; }
+  .site-header nav { gap: 0; letter-spacing: .06em; }
+  .site-header nav a { padding: 0 8px; }
+  .site-header nav a::before, .site-header nav a::after { content: none; }
+  .theme-switch .tw { display: none; }
+  .theme-switch { font-size: 17px; min-width: 40px; justify-content: center; margin-left: 4px; }
+  /* The tilted snapshot sheet and its shadow stay inside the screen */
+  .chart-head > .snapshot { width: calc(100% - 14px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand::before { animation: none; }
+}
+/* Touch screens: every control is at least 44px tall (Apple's 44pt, close to Material's 48dp; WCAG 2.2
+   asks for 24px). Links inside running text keep their size. */
+@media (pointer: coarse) {
+  .brand { padding: 8px 0; }
+  .site-header nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; }
+  .theme-switch { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; }
+  .eyebrow a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; }
+  .snapshot-note a { padding: 10px 6px; margin-top: 4px; }
+  .site-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+  a, button, summary, select, input { -webkit-tap-highlight-color: transparent; }
+}
+/* Monitor mode: scanlines over everything */
+:root[data-theme="dark"] body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
+  }
+}
+
+/* Components shared by entry pages: filters, tiles, cards, chart axes, table, tooltip, notes.
+   Pasted inline at build time, after shell.css. Filters are a control panel of physical keys,
+   key figures a bedside monitor, cards tractor-feed printouts, the table bluebar paper,
+   the tooltip embossed label tape, and the notes a lined case-notes sheet. */
+
+/* Filters: the bedside monitor, a dark screen in its bezel in both modes, above everything they scope.
+   Every control has the same height (--ctl-h) and type; on phones the toggles share one row that scrolls
+   sideways, the year slider gets its own row, and the text labels are kept for screen readers only. */
+.filters {
+  --ctl-h: 30px;
+  --scr-text: #d3ddff; --scr-dim: #8fa3d6; --scr-line: rgba(111, 157, 255, .45); --scr-key: #6f9dff; --scr-gold: #ffd23d;
+  position: sticky; top: 0; z-index: 5; color-scheme: dark; color: var(--scr-text);
+  display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center;
+  /* Full width of the page: the controls line up with the content column (main: max 1440px, 24px padding) */
+  margin: 26px calc(50% - 50vw) 22px; padding: 10px max(24px, calc(50vw - 696px));
+  background: var(--screen); border: 8px solid var(--bezel); border-width: 8px 0; border-radius: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), 0 14px 26px -18px rgba(0, 0, 0, .7);
+}
+.filters::after { /* screen glare and scanlines */
+  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 6px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .06), transparent 40%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
+}
+.filters::before {
+  content: "CONTROLS"; font: 800 10px/1 var(--mono); letter-spacing: .22em; color: var(--screen); background: var(--scr-key);
+  padding: 4px 5px; writing-mode: vertical-rl; transform: rotate(180deg); align-self: stretch; text-align: center; margin: -2px 0;
+}
+.filter-row { display: contents; } /* one wrapping line with the year on desktop; its own row on phones */
+.filter { display: flex; align-items: center; gap: 7px; }
+.filter > .label { font: 700 11.5px/1 var(--mono); color: var(--scr-dim); text-transform: uppercase; letter-spacing: .1em; white-space: nowrap; }
+.seg { display: inline-flex; gap: 4px; padding: 0; }
+.seg button {
+  height: var(--ctl-h, 30px); display: inline-flex; align-items: center; white-space: nowrap;
+  border: 1.5px solid var(--scr-line); background: transparent; color: var(--scr-text); font: 600 12.5px/1 var(--mono);
+  text-transform: uppercase; letter-spacing: .03em; padding: 0 9px; border-radius: 4px; cursor: pointer;
+  transition: background .1s, box-shadow .1s;
+}
+@media (hover: hover) { .seg button:hover { background: rgba(111, 157, 255, .14); } }
+.seg button[aria-pressed="true"] {
+  background: var(--scr-key); color: var(--screen); border-color: var(--scr-key); box-shadow: 0 0 12px rgba(111, 157, 255, .55);
+}
+select {
+  height: var(--ctl-h, 30px); max-width: 220px; text-overflow: ellipsis;
+  font: 700 12.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .03em; color: var(--scr-text); background: rgba(111, 157, 255, .1);
+  border: 1.5px solid var(--scr-line); border-radius: 4px; padding: 0 8px; cursor: pointer;
+}
+.year { flex: 1 1 240px; min-width: 200px; }
+.year input { flex: 1; accent-color: var(--scr-key); min-width: 100px; margin: 0; }
+.year output {
+  font: 800 16px/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 2.8em; color: var(--scr-gold); text-shadow: 0 0 10px rgba(255, 210, 61, .45);
+}
+.icon-btn {
+  width: var(--ctl-h, 30px); height: var(--ctl-h, 30px); flex: none; display: grid; place-items: center; cursor: pointer;
+  border: 1.5px solid var(--scr-key); border-radius: 50%; background: var(--scr-key); color: var(--screen); box-shadow: 0 0 10px rgba(111, 157, 255, .45);
+}
+@media (hover: hover) { .icon-btn:hover { filter: brightness(1.1); } }
+.icon-btn:active { transform: translateY(1px); }
+.icon-btn svg { width: 11px; height: 11px; fill: currentColor; }
+button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.filters :focus-visible { outline-color: var(--scr-gold); }
+/* Decoration, not a control: a dim heart trace sweeping in the room right of the controls (as in the
+   header, with its red dot), behind a thin divider; no frame, no label, no pointer, hidden from screen
+   readers. Still for reduced motion. */
+.monitor-deco { flex: 1 1 160px; min-width: 120px; align-self: stretch; min-height: 30px; position: relative; overflow: hidden;
+  border-left: 1px solid rgba(111, 157, 255, .22); margin-left: 4px; opacity: .45; pointer-events: none; }
+.monitor-deco[hidden] { display: none; } /* no room left in the controls' row: see site.TRACE_JS */
+.monitor-deco svg { position: absolute; left: 6px; top: 2px; width: calc(100% - 6px); height: calc(100% - 4px); overflow: visible; }
+.mon-trace .beat-line { stroke: var(--scr-key); filter: drop-shadow(0 0 3px rgba(111, 157, 255, .6)); }
+.monitor-deco .beat-dot { fill: #ff4d61; filter: drop-shadow(0 0 5px #ff4d61); }
+
+/* Key figures: a patient wristband. One band with rounded ends, a snap button at the left and a barcode
+   at the right, the four readings side by side with dotted lines between them. */
+.tiles {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-bottom: 30px;
+  border-radius: 999px; padding: 4px 76px 4px 52px; background: var(--surface);
+  border: 1.5px solid var(--border); box-shadow: var(--paper-shadow); position: relative;
+}
+.tiles::before { /* the snap */
+  content: ""; position: absolute; left: 16px; top: 50%; width: 20px; height: 20px; margin-top: -10px;
+  border-radius: 50%; background: var(--ink); box-shadow: inset 0 0 0 5px var(--surface), 0 0 0 1.5px var(--ink);
+}
+.tiles::after { /* the barcode */
+  content: ""; position: absolute; right: 26px; top: 24%; bottom: 24%; width: 34px; opacity: .75;
+  background: repeating-linear-gradient(90deg, var(--text) 0 2px, transparent 2px 3px, var(--text) 3px 4px, transparent 4px 7px,
+    var(--text) 7px 10px, transparent 10px 12px);
+}
+.tile { background: transparent; padding: 14px 18px 12px; min-width: 0; color: var(--ink); position: relative; }
+.tile + .tile { border-left: 1.5px dotted var(--border); }
+/* Two readings per row on narrower screens: a band with softer ends, no barcode, dotted lines between the rows */
+@media (max-width: 960px) {
+  .tiles { border-radius: 30px; padding: 4px 16px 4px 46px; }
+  .tiles::after { display: none; }
+  .tile:nth-child(3) { border-left: 0; }
+  .tile:nth-child(n+3) { border-top: 1.5px dotted var(--border); }
+}
+.tile .k { font: 700 12px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .12em; margin: 0 0 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile .v { font: 700 34px/1.15 var(--mono); letter-spacing: -0.04em; margin: 0; color: var(--text); font-variant-numeric: tabular-nums; }
+.tile .v small { font-size: 14px; font-weight: 500; opacity: .85; margin-left: 4px; letter-spacing: 0; }
+.tile .s { font: 13px/1.5 var(--mono); color: var(--text-2); margin: 4px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Tiles are filled by the script: each line keeps its height from the start (no layout shift). */
+.tile .k, .tile .s { min-height: 1.5em; }
+.tile .v { min-height: 1.2em; }
+
+/* Insights under each chart, as lightbulb bullets. Whose number a sentence is about is highlighted in it:
+   the EU-27 (or Europe) on a blue tint, the selected country on the selection red's tint. The EU-27's bullets
+   come first, then the selected country's; two of each show, "Show more insights" opens the rest in place. */
+.insights { margin: 16px 0 0; padding-top: 14px; border-top: 1.5px dashed var(--border); }
+.ins-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.ins-list + .ins-list { margin-top: 14px; } /* the EU-27's bullets, then the selected country's */
+.ins-list li { position: relative; padding-left: 1.6em; font: 16.5px/1.55 var(--serif); color: var(--text); } /* the full width of the chart */
+.ins-list li::before {
+  content: ""; position: absolute; left: 0; top: .22em; width: 1.1em; height: 1.1em; background: var(--ink); transform: rotate(-14deg);
+  -webkit-mask: var(--bulb) center / contain no-repeat; mask: var(--bulb) center / contain no-repeat;
+}
+.ins-list li.extra { display: none; }
+.insights.open .ins-list li.extra { display: block; }
+.ins-list mark.hl { color: var(--text); font-weight: 700; padding: 0 .22em; border-radius: 3px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.ins-list mark.eu { background: color-mix(in srgb, var(--series-1) 24%, transparent); }
+.ins-list mark.sel { background: color-mix(in srgb, var(--mark) 22%, transparent); }
+.ins-more { margin: 10px 0 0 1.6em; padding: 0; border: 0; background: none; cursor: pointer; color: var(--ink);
+  font: italic 15.5px var(--serif); text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
+.ins-more .c, .insights.open .ins-more .o { display: none; }
+.insights.open .ins-more .c { display: inline; }
+@media (pointer: coarse) { .ins-more { min-height: 44px; } }
+
+/* Hints inside a chart card (a term explained, e.g. "Pension or retirement?"): the full width of the chart,
+   on a wash with an ink bar at the left */
+.term-note { margin: 4px 0 14px; padding: 8px 12px; max-width: none; font: 14px/1.4 var(--serif); color: var(--text-2);
+  background: var(--wash); border-left: 4px solid var(--ink); }
+.term-note strong { font: 700 13px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink); }
+
+/* A chart's source credit, in its bottom-right corner: the sources it uses, numbered as in the sources
+   list at the bottom of the page (Rx1, Rx2, …), each a link to its item there */
+.chart-source { margin: 8px 0 0; text-align: right; font: 12px/1.6 var(--mono); color: var(--text-2); }
+.chart-source a { color: inherit; text-decoration: none; white-space: nowrap; }
+@media (hover: hover) { .chart-source a:hover { color: var(--ink); text-decoration: underline; } }
+.chart-source .rx { font-weight: 700; color: var(--ink); border: 1px solid var(--ink); border-radius: 3px; padding: 0 3px; }
+@media (pointer: coarse) { .chart-source a { display: inline-block; padding: 10px 0; } }
+
+/* Cards: continuous tractor-feed printouts, sprocket holes down both edges */
+.card {
+  background: var(--surface); padding: 22px 46px 22px; position: relative;
+  box-shadow: var(--paper-shadow);
+}
+.card::before, .card::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 30px; pointer-events: none;
+  background: radial-gradient(circle at 15px 15px, var(--hole) 0 5px, transparent 5.5px) 0 0 / 30px 30px repeat-y;
+}
+.card::before { left: 0; border-right: 1.5px dashed var(--border); }
+.card::after { right: 0; border-left: 1.5px dashed var(--border); }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin-bottom: 14px; }
+.card-head h2, .card > h2 { font: 700 22px/1.2 var(--serif); letter-spacing: -0.01em; }
+.card-head > div:first-child { flex: 1 1 auto; min-width: 0; } /* titles use the width up to the tools: no early line breaks */
+.card-head h2::before { content: "§ "; color: var(--ink); font-style: italic; }
+.card-head p { margin: 6px 0 0; max-width: 92ch; }
+.card-head .small.muted { color: var(--text-2); font-size: 14.5px; }
+/* Chart info: an (i) at the right of the chart's title opens its description in a popup */
+.card-head:has(> .card-tools) { flex-wrap: nowrap; }
+.card-tools { display: flex; gap: 8px; flex: none; align-self: flex-start; }
+.info { position: relative; }
+.info summary {
+  list-style: none; cursor: pointer; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--ink); box-shadow: 0 2px 0 var(--text);
+  font: italic 700 17px/1 var(--serif);
+}
+.info summary::-webkit-details-marker { display: none; }
+.info[open] summary { background: var(--ink); color: var(--on-ink); transform: translateY(2px); box-shadow: none; }
+.card-head .info-pop {
+  position: absolute; right: 0; top: calc(100% + 10px); z-index: 6; width: min(400px, calc(100vw - 48px)); margin: 0;
+  padding: 12px 14px; background: var(--surface); border: 1.5px solid var(--text); box-shadow: 5px 5px 0 var(--text);
+  font: 14.5px/1.5 var(--sans); color: var(--text-2);
+}
+.grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr); gap: 22px; margin-bottom: 22px; }
+
+/* Legend keys */
+.key { display: inline-flex; align-items: center; gap: 6px; font: 12.5px var(--mono); color: var(--text-2); text-transform: uppercase; letter-spacing: .03em; }
+.key i { width: 14px; height: 10px; border-radius: 2px; display: inline-block; }
+.keys { font-family: var(--mono) !important; text-transform: uppercase; letter-spacing: .03em; font-size: 12.5px !important; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.find input {
+  width: 100%; font: 600 14px var(--mono); text-transform: uppercase; color: var(--text); background: var(--page);
+  border: 1.5px solid var(--text); border-radius: 0; padding: 8px 10px; box-shadow: inset 3px 3px 0 var(--wash);
+}
+.find input:focus-visible { outline: 3px solid var(--ink); outline-offset: 1px; }
+
+/* Small charts */
+.chart-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font: 12.5px var(--mono); color: var(--text-2); text-transform: uppercase; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 14px; height: 2px; border-radius: 1px; display: inline-block; }
+svg text { font-family: var(--sans); }
+.tick { font: 11.5px var(--mono); fill: var(--muted); font-variant-numeric: tabular-nums; }
+.gridline { stroke: var(--grid); stroke-width: 1; stroke-dasharray: 2 3; }
+.baseline { stroke: var(--axis); stroke-width: 1; }
+.endlabel { font-size: 12.5px; fill: var(--text-2); }
+.endlabel tspan.v { fill: var(--text); font-weight: 600; }
+.col-head, .axis-title { font-family: var(--mono) !important; text-transform: uppercase; letter-spacing: .06em; }
+svg[role="img"] { cursor: crosshair; }
+
+/* Table view: bluebar printout (blue instead of green: the room stays EU blue) */
+details.card summary {
+  cursor: pointer; font: 800 14px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em; list-style: none;
+  display: flex; align-items: center; gap: 12px;
+}
+details.card summary::-webkit-details-marker { display: none; }
+details.card summary::before {
+  content: "+"; display: grid; place-items: center; width: 24px; height: 24px; border: 1.5px solid var(--text);
+  font-size: 16px; background: var(--page); transition: transform .15s;
+}
+details.card[open] summary::before { content: "−"; background: var(--ink); color: var(--on-ink); }
+details.card summary::after { content: "· print to screen"; color: var(--muted); font-weight: 500; letter-spacing: .06em; }
+.table-wrap { overflow-x: auto; margin-top: 16px; max-height: 560px; overflow-y: auto; border-top: 2px solid var(--text); }
+table { border-collapse: collapse; width: 100%; font: 13.5px var(--mono); }
+th, td { text-align: left; padding: 6px 10px; white-space: nowrap; }
+tbody tr:nth-child(4n+1) td, tbody tr:nth-child(4n+2) td { background: rgba(29, 63, 154, .07); }
+th { position: sticky; top: 0; background: var(--surface); color: var(--text); font-weight: 800; text-transform: uppercase;
+  letter-spacing: .06em; font-size: 12px; border-bottom: 1.5px solid var(--text); }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+tr.hl td { background: var(--mark) !important; color: var(--on-mark); }
+/* The table view's key: what the red rows mean */
+.table-key { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 0 0 10px; font: 13px/1.5 var(--mono); color: var(--text-2); }
+.table-key span { display: inline-flex; align-items: center; gap: 7px; }
+.table-key i { width: 22px; height: 12px; flex: none; border-radius: 2px; }
+.table-key .tk-sel { background: var(--mark); }
+tr.hl td button { color: var(--on-mark); }
+td button { font: inherit; font-weight: 700; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
+  text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
+@media (hover: hover) { td button:hover { color: var(--ink); } }
+
+/* Tooltip: embossed label tape */
+.tip {
+  position: fixed; z-index: 20; pointer-events: none; opacity: 0; transition: opacity .1s;
+  background: #1d3f9a; color: #f4f6ff; border-radius: 3px; transform: rotate(-1.2deg);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 -1px 0 rgba(0, 0, 0, .6) inset, 4px 6px 0 rgba(0, 0, 0, .18);
+  padding: 9px 12px 9px 16px; font: 600 12.5px/1.55 var(--mono); text-transform: uppercase; letter-spacing: .04em; max-width: 280px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .8), 0 -1px 0 rgba(255, 255, 255, .25);
+  background-image: radial-gradient(circle at 6px 50%, #14306f 0 2px, transparent 2.5px);
+}
+:root[data-theme="dark"] .tip { background-color: #0c1a3d; color: #d3ddff; box-shadow: 0 0 0 1px #6f9dff, 0 0 18px rgba(111, 157, 255, .3); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tip { background-color: #0c1a3d; color: #d3ddff; box-shadow: 0 0 0 1px #6f9dff, 0 0 18px rgba(111, 157, 255, .3); } }
+.tip.on { opacity: 1; }
+.tip .tv { font-size: 15px; font-weight: 800; display: block; letter-spacing: 0; }
+.tip .tn { display: block; color: #ffd84d; }
+/* Every fact in a tooltip is its own bullet point */
+.tip .tm { display: block; opacity: .82; text-transform: none; font-weight: 500; position: relative; padding-left: 1em; }
+.tip .tm::before { content: "•"; position: absolute; left: 0; }
+.tip .row { display: flex; align-items: center; gap: 8px; }
+.tip .row i { width: 12px; height: 3px; border-radius: 1px; flex: none; }
+.tip .row b { font-variant-numeric: tabular-nums; min-width: 2.6em; }
+
+/* Notes: a lined case-notes sheet with a margin rule */
+.notes {
+  margin: 40px auto 0; color: var(--text-2); max-width: 96ch; position: relative;
+  background: var(--surface); box-shadow: var(--paper-shadow); padding: 34px 34px 26px 92px;
+  font: 16px/28px var(--serif);
+  background-image: linear-gradient(90deg, transparent 70px, var(--mark-soft) 70px, var(--mark-soft) 72px, transparent 72px),
+    repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px);
+  background-position: 0 0, 0 33px;
+  transform: rotate(-.35deg);
+}
+.notes::before {
+  content: "case notes"; position: absolute; left: 14px; top: 32px; font: italic 22px/1 var(--hand); color: var(--ink);
+  writing-mode: vertical-rl; transform: rotate(180deg);
+}
+.notes h2 { font: 800 14px/28px var(--mono); text-transform: uppercase; letter-spacing: .2em; color: var(--ink); margin: 0; }
+.notes p { margin: 0 0 28px; }
+.notes .sources { font-size: 15px; line-height: 1.6; margin-bottom: 28px; }
+
+@media (max-width: 960px) {
+  .grid { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  main { padding: 20px 16px 40px; }
+  .filters { --ctl-h: 28px; flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 6px; margin: 18px -16px 16px; padding: 8px 0; border-width: 6px 0; }
+  .monitor-deco { display: none; }
+  .filters::before { display: none; }
+  .filter-row {
+    display: flex; gap: 8px; overflow-x: auto; padding: 0 10px 2px; scrollbar-width: none; overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
+            mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .filter { flex: none; }
+  .filter > .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .year { flex: none; min-width: 0; padding: 0 10px; }
+  .seg button { padding: 0 8px; font-size: 12px; }
+  select { max-width: 150px; font-size: 12px; }
+  /* Filters scroll away with the page on phones: pinned, two rows of 44px keys took a sixth of the
+     screen. Charts have their own full-screen view for a closer look. */
+  .filters { position: relative; }
+  /* The (i) and full-screen buttons sit in their own row above the title, which keeps the full width */
+  .card-head:has(> .card-tools) { flex-wrap: wrap; }
+  .card-tools { order: -1; margin-left: auto; }
+  /* Key figures: labels and sublines wrap instead of being cut off (up to 2 and 3 lines, reserved
+     before the script fills them, so nothing shifts) */
+  .tile { padding: 12px 12px 10px; }
+  .tile .k, .tile .s { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+  .tile .k { min-height: 3em; }
+  .tile .s { min-height: 4.5em; font-size: 12px; }
+  .tile .v { font-size: 24px; }
+  .card { padding: 18px 22px; }
+  .card::before, .card::after { width: 16px; background-size: 16px 22px;
+    background-image: radial-gradient(circle at 8px 11px, var(--hole) 0 3.5px, transparent 4px); }
+  .notes { padding: 26px 18px 18px 30px; transform: none;
+    background-image: linear-gradient(90deg, transparent 18px, var(--mark-soft) 18px, var(--mark-soft) 20px, transparent 20px),
+      repeating-linear-gradient(transparent 0 27px, rgba(60, 110, 200, .16) 27px 28px); }
+  .notes::before { display: none; }
+}
+/* Full screen: the chart's card covers the browser window (an overlay, not the browser's own full
+   screen). The button says what it does: "Full screen", then "Exit full screen". The page's filters
+   move into the card under the title (site.PAGE_JS) and --full-ctl holds their height. */
+.full-btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px 0 9px; cursor: pointer;
+  border-radius: 999px; white-space: nowrap; font: 700 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em;
+  border: 1.5px solid var(--text); background: var(--surface); color: var(--ink); box-shadow: 0 2px 0 var(--text);
+}
+.full-btn svg { width: 13px; height: 13px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.full-btn .i-close, .full-btn .l-close, .full-btn.on .i-open, .full-btn.on .l-open { display: none; }
+.full-btn.on .i-close, .full-btn.on .l-close { display: inline; }
+.full-btn.on { background: var(--ink); color: var(--on-ink); }
+.card.is-full {
+  position: fixed; inset: 0; z-index: 50; margin: 0 !important; width: auto; max-width: none; overflow: auto;
+  transform: none; border-radius: 0; background-color: var(--surface); overscroll-behavior: contain;
+  padding: max(16px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+}
+.card.is-full::before, .card.is-full::after { display: none; }
+html.has-full { overflow: hidden; }
+/* The filters in the card: the screen across the card's width, pinned to its top while it scrolls (not on phones,
+   where they would take too much of the screen, as on the page) */
+.card.is-full > .filters { margin: 0 0 12px; padding: 10px 16px; border-width: 8px; border-radius: 14px; }
+@media (min-width: 601px) { .card.is-full > .filters { position: sticky; top: 0; } }
+/* Heights use the small viewport (svh): with dvh, charts resized whenever the browser's bars slid in or
+   out, which happens constantly around a turn of the phone. The filters' height comes off too. */
+.card.is-full #scatter { height: calc(100vh - 202px - var(--full-ctl, 0px)); min-height: 320px; }
+/* The map: its frame (with the zoom button and credit) is as wide as fits the screen's height at the
+   map's proportions, and the map fills it at full width (an <svg> sized by height alone with width:
+   auto falls back to 300px). Room is left for the title, filters, legend and outermost regions; at
+   least 320px wide when a phone is held sideways (the card then scrolls). */
+.card.is-full .map-wrap { width: min(100%, max(calc((100vh - 252px - var(--full-ctl, 0px)) * var(--map-ratio)), 320px)); margin: 0 auto; }
+@supports (height: 100svh) {
+  .card.is-full #scatter { height: calc(100svh - 202px - var(--full-ctl, 0px)); }
+  .card.is-full .map-wrap { width: min(100%, max(calc((100svh - 252px - var(--full-ctl, 0px)) * var(--map-ratio)), 320px)); }
+}
+.card.is-full .tip { z-index: 60; }
+
+/* Touch screens: 44px controls (see shell.css), and 16px text in form fields so iOS Safari doesn't
+   zoom the page when one is tapped. Comes after the phone rules so it wins on small screens too. */
+@media (pointer: coarse) {
+  .filters { --ctl-h: 44px; }
+  .seg { gap: 6px; }
+  .seg button { min-width: 44px; justify-content: center; padding: 0 12px; }
+  select { font-size: 16px; }
+  .year input { height: var(--ctl-h); }
+  .icon-btn svg { width: 14px; height: 14px; }
+  .find input { font-size: 16px; min-height: 44px; }
+  details.card summary { min-height: 44px; }
+  .info summary { width: 44px; height: 44px; }
+  .full-btn { height: 44px; padding: 0 14px 0 12px; }
+  details.card summary::before { width: 32px; height: 32px; }
+  td button { padding: 12px 0; margin: -12px 0; }
+  .seg button:active, .icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 var(--text); }
+}
+@media (prefers-reduced-motion: reduce) { .seg button, details.card summary::before { transition: none; } }
+
+/* Below the fold: the browser skips rendering these until they come near the viewport. */
+.notes { content-visibility: auto; contain-intrinsic-size: auto 480px; }
+
+
+/* Key figures in two pairs: the EU-27 (left, blue) and the selected country (right, the selection red),
+   the same two measures each. A tag on every tile names whose number it is. */
+.tiles.pairs .tile.eu { --tc: var(--series-1); color: var(--tc); }
+.tiles.pairs .tile.sel { --tc: var(--mark); color: var(--tc); }
+.tiles.pairs .tile.sel:nth-child(3) { border-left: 2.5px solid var(--border); } /* between the two pairs */
+.tile .scope {
+  display: inline-block; max-width: 100%; margin: 0 0 8px; padding: 3px 7px; border-radius: 3px;
+  background: var(--tc); color: var(--surface); font: 800 10.5px/1.2 var(--mono); letter-spacing: .12em;
+  text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+@media (max-width: 960px) { .tiles.pairs .tile.sel:nth-child(3) { border-left: 0; } }
+
+/* People tables: each dot one person in 100, by reason and by income fifth */
+#rank, #gap { display: block; width: 100%; }
+.c-wait { fill: var(--series-1); }
+.c-cost { fill: var(--series-2); }
+.c-far { fill: var(--series-3); }
+/* Income chart: the richest fifth a filled amber dot (darker amber on paper, brighter on the monitor:
+   3.5:1 and 10.5:1 against the chart), the poorest fifth a hollow ring in the text colour (about 9:1 or
+   more in both modes); filled against hollow tells them apart without colour too. */
+:root { --rich: #b97c00; }
+:root[data-theme="dark"] { --rich: #f2b33d; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --rich: #f2b33d; } }
+.g-span { stroke: var(--text-2); stroke-width: 2.5; stroke-linecap: round; opacity: .55; }
+.g-rich { fill: var(--rich); stroke: var(--surface); stroke-width: 2; }
+.g-poor { fill: var(--surface); stroke: var(--text); stroke-width: 2.5; }
+.g-lab { font: 700 13px var(--sans); }
+.g-lab.rich { fill: var(--rich); }
+.g-lab.poor { fill: var(--text); }
+.g-val { font: 600 13px var(--mono); fill: var(--text-2); font-variant-numeric: tabular-nums; }
+.g-val.hl { fill: var(--mark); font-weight: 800; }
+#gap .row-label { font-size: 14.5px; }
+.c-part { fill: var(--grid); }
+.person path, .keys path { stroke: none; } /* no outlines: they blur the figures at this size */
+.eu-band { fill: var(--grid); opacity: .7; }
+.row-rule { stroke: var(--grid); stroke-dasharray: 1 3; }
+.col-head { fill: var(--mark); font-size: 12px; font-weight: 600; }
+.row-label { font-size: 13.5px; fill: var(--text-2); font-family: var(--sans); }
+.row-label.hl { fill: var(--mark); font-weight: 800; }
+.row-label.eu, .row-value.eu { fill: var(--text); font-weight: 800; }
+.row-label.nodata { fill: var(--muted); }
+.nodata-note { font-family: var(--hand); font-style: italic; font-size: 14px; fill: var(--mark); opacity: .75; }
+.row-band { fill: var(--mark); opacity: .1; }
+.row-value { font-family: var(--mono); font-size: 11px; fill: var(--text-2); font-variant-numeric: tabular-nums; }
+.row-value.total { font-size: 12.5px; font-weight: 800; fill: var(--text); }
+.row-value.hl { fill: var(--mark); }
+.row-hit { fill: transparent; cursor: pointer; }
+.keys { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 6px 0 10px; font-size: 13.5px; color: var(--text-2); }
+.keys span { display: inline-flex; align-items: center; gap: 6px; }
+.keys svg { display: block; overflow: visible; }
+#rank, #gap { margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="drip" aria-hidden="true"></div><header class="site-header"><a class="brand" href="../">healthviz</a><nav aria-label="Site"><a href="../#assessments">Assessments</a><a href="../#about">About</a><button type="button" class="theme-switch" onclick="var r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';try{localStorage.setItem('hv-theme',r.dataset.theme)}catch(e){}" aria-label="Switch between paper and monitor"><span class="t-light">◐<span class="tw"> Monitor</span></span><span class="t-dark">◑<span class="tw"> Paper</span></span></button></nav></header>
+<main>
+  <header class="chart-head">
+    <p class="eyebrow"><a href="../#assessments">← Assessments</a>Access to care</p>
+    <h1>Who can't get the care they need, and why<span class="qm">?</span></h1>
+    <p class="intro">How many people in Europe went without a medical or dental examination they needed in a year, because it cost too much, was too far away or had a waiting list. It also compares the poorest fifth of the population with the richest.</p>
+    <aside class="snapshot" aria-label="Data snapshot"><p class="snapshot-k">Data snapshot</p><dl><div><dt>Source last updated</dt><dd><time datetime="2026-10-20">20 Oct 2026</time></dd></div><div><dt>Source</dt><dd>Eurostat</dd></div><div><dt>Covers</dt><dd>2025 · 31 countries</dd></div></dl><p class="snapshot-note"><a href="#sources">Sources and notes</a></p></aside>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filters">
+    <div class="filter-row">
+      <div class="filter">
+        <label class="label" for="country">Country</label>
+        <select id="country"></select>
+      </div>
+      <div class="filter">
+        <span class="label" id="care-label">Care</span>
+        <div class="seg" id="care" role="group" aria-labelledby="care-label">
+          <button type="button" data-v="med">Medical</button>
+          <button type="button" data-v="dent">Dental</button>
+        </div>
+      </div>
+      <div class="filter">
+        <span class="label" id="income-label">Income</span>
+        <div class="seg" id="income" role="group" aria-labelledby="income-label">
+          <button type="button" data-v="0">Everyone</button>
+          <button type="button" data-v="1">Poorest fifth</button>
+          <button type="button" data-v="5">Richest fifth</button>
+        </div>
+      </div>
+      <div class="filter">
+        <span class="label" id="scope-label">Compare</span>
+        <div class="seg" id="scope" role="group" aria-labelledby="scope-label">
+          <button type="button" data-v="eu">EU-27</button>
+          <button type="button" data-v="all">All of Europe</button>
+        </div>
+      </div>
+    </div>
+    <div class="monitor-deco" aria-hidden="true"><svg class="mon-trace beat" aria-hidden="true"><defs><clipPath id="clip-mon-trace"><rect width="0" height="0"/></clipPath></defs><path class="beat-line" clip-path="url(#clip-mon-trace)"/><circle class="beat-dot" r="4" cx="-10" cy="-10"/></svg></div>
+  </div>
+
+  <section class="tiles pairs" aria-label="Key figures: the EU-27 and the selected country">
+    <div class="tile eu"><p class="scope">EU-27</p><p class="k">Went without</p><p class="v" id="t1v"></p><p class="s" id="t1s"></p></div>
+    <div class="tile eu"><p class="scope">EU-27</p><p class="k">Poorest vs richest fifth</p><p class="v" id="t2v"></p><p class="s" id="t2s"></p></div>
+    <div class="tile sel"><p class="scope" id="t3sc">Germany</p><p class="k">Went without</p><p class="v" id="t3v"></p><p class="s" id="t3s"></p></div>
+    <div class="tile sel"><p class="scope" id="t4sc">Germany</p><p class="k">Poorest vs richest fifth</p><p class="v" id="t4v"></p><p class="s" id="t4s"></p></div>
+  </section>
+
+
+  <section class="card" aria-labelledby="rank-title">
+    <div class="card-head">
+      <div>
+        <h2 id="rank-title">How many in 100 people went without a medical examination they needed in 2025, and why</h2>
+      </div>
+      <div class="card-tools">
+        <details class="info">
+          <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
+          <p class="info-pop" id="rank-sub">Out of 100 people aged 16 or over: how many needed an examination or treatment in the last 12 months and didn't get it, by the main reason they gave, and in total. Each dot is one person; a partly coloured dot is part of one. Countries are ranked by the total; the EU-27 sits where its total belongs. Tap or click a row to pick a country.</p>
+        </details>
+        <button type="button" class="full-btn"><svg viewBox="0 0 14 14" aria-hidden="true"><path class="i-open" d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/><path class="i-close" d="M5 1v4H1M9 1v4h4M13 9H9v4M1 9h4v4"/></svg><span class="l-open">Full screen</span><span class="l-close">Exit full screen</span></button>
+      </div>
+    </div>
+    <div class="keys" aria-hidden="true">
+      <span><svg width="14" height="14" viewBox="0 0 10 10"><path class="c-wait" d="M5 0a2.4 2.4 0 1 1 0 4.8a2.4 2.4 0 1 1 0-4.8zM1 10V7.8C1 6.2 2.2 5.4 3.5 5.4H6.5C7.8 5.4 9 6.2 9 7.8V10Z"/></svg>One person in 100</span>
+      <span><svg width="14" height="14" viewBox="0 0 10 10"><defs><clipPath id="key-half"><rect x="0" y="0" width="5" height="10"/></clipPath></defs><path class="c-part" d="M5 0a2.4 2.4 0 1 1 0 4.8a2.4 2.4 0 1 1 0-4.8zM1 10V7.8C1 6.2 2.2 5.4 3.5 5.4H6.5C7.8 5.4 9 6.2 9 7.8V10Z"/><path class="c-wait" clip-path="url(#key-half)" d="M5 0a2.4 2.4 0 1 1 0 4.8a2.4 2.4 0 1 1 0-4.8zM1 10V7.8C1 6.2 2.2 5.4 3.5 5.4H6.5C7.8 5.4 9 6.2 9 7.8V10Z"/></svg>Part of a person</span>
+    </div>
+    <svg id="rank" role="img" aria-labelledby="rank-title rank-sub" height="702"></svg>
+    <p class="chart-source">Source: <a href="#src-1"><span class="rx">Rx1</span> Eurostat · hlth_silc_08</a>, <a href="#src-2"><span class="rx">Rx2</span> Eurostat · hlth_silc_09</a></p>
+    <div class="insights" id="rank-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>In the <mark class="hl eu">EU-27</mark>, <strong>2.4 in every 100</strong> people went without a medical examination they needed in 2025, because it cost too much, was too far away or had a waiting list.</li><li>Across the <mark class="hl eu">EU-27</mark>, this happened most often in <strong>Greece</strong> (11.5 in every 100) and least often in <strong>Cyprus and Malta</strong> (0.1).</li><li class="extra">In <strong>18 of the 27</strong> countries of the <mark class="hl eu">EU-27</mark>, waiting lists were the main reason people went without.</li><li class="extra">Across the <mark class="hl eu">EU-27</mark> as a whole, <strong>waiting lists</strong> kept the most people from a medical examination they needed (1.2 in every 100).</li></ul><ul class="ins-list"><li>In <mark class="hl sel">Germany</mark>, <strong>1.0 in every 100</strong> people went without a medical examination they needed, fewer than across the EU-27 (2.4).</li><li>In <mark class="hl sel">Germany</mark>, the most common reason people went without was <strong>waiting lists</strong>.</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
+  </section>
+
+  <section class="card" aria-labelledby="gap-title" style="margin-top:16px">
+    <div class="card-head">
+      <div>
+        <h2 id="gap-title">How many in 100 went without a medical examination they needed in 2025, from the poorest to the richest fifth</h2>
+      </div>
+      <div class="card-tools">
+        <details class="info">
+          <summary aria-label="About this chart"><span aria-hidden="true">i</span></summary>
+          <p class="info-pop" id="gap-sub">The same share for the poorest fifth of the population by household income (hollow ring) and the richest fifth (filled amber dot), with each number beside its dot. Countries are ranked by the gap between them, largest first. Tap or click a row to pick a country.</p>
+        </details>
+        <button type="button" class="full-btn"><svg viewBox="0 0 14 14" aria-hidden="true"><path class="i-open" d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/><path class="i-close" d="M5 1v4H1M9 1v4h4M13 9H9v4M1 9h4v4"/></svg><span class="l-open">Full screen</span><span class="l-close">Exit full screen</span></button>
+      </div>
+    </div>
+    <svg id="gap" role="img" aria-labelledby="gap-title gap-sub" height="930"></svg>
+    <p class="chart-source">Source: <a href="#src-1"><span class="rx">Rx1</span> Eurostat · hlth_silc_08</a>, <a href="#src-2"><span class="rx">Rx2</span> Eurostat · hlth_silc_09</a></p>
+    <div class="insights" id="gap-ins" aria-label="Insights from this chart"><ul class="ins-list"><li>In the <mark class="hl eu">EU-27</mark>, people in the poorest fifth went without <strong>2.6 times</strong> as often as people in the richest fifth.</li><li>Among the countries of the <mark class="hl eu">EU-27</mark>, the gap between the poorest and the richest fifth was largest in <strong>Greece</strong>: 18.9 against 4.9 in every 100 went without.</li><li class="extra">In <strong>25 of the 27</strong> countries of the <mark class="hl eu">EU-27</mark>, the poorest fifth went without more often than the richest fifth.</li><li class="extra">Among the countries of the <mark class="hl eu">EU-27</mark>, the poorest and the richest fifth were closest in <strong>Slovenia</strong> (3.3 against 3.2 in every 100).</li></ul><ul class="ins-list"><li>In <mark class="hl sel">Germany</mark>, <strong>1.3 in every 100</strong> people in the poorest fifth went without, against <strong>0.8</strong> in the richest fifth.</li><li>So in <mark class="hl sel">Germany</mark>, the gap between the poorest and the richest fifth is smaller than across the EU-27.</li></ul><button class="ins-more" type="button" aria-expanded="false"><span class="o">Show more insights</span><span class="c">Show fewer insights</span></button></div>
+  </section>
+
+  <details class="card" id="table-card" style="margin-top:16px">
+    <summary>Table view: all countries</summary>
+    <p class="table-key"><span><i class="tk-sel"></i>The selected country</span></p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="r">Rank</th><th>Country</th><th class="r">Went without</th><th class="r">Too expensive</th><th class="r">Waiting list</th><th class="r">Too far</th><th class="r">Poorest fifth</th><th class="r">Richest fifth</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </details>
+
+  <section class="notes" id="sources">
+    <h2>Sources</h2>
+    <ul class="sources"><li id="src-1"><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_08/default/table">Eurostat: Self-reported unmet needs for medical examination by sex, age, main reason declared and income quintile</a> (<code>hlth_silc_08</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-20">20 Oct 2026</time>.</span></li><li id="src-2"><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_09/default/table">Eurostat: Self-reported unmet needs for dental examination by sex, age, main reason declared and income quintile</a> (<code>hlth_silc_09</code>). CC BY 4.0, © European Union. <span class="muted">Last updated <time datetime="2026-10-20">20 Oct 2026</time>.</span></li><li>The data on this page: <a href="data.csv" download>CSV</a>, same licence and credit.</li></ul>
+    <h2>Notes</h2>
+    <p>The figures come from the EU survey on income and living conditions (EU-SILC). People aged 16 or over are asked whether, in the last 12 months, they needed a medical (or dental) examination or treatment and didn't get it, and for the main reason. The page shows Eurostat's headline measure: people whose main reason was that it was too expensive, too far to travel or there was a waiting list, the reasons a health system can do something about. Other reasons (no time, fear of doctors or treatment, waiting to see whether it gets better) are not included. The page shows each reason as Eurostat publishes it, and the total beside them; all are rounded to one decimal, so the reasons don't always add up exactly to the total.</p>
+    <p>It counts care people went without, not how long they waited for it: someone who waits weeks for a specialist and then sees one doesn't count. A country with long waits for appointments can therefore still have a low share, if people wait rather than go without.</p>
+    <p>Income fifths: everyone is ranked by their household's disposable income, adjusted for the size of the household, and split into five groups of equal size. The survey covers people in private households, not in care homes. Small shares rest on few answers, so differences of a few tenths of a percentage point are within the survey's margin. What public insurance covers differs between countries, dental care above all, which shows in the dental figures. Eurostat flags some 2025 values: Lithuania (provisional), Luxembourg (break in series). </p>
+  </section>
+</main>
+<footer class="site-footer"><p><span class="sig" aria-hidden="true">healthviz</span><a href="../">healthviz.eu</a><span>A personal playground for open European health data</span><a href="../feed.xml">RSS feed</a></p></footer><script>addEventListener("pointerdown",e=>{for(const d of document.querySelectorAll("details.info[open]"))if(!d.contains(e.target))d.open=false});let hvSpot=null;const hvCtl=()=>{const c=document.querySelector(".card.is-full"),f=c&&c.querySelector(".filters");if(c)c.style.setProperty("--full-ctl",f?f.offsetHeight+"px":"0px")};const hvFull=(card,on)=>{const b=card.querySelector(".full-btn"),tip=document.getElementById("tip"),f=document.querySelector(".filters");if(tip)tip.classList.remove("on");if(on){card.scrollTop=0;card.hvTurn=0}if(f&&on){hvSpot=document.createComment("filters");f.before(hvSpot);b.closest(".card-head").after(f)}else if(f&&hvSpot){hvSpot.replaceWith(f);hvSpot=null}card.classList.toggle("is-full",on);document.documentElement.classList.toggle("has-full",on);b.classList.toggle("on",on);if(tip)(on?card:document.body).append(tip);if(on)hvCtl();else{card.style.removeProperty("--full-ctl");if(card.hvTurn)card.scrollIntoView({block:"center"})}};addEventListener("resize",hvCtl);addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".full-btn");if(b){const c=b.closest(".card");hvFull(c,!c.classList.contains("is-full"))}});window.matchMedia?.("(orientation: portrait)").addEventListener?.("change",()=>{const t=document.getElementById("tip");if(t)t.classList.remove("on");for(const c of document.querySelectorAll(".card.is-full")){c.scrollTop=0;c.hvTurn=1}});addEventListener("keydown",e=>{if(e.key!=="Escape")return;for(const d of document.querySelectorAll("details.info[open]")){d.open=false;d.querySelector("summary").focus()}for(const c of document.querySelectorAll(".card.is-full")){hvFull(c,false);c.querySelector(".full-btn").focus()}});(()=>{const BEAT=100,SPEED=BEAT*70/60;
+// The monitor's trace only shares the controls' row: where the controls fill the row, it would wrap
+// into a row of its own, so it is left out (checked again whenever the bar changes width).
+const decos=[...document.querySelectorAll(".monitor-deco")];
+const placeDeco=()=>{for(const d of decos){d.hidden=false;const f=d.parentElement.querySelector(".filter");if(f&&d.getBoundingClientRect().top>=f.getBoundingClientRect().bottom-2)d.hidden=true}};
+placeDeco();if(window.ResizeObserver){const ro=new ResizeObserver(placeDeco);for(const d of decos)ro.observe(d.parentElement)}else addEventListener("resize",placeDeco);
+// One beat, 100px wide: P wave (small bump), Q (short dip), R (tall spike), S (dip below the line), T wave
+// (rounder bump). Negative is up, as in SVG; 1 is the spike's height.
+const SHAPE=[[0,0],[30,0],[33,-.12],[36,-.2],[39,-.2],[42,-.12],[45,0],[54,0],[56,.12],[60,-1],[64,.28],[67,0],[76,0],[80,-.18],[84,-.3],[88,-.3],[92,-.18],[96,0]];
+const still=!!window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+const T=[...document.querySelectorAll("svg.beat")].map(svg=>({svg,line:svg.querySelector(".beat-line"),dot:svg.querySelector(".beat-dot"),clip:svg.querySelector("clipPath rect"),pts:[],W:0,H:0}));
+const fit=t=>{const W=t.svg.clientWidth,H=t.svg.clientHeight;if(!W||!H||(W===t.W&&H===t.H))return;t.W=W;t.H=H;
+t.svg.setAttribute("viewBox",`0 0 ${W} ${H}`);const base=H*.68,A=H*.6,p=[];
+for(let x0=0;x0<W+BEAT;x0+=BEAT)for(const[x,v]of SHAPE)p.push([x0+x,base+v*A]);
+t.pts=p;t.line.setAttribute("d","M"+p.map(q=>q[0].toFixed(1)+" "+q[1].toFixed(1)).join("L"));t.clip.setAttribute("height",H)};
+const yAt=(p,x)=>{for(let i=1;i<p.length;i++)if(p[i][0]>=x){const[a,b]=p[i-1],[c,d]=p[i];return b+(d-b)*(x-a)/((c-a)||1)}return p[p.length-1][1]};
+const draw=now=>{for(const t of T){fit(t);if(!t.W)continue;
+if(still||now==null){t.clip.setAttribute("x",0);t.clip.setAttribute("width",t.W);t.dot.style.opacity=0;continue}
+const D=t.W/SPEED*1000,ph=(now%(2*D))/D;
+if(ph<1){const x=ph*t.W;t.clip.setAttribute("x",0);t.clip.setAttribute("width",x);t.dot.setAttribute("cx",x);t.dot.setAttribute("cy",yAt(t.pts,x));t.dot.style.opacity=1}
+else{const x=(ph-1)*t.W;t.clip.setAttribute("x",x);t.clip.setAttribute("width",t.W-x);t.dot.style.opacity=0}}};
+if(still||!window.IntersectionObserver){draw(null);addEventListener("resize",()=>draw(null));return}let on=0,raf=0;const loop=now=>{draw(now);raf=on?requestAnimationFrame(loop):0};const io=new IntersectionObserver(es=>{for(const e of es)e.target.hvOn=e.isIntersecting;on=T.filter(t=>t.svg.hvOn).length;if(on&&!raf)raf=requestAnimationFrame(loop)});for(const t of T)io.observe(t.svg)})();;const HV=(()=>{const SHOWN=2;
+const r1=v=>(Math.round(v*10)/10).toFixed(1),r0=v=>String(Math.round(v));
+const signed1=v=>`${v>0?"+":v<0?"−":"±"}${r1(Math.abs(v))}`;
+const byName=(a,b)=>a<b?-1:a>b?1:0;
+const joinNames=ns=>ns.length>3?`${ns.slice(0,2).join(", ")} and ${ns.length-2} others`:ns.length>1?`${ns.slice(0,-1).join(", ")} and ${ns[ns.length-1]}`:ns[0];
+const B=t=>({b:t}),EU=t=>({eu:t}),SEL=t=>({sel:t}),ins=(eu,...parts)=>({eu,parts});
+const area=scope=>scope==="eu"?["the ",EU("EU-27")]:[EU("Europe")];
+const el=(tag,cls,text,parent)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;parent.appendChild(n);return n};
+function render(id,list){const box=document.getElementById(id);box.replaceChildren();
+const groups=[list.filter(it=>it.eu),list.filter(it=>!it.eu)].filter(g=>g.length);
+for(const group of groups){const ul=el("ul","ins-list",null,box);
+group.forEach((it,i)=>{const li=el("li",i>=SHOWN?"extra":"",null,ul);
+for(const p of it.parts){if(typeof p==="string")li.append(p);else if(p.b!=null)el("strong","",p.b,li);else el("mark",`hl ${p.eu!=null?"eu":"sel"}`,p.eu??p.sel,li)}})}
+if(groups.some(g=>g.length>SHOWN)){const bt=el("button","ins-more",null,box);bt.type="button";
+bt.setAttribute("aria-expanded",box.classList.contains("open"));el("span","o","Show more insights",bt);el("span","c","Show fewer insights",bt)}}
+document.addEventListener("click",e=>{const m=e.target.closest&&e.target.closest(".ins-more");if(!m)return;
+const box=m.closest(".insights"),open=box.classList.toggle("open");m.setAttribute("aria-expanded",open)});
+return{SHOWN,r1,r0,signed1,byName,joinNames,B,EU,SEL,ins,area,render}})();</script>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+const D = {"year":2025,"areas":{"AL":{"name":"Albania","eu":false,"med":{"any":[9.5,15.9,14.0,9.4,5.5,3.4],"cost":[7.7,13.6,10.6,7.4,4.5,2.8],"wait":[1.5,1.7,2.9,1.5,0.9,0.3],"far":[0.4,0.6,0.6,0.4,0.1,0.3],"flag":null},"dent":{"any":[10.7,17.1,13.5,10.7,7.5,5.4],"cost":[10.1,16.2,12.7,10.2,6.9,4.9],"wait":[0.4,0.4,0.6,0.5,0.3,0.2],"far":[0.3,0.5,0.2,0.1,0.3,0.3],"flag":null}},"AT":{"name":"Austria","eu":true,"med":{"any":[0.9,1.8,0.7,0.8,0.9,0.6],"cost":[0.3,0.8,0.2,0.2,0.1,0.1],"wait":[0.6,0.9,0.4,0.6,0.8,0.5],"far":[0.0,0.1,0.0,0.1,0.0,0.0],"flag":null},"dent":{"any":[1.3,3.4,1.4,0.8,0.7,0.3],"cost":[0.9,2.5,1.1,0.4,0.3,0.2],"wait":[0.4,0.9,0.2,0.4,0.4,0.1],"far":[0.0,0.1,0.0,0.0,0.0,0.0],"flag":null}},"BE":{"name":"Belgium","eu":true,"med":{"any":[0.9,2.5,1.5,0.4,0.2,0.0],"cost":[0.8,2.3,1.2,0.3,0.1,0.0],"wait":[0.1,0.1,0.1,0.1,0.1,0.0],"far":[0.0,0.0,0.2,0.0,0.0,0.0],"flag":null},"dent":{"any":[3.2,7.7,4.0,1.8,1.9,1.0],"cost":[2.6,7.1,3.5,1.3,1.0,0.5],"wait":[0.5,0.4,0.4,0.5,0.9,0.4],"far":[0.1,0.1,0.1,0.0,0.0,0.0],"flag":null}},"BG":{"name":"Bulgaria","eu":true,"med":{"any":[1.0,2.1,1.4,1.0,0.3,0.3],"cost":[0.7,1.8,1.0,0.6,0.2,0.1],"wait":[0.0,0.0,0.0,0.2,0.0,0.1],"far":[0.2,0.3,0.4,0.2,0.2,0.1],"flag":null},"dent":{"any":[2.0,3.7,2.6,2.0,1.2,0.8],"cost":[1.9,3.6,2.5,1.9,1.1,0.7],"wait":[0.0,0.0,0.0,0.1,0.0,0.0],"far":[0.0,0.1,0.1,0.0,0.0,0.1],"flag":null}},"CY":{"name":"Cyprus","eu":true,"med":{"any":[0.1,0.4,0.1,0.0,0.0,0.0],"cost":[0.1,0.3,0.1,0.0,0.0,0.0],"wait":[0.0,0.1,0.0,0.0,0.0,0.0],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null},"dent":{"any":[1.2,3.3,1.8,0.5,0.3,0.3],"cost":[1.2,3.3,1.8,0.5,0.2,0.3],"wait":[0.0,0.0,0.0,0.0,0.1,0.0],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null}},"CZ":{"name":"Czechia","eu":true,"med":{"any":[0.3,0.6,0.4,0.2,0.3,0.2],"cost":[0.0,0.0,0.1,0.0,0.0,0.0],"wait":[0.2,0.3,0.0,0.1,0.2,0.2],"far":[0.1,0.3,0.3,0.0,0.1,0.0],"flag":null},"dent":{"any":[1.0,2.1,1.2,0.3,1.1,0.3],"cost":[0.4,1.2,0.7,0.1,0.2,0.0],"wait":[0.5,0.7,0.3,0.2,0.8,0.2],"far":[0.1,0.1,0.2,0.0,0.0,0.0],"flag":null}},"DE":{"name":"Germany","eu":true,"med":{"any":[1.0,1.3,1.0,0.9,1.0,0.8],"cost":[0.2,0.3,0.2,0.1,0.1,0.0],"wait":[0.8,0.9,0.7,0.8,0.9,0.7],"far":[0.0,0.1,0.0,0.0,0.0,0.0],"flag":null},"dent":{"any":[0.5,1.0,0.5,0.4,0.3,0.2],"cost":[0.4,0.8,0.4,0.3,0.2,0.1],"wait":[0.1,0.1,0.1,0.0,0.1,0.0],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null}},"DK":{"name":"Denmark","eu":true,"med":{"any":[2.9,4.7,3.9,2.7,2.3,1.0],"cost":[0.4,0.7,0.7,0.3,0.2,0.0],"wait":[2.3,3.5,2.9,2.3,1.8,0.8],"far":[0.2,0.4,0.3,0.1,0.3,0.1],"flag":null},"dent":{"any":[8.1,14.2,11.3,9.1,4.0,2.1],"cost":[7.8,13.9,10.9,9.0,3.5,1.7],"wait":[0.3,0.1,0.2,0.0,0.5,0.4],"far":[0.1,0.2,0.2,0.0,0.0,0.0],"flag":null}},"EE":{"name":"Estonia","eu":true,"med":{"any":[7.7,8.3,7.6,8.4,6.8,7.2],"cost":[0.5,1.3,0.4,0.3,0.0,0.4],"wait":[6.9,6.3,6.9,7.8,6.8,6.7],"far":[0.3,0.7,0.3,0.4,0.0,0.1],"flag":null},"dent":{"any":[5.5,8.9,6.6,5.1,3.1,3.5],"cost":[4.3,8.1,5.2,4.0,2.2,1.5],"wait":[1.1,0.7,1.3,0.9,0.9,1.9],"far":[0.1,0.1,0.1,0.2,0.0,0.1],"flag":null}},"EL":{"name":"Greece","eu":true,"med":{"any":[11.5,18.9,15.9,11.0,7.7,4.9],"cost":[8.8,14.5,12.2,8.9,5.6,3.3],"wait":[2.0,3.3,2.6,1.5,1.5,1.1],"far":[0.7,1.1,1.0,0.6,0.6,0.5],"flag":null},"dent":{"any":[11.5,17.7,13.9,11.6,8.1,6.8],"cost":[10.3,16.3,12.6,10.2,7.2,5.8],"wait":[0.5,0.6,0.5,0.9,0.3,0.2],"far":[0.7,0.7,0.7,0.5,0.6,0.8],"flag":null}},"ES":{"name":"Spain","eu":true,"med":{"any":[1.6,1.6,2.0,1.8,1.5,1.3],"cost":[0.2,0.3,0.1,0.1,0.1,0.1],"wait":[1.5,1.1,1.8,1.7,1.4,1.3],"far":[0.0,0.1,0.0,0.0,0.0,0.0],"flag":null},"dent":{"any":[4.1,8.7,5.2,3.9,2.5,1.0],"cost":[4.0,8.6,5.1,3.7,2.3,0.9],"wait":[0.1,0.0,0.1,0.2,0.2,0.1],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null}},"FI":{"name":"Finland","eu":true,"med":{"any":[7.8,10.7,9.4,7.5,6.6,4.6],"cost":[0.4,1.0,0.6,0.2,0.2,0.0],"wait":[7.3,9.7,8.7,7.2,6.4,4.6],"far":[0.0,0.1,0.1,0.0,0.0,0.0],"flag":null},"dent":{"any":[7.5,9.3,7.6,7.8,6.9,6.0],"cost":[0.9,2.9,0.7,0.4,0.4,0.2],"wait":[6.6,6.2,6.8,7.4,6.5,5.8],"far":[0.0,0.1,0.0,0.0,0.0,0.0],"flag":null}},"FR":{"name":"France","eu":true,"med":{"any":[3.7,5.8,4.5,3.6,2.6,2.1],"cost":[1.9,3.9,3.0,1.7,0.9,0.4],"wait":[1.4,1.1,1.2,1.5,1.4,1.5],"far":[0.4,0.8,0.3,0.4,0.2,0.2],"flag":null},"dent":{"any":[6.5,10.6,8.5,7.2,4.3,2.3],"cost":[5.1,9.2,7.1,5.3,3.1,1.5],"wait":[1.0,0.8,1.1,1.4,1.1,0.7],"far":[0.3,0.6,0.3,0.5,0.1,0.2],"flag":null}},"HR":{"name":"Croatia","eu":true,"med":{"any":[1.4,3.4,1.5,0.9,0.5,0.5],"cost":[0.2,0.4,0.1,0.1,0.0,0.1],"wait":[0.5,0.8,0.7,0.5,0.4,0.3],"far":[0.7,2.2,0.7,0.3,0.1,0.1],"flag":null},"dent":{"any":[0.6,1.3,0.6,0.5,0.2,0.2],"cost":[0.3,0.8,0.3,0.3,0.1,0.2],"wait":[0.1,0.1,0.2,0.0,0.1,0.0],"far":[0.1,0.4,0.1,0.1,0.0,0.0],"flag":null}},"HU":{"name":"Hungary","eu":true,"med":{"any":[1.4,1.3,1.8,1.1,1.6,1.5],"cost":[0.3,0.5,0.2,0.2,0.3,0.2],"wait":[1.1,0.7,1.5,0.8,1.2,1.3],"far":[0.1,0.1,0.1,0.0,0.0,0.0],"flag":null},"dent":{"any":[0.9,1.3,0.8,0.6,0.6,1.0],"cost":[0.5,1.1,0.6,0.3,0.3,0.1],"wait":[0.4,0.2,0.3,0.3,0.3,0.8],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null}},"IE":{"name":"Ireland","eu":true,"med":{"any":[2.7,2.9,3.6,4.1,1.8,1.4],"cost":[0.6,0.9,0.9,0.9,0.3,0.1],"wait":[2.1,2.0,2.7,3.3,1.4,1.3],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null},"dent":{"any":[1.6,3.2,2.8,0.6,0.8,0.7],"cost":[1.2,3.0,2.4,0.3,0.6,0.2],"wait":[0.3,0.2,0.3,0.3,0.2,0.5],"far":[0.0,0.0,0.1,0.0,0.0,0.0],"flag":null}},"IT":{"name":"Italy","eu":true,"med":{"any":[2.5,4.4,3.5,2.1,1.7,0.8],"cost":[1.6,3.0,2.4,1.3,1.1,0.3],"wait":[0.9,1.4,1.1,0.8,0.6,0.5],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null},"dent":{"any":[2.9,6.0,4.2,2.2,1.6,0.7],"cost":[2.8,5.9,4.1,2.0,1.5,0.6],"wait":[0.1,0.1,0.1,0.2,0.0,0.0],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null}},"LT":{"name":"Lithuania","eu":true,"med":{"any":[3.3,4.9,3.5,3.0,2.4,2.5],"cost":[0.2,0.2,0.4,0.1,0.0,0.5],"wait":[2.9,4.2,3.0,2.8,2.4,2.0],"far":[0.2,0.6,0.1,0.1,0.0,0.0],"flag":"p"},"dent":{"any":[2.0,4.2,2.0,1.5,1.1,1.0],"cost":[1.5,3.4,1.6,1.0,0.9,0.6],"wait":[0.4,0.7,0.4,0.4,0.3,0.4],"far":[0.0,0.1,0.0,0.1,0.0,0.0],"flag":"p"}},"LU":{"name":"Luxembourg","eu":true,"med":{"any":[1.1,1.2,0.5,1.4,1.6,1.0],"cost":[0.3,0.7,0.1,0.2,0.2,0.0],"wait":[0.9,0.5,0.4,1.2,1.3,1.0],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":"b"},"dent":{"any":[1.4,2.0,2.8,1.3,0.8,0.3],"cost":[1.2,2.0,2.6,1.1,0.6,0.2],"wait":[0.1,0.0,0.2,0.2,0.2,0.1],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":"b"}},"LV":{"name":"Latvia","eu":true,"med":{"any":[7.6,13.5,8.5,5.3,6.6,3.3],"cost":[2.5,6.2,2.7,1.3,0.9,0.5],"wait":[4.8,6.0,5.4,3.9,5.7,2.8],"far":[0.4,1.2,0.4,0.1,0.0,0.0],"flag":null},"dent":{"any":[9.0,19.0,11.3,6.1,4.3,2.3],"cost":[8.0,17.6,10.0,5.5,3.2,1.8],"wait":[0.9,1.0,1.1,0.7,1.0,0.4],"far":[0.2,0.5,0.2,0.0,0.1,0.1],"flag":null}},"MT":{"name":"Malta","eu":true,"med":{"any":[0.1,0.3,0.0,0.1,0.0,0.0],"cost":[0.0,0.0,0.0,0.0,0.0,0.0],"wait":[0.1,0.3,0.0,0.0,0.0,0.0],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null},"dent":{"any":[0.2,0.9,0.0,0.1,0.0,0.0],"cost":[0.2,0.8,0.0,0.1,0.0,0.0],"wait":[0.0,0.0,0.0,0.0,0.0,0.0],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null}},"NL":{"name":"Netherlands","eu":true,"med":{"any":[0.5,1.3,0.3,0.1,0.8,0.3],"cost":[0.3,0.5,0.1,0.0,0.6,0.3],"wait":[0.2,0.6,0.2,0.1,0.2,0.0],"far":[0.0,0.2,0.0,0.0,0.0,0.0],"flag":null},"dent":{"any":[0.6,1.8,0.5,0.4,0.1,0.3],"cost":[0.4,1.2,0.3,0.3,0.0,0.3],"wait":[0.2,0.5,0.2,0.1,0.1,0.0],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null}},"NO":{"name":"Norway","eu":false,"med":{"any":[1.9,4.7,1.6,1.2,1.3,0.8],"cost":[0.9,2.5,1.5,0.6,0.1,0.0],"wait":[0.9,2.2,0.1,0.3,1.0,0.8],"far":[0.1,0.0,0.0,0.3,0.2,0.0],"flag":null},"dent":{"any":[7.8,16.7,10.8,5.7,4.1,2.5],"cost":[7.7,16.6,10.8,5.7,4.0,2.5],"wait":[0.0,0.1,0.0,0.0,0.1,0.0],"far":[0.0,0.1,0.0,0.0,0.0,0.0],"flag":null}},"PL":{"name":"Poland","eu":true,"med":{"any":[2.9,3.7,3.0,2.3,2.7,2.9],"cost":[0.5,1.0,0.7,0.3,0.3,0.2],"wait":[2.2,2.3,2.0,1.8,2.4,2.6],"far":[0.2,0.4,0.3,0.2,0.0,0.0],"flag":null},"dent":{"any":[1.2,1.6,1.3,0.9,1.2,1.0],"cost":[0.8,1.2,0.8,0.5,0.8,0.5],"wait":[0.4,0.4,0.5,0.4,0.4,0.4],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null}},"PT":{"name":"Portugal","eu":true,"med":{"any":[2.5,4.2,3.5,2.3,1.7,1.0],"cost":[1.0,1.9,1.2,1.0,0.5,0.2],"wait":[1.5,2.1,2.2,1.3,1.2,0.7],"far":[0.1,0.2,0.1,0.0,0.0,0.0],"flag":null},"dent":{"any":[7.9,16.9,11.7,6.0,3.6,1.6],"cost":[7.7,16.6,11.5,5.8,3.5,1.5],"wait":[0.1,0.2,0.2,0.1,0.1,0.0],"far":[0.0,0.1,0.0,0.0,0.0,0.1],"flag":null}},"RO":{"name":"Romania","eu":true,"med":{"any":[2.9,6.0,4.2,2.2,1.5,0.9],"cost":[2.0,4.8,3.1,1.4,0.6,0.5],"wait":[0.6,0.3,0.7,0.7,0.8,0.4],"far":[0.3,0.9,0.4,0.2,0.0,0.0],"flag":null},"dent":{"any":[4.1,6.9,6.4,3.7,2.3,1.6],"cost":[3.9,6.6,6.2,3.5,2.1,1.4],"wait":[0.1,0.0,0.1,0.1,0.1,0.2],"far":[0.1,0.2,0.1,0.1,0.0,0.0],"flag":null}},"RS":{"name":"Serbia","eu":false,"med":{"any":[2.8,6.5,2.8,2.2,1.4,1.0],"cost":[1.1,3.3,1.3,0.6,0.1,0.0],"wait":[1.4,2.2,1.4,1.5,1.2,0.9],"far":[0.3,1.0,0.1,0.2,0.1,0.1],"flag":null},"dent":{"any":[2.5,6.5,2.8,2.0,1.0,0.3],"cost":[2.3,6.1,2.6,1.8,1.0,0.2],"wait":[0.1,0.1,0.2,0.1,0.0,0.1],"far":[0.1,0.2,0.1,0.1,0.0,0.0],"flag":null}},"SE":{"name":"Sweden","eu":true,"med":{"any":[2.1,3.0,2.1,2.0,1.7,1.6],"cost":[0.3,1.1,0.2,0.1,0.2,0.0],"wait":[1.7,1.8,1.7,1.8,1.5,1.6],"far":[0.1,0.1,0.2,0.2,0.0,0.0],"flag":null},"dent":{"any":[2.6,4.9,3.8,3.0,1.1,0.5],"cost":[2.0,4.1,3.2,2.1,0.6,0.3],"wait":[0.6,0.9,0.6,0.9,0.5,0.3],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null}},"SI":{"name":"Slovenia","eu":true,"med":{"any":[3.2,3.3,3.7,2.8,2.8,3.2],"cost":[0.2,0.2,0.1,0.1,0.2,0.3],"wait":[3.0,3.1,3.5,2.8,2.6,2.9],"far":[0.0,0.0,0.0,0.0,0.0,0.0],"flag":null},"dent":{"any":[3.9,4.0,3.9,3.7,3.9,4.1],"cost":[0.4,0.3,0.7,0.4,0.4,0.1],"wait":[3.5,3.6,3.2,3.3,3.4,4.0],"far":[0.0,0.1,0.0,0.0,0.0,0.0],"flag":null}},"SK":{"name":"Slovakia","eu":true,"med":{"any":[1.1,0.8,1.7,0.9,0.7,1.4],"cost":[0.1,0.1,0.1,0.0,0.0,0.0],"wait":[1.0,0.4,1.5,0.8,0.7,1.4],"far":[0.1,0.2,0.1,0.1,0.0,0.0],"flag":null},"dent":{"any":[1.0,1.1,1.8,0.5,0.8,0.7],"cost":[0.7,1.0,1.4,0.3,0.6,0.1],"wait":[0.3,0.1,0.3,0.1,0.2,0.6],"far":[0.0,0.0,0.1,0.1,0.0,0.0],"flag":null}},"TR":{"name":"Türkiye","eu":false,"med":{"any":[0.7,2.1,0.8,0.3,0.3,0.2],"cost":[0.4,1.3,0.5,0.2,0.2,0.1],"wait":[0.0,0.0,0.0,0.0,0.0,0.0],"far":[0.2,0.7,0.3,0.1,0.1,0.1],"flag":null},"dent":{"any":[0.8,1.8,1.2,0.6,0.6,0.2],"cost":[0.7,1.6,1.0,0.6,0.5,0.2],"wait":[0.0,0.0,0.0,0.0,0.0,0.0],"far":[0.1,0.2,0.1,0.1,0.1,0.1],"flag":null}}},"eu27":{"med":{"any":[2.4,3.7,3.0,2.2,1.8,1.4],"cost":[1.0,2.0,1.5,0.9,0.6,0.3],"wait":[1.2,1.4,1.4,1.2,1.2,1.1],"far":[0.1,0.3,0.2,0.1,0.1,0.1],"flag":null},"dent":{"any":[3.3,6.1,4.4,3.1,2.1,1.2],"cost":[2.8,5.5,3.8,2.5,1.6,0.8],"wait":[0.4,0.4,0.4,0.5,0.5,0.3],"far":[0.1,0.2,0.1,0.1,0.0,0.0],"flag":null}}};
+const CARE = { med: "medical examination", dent: "dental examination" };
+const CARE_WORD = { med: "medical", dent: "dental" };
+const GROUP = { 0: "Everyone", 1: "Poorest fifth", 5: "Richest fifth" };
+const REASON = { cost: "the cost", wait: "waiting lists", far: "the distance" };
+const PARTS = [["wait", "c-wait", "Waiting list"], ["cost", "c-cost", "Too expensive"], ["far", "c-far", "Too far"]];
+const FLAG = { p: "provisional", b: "break in series", e: "estimated", u: "low reliability", bp: "break in series, provisional", ep: "estimated, provisional", be: "break in series, estimated", bu: "break in series, low reliability", eu: "estimated, low reliability", pu: "provisional, low reliability" };
+// Table geometry; the build reserves the same height for the default view (chart_height).
+const TOP = 24, ROW = 24, BOTTOM = 6;
+const NS = "http://www.w3.org/2000/svg";
+const state = { country: "DE", care: "med", q: 0, scope: "eu" };
+
+const $ = id => document.getElementById(id);
+const el = (tag, attrs = {}, parent) => {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+};
+const html = (tag, cls, text, parent) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  if (parent) parent.appendChild(n);
+  return n;
+};
+const A = g => D.areas[g];
+const name = g => A(g).name;
+const S = g => A(g)[state.care];
+const EU = () => D.eu27[state.care];
+const val = (g, q = state.q) => S(g)?.any[q] ?? null;
+const pct = v => v == null ? "–" : `${v.toFixed(1)}%`;
+const inScope = g => state.scope === "all" || A(g).eu;
+const latest = g => A(g)[`${state.care}_latest`];
+const noFigures = g => `No ${D.year} figures${latest(g) ? ` (latest ${latest(g)})` : ""}`;
+const flag = g => FLAG[S(g)?.flag] || "";
+// The reason most people named, as in the build (main_reason): ties go to cost, then waiting, then distance.
+function mainReason(s, q) {
+  let best = null;
+  for (const k of ["cost", "wait", "far"]) if ((s[k][q] ?? 0) > (best ? s[best][q] ?? 0 : 0)) best = k;
+  return best;
+}
+
+// Countries in scope with a figure for the selected care and income group, highest share first;
+// equal shares share a rank, ties by name. Those without follow, unranked (`nodata`).
+let rows = [], nodata = [], gaps = [], gapless = [];
+function computeRows() {
+  const scoped = Object.keys(D.areas).filter(inScope);
+  rows = scoped.filter(g => val(g) != null).sort((a, b) => val(b) - val(a) || name(a).localeCompare(name(b)));
+  nodata = scoped.filter(g => val(g) == null).sort((a, b) => name(a).localeCompare(name(b)));
+  const gap = g => S(g).any[1] - S(g).any[5];
+  gaps = scoped.filter(g => S(g) && S(g).any[1] != null && S(g).any[5] != null)
+    .sort((a, b) => gap(b) - gap(a) || name(a).localeCompare(name(b)));
+  gapless = scoped.filter(g => !gaps.includes(g)).sort((a, b) => name(a).localeCompare(name(b)));
+}
+const rankOf = g => val(g) == null ? null : 1 + rows.filter(o => val(o) > val(g)).length;
+/* ---------- Tooltip ---------- */
+const tip = $("tip");
+function placeTip(evt) {
+  const pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = evt.clientX + pad, y = evt.clientY + pad;
+  if (x + w > innerWidth - 8) x = evt.clientX - w - pad;
+  if (y + h > innerHeight - 8) y = evt.clientY - h - pad;
+  tip.style.left = `${Math.max(8, x)}px`;
+  tip.style.top = `${Math.max(8, y)}px`;
+}
+const hideTip = () => tip.classList.remove("on");
+addEventListener("scroll", hideTip, { passive: true });
+// Touch: a tap selects like a click and also shows the tooltip a mouse gets on hover; a tap
+// anywhere else hides it again.
+let touch = false;
+addEventListener("pointerdown", e => {
+  touch = e.pointerType !== "mouse";
+  if (touch && !e.target.closest?.("svg[role=img]")) hideTip();
+}, { capture: true, passive: true });
+function rankTipFor(evt, g) {
+  tip.replaceChildren();
+  if (val(g) == null) {
+    html("span", "tv", noFigures(g), tip);
+    html("span", "tn", name(g), tip);
+  } else {
+    const s = S(g), q = state.q, r = rankOf(g);
+    html("span", "tv", `${pct(s.any[q])} went without`, tip);
+    html("span", "tn", `${name(g)}${q ? ` · ${GROUP[q].toLowerCase()}` : ""}`, tip);
+    html("span", "tm", `#${r} of ${rows.length}, highest first`, tip);
+    for (const [k, , label] of PARTS) html("span", "tm", `${label}: ${pct(s[k][q])}`, tip);
+    if (!q && s.any[1] != null) {
+      html("span", "tm", `Poorest fifth: ${pct(s.any[1])}`, tip);
+      html("span", "tm", `Richest fifth: ${pct(s.any[5])}`, tip);
+    }
+    if (flag(g)) html("span", "tm", `Eurostat: ${flag(g)}`, tip);
+  }
+  tip.classList.add("on");
+  placeTip(evt);
+}
+function gapTipFor(evt, g) {
+  tip.replaceChildren();
+  const s = S(g);
+  if (!s || s.any[1] == null || s.any[5] == null) {
+    html("span", "tv", s ? "No figures by income" : noFigures(g), tip);
+    html("span", "tn", name(g), tip);
+  } else {
+    const d = s.any[1] - s.any[5];
+    html("span", "tv", `${pct(s.any[1])} vs ${pct(s.any[5])}`, tip);
+    html("span", "tn", name(g), tip);
+    html("span", "tm", `Poorest fifth: ${pct(s.any[1])}`, tip);
+    html("span", "tm", `Richest fifth: ${pct(s.any[5])}`, tip);
+    html("span", "tm", `Gap: ${d >= 0 ? "+" : "−"}${Math.abs(d).toFixed(1)} percentage points`, tip);
+  }
+  tip.classList.add("on");
+  placeTip(evt);
+}
+
+/* ---------- People tables (both charts) ---------- */
+// One row per country, and the EU-27 where its value belongs. Columns of people: each dot is one
+// person in 100, drawn as a small figure (a partly coloured one is part of a person), with the number beside it; the right
+// column holds the row's total (or gap). Each column fits its largest value anywhere (any care,
+// income group, country), so dots compare across every view.
+const maxOf = get => Math.ceil(Math.max(...Object.values(D.areas).flatMap(a =>
+  ["med", "dent"].flatMap(c => a[c] ? [0, 1, 2, 3, 4, 5].map(q => get(a[c], q)).filter(v => v != null) : []))));
+// A small person (round head, rounded shoulders) in a 10×10 box: simple enough to read at 10–14px.
+const PERSON = "M5 0a2.4 2.4 0 1 1 0 4.8a2.4 2.4 0 1 1 0-4.8zM1 10V7.8C1 6.2 2.2 5.4 3.5 5.4H6.5C7.8 5.4 9 6.2 9 7.8V10Z";
+let clipN = 0;
+// One person, size px tall, centred on (cx, cy); for part of one (f < 1) the coloured part over a faint whole figure.
+function dot(svg, cx, cy, size, cls, f) {
+  if (f <= 1e-6) return;
+  const g = el("g", { class: "person", "data-y": cy }, svg), x0 = cx - size / 2, y0 = cy - size / 2;
+  const fig = (c, parent) => el("path", { class: c, d: PERSON, transform: `translate(${x0} ${y0}) scale(${size / 10})` }, parent);
+  if (f >= 1 - 1e-6) { fig(cls, g); return; }
+  fig("c-part", g);
+  const defs = svg.querySelector("defs") || el("defs", {}, svg), id = `${svg.id}-cp${clipN++}`;
+  // The figure is 8 of its 10 units wide (from 1 to 9): the fraction is of that width.
+  el("rect", { x: x0 + size * .1, y: y0, width: size * .8 * f, height: size }, el("clipPath", { id }, defs));
+  fig(cls, el("g", { "clip-path": `url(#${id})` }, g));
+}
+// cols: [{ head, short, cls, max, get(s) }]; list: [g or "EU27"]; right: { head, get(s), fmt }
+function peopleTable(svg, cols, list, right, rank) {
+  svg.replaceChildren();
+  const W = svg.clientWidth || 900, narrow = W < 560, labelW = narrow ? 92 : 150, rightW = narrow ? 38 : 50;
+  const textW = narrow ? 24 : 32, gapC = narrow ? 8 : 12;
+  // Headers: full on wide screens, short on phones; a column is never narrower than its header.
+  const heads = cols.map(c => narrow ? c.short : c.head), headW = heads.map(h => h.length * 7.4 + 4);
+  const avail = W - labelW - rightW - cols.length * gapC;
+  const colW = p => cols.map((c, j) => Math.max(headW[j], c.max * p + textW));
+  let pitch = 12;
+  while (pitch > 2 && colW(pitch).reduce((a, b) => a + b, 0) > avail) pitch -= 0.25;
+  const xs = [];
+  let x = labelW;
+  for (const w of colW(pitch)) { xs.push(x); x += w + gapC; }
+  const H = TOP + list.length * ROW + BOTTOM, r = Math.min(pitch * 1.2, 15); // a person's height
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("height", H);
+  heads.forEach((h, j) => { el("text", { class: "col-head", x: xs[j], y: 14 }, svg).textContent = h; });
+  el("text", { class: "col-head", x: W, y: 14, "text-anchor": "end" }, svg).textContent = right.head;
+  list.forEach((g, i) => {
+    const isEU = g === "EU27", top = TOP + i * ROW, cy = top + ROW / 2, s = isEU ? EU() : S(g);
+    const hl = !isEU && g === state.country, rk = isEU ? null : rank(g);
+    if (hl) el("rect", { class: "row-band", x: 0, y: top, width: W, height: ROW, rx: 4 }, svg);
+    if (isEU) el("rect", { class: "eu-band", x: 0, y: top, width: W, height: ROW, rx: 4 }, svg);
+    el("line", { class: "row-rule", x1: 0, x2: W, y1: top + ROW, y2: top + ROW }, svg);
+    const nm = isEU ? "EU-27" : name(g), lab = narrow && nm.length > 11 ? nm.slice(0, 10) + "…" : nm;
+    el("text", { class: "row-label" + (hl ? " hl" : "") + (isEU ? " eu" : "") + (rk || isEU ? "" : " nodata"), x: 0, y: cy + 4 }, svg)
+      .textContent = rk ? `${rk}. ${lab}` : lab;
+    const total = s ? right.get(s) : null;
+    if (total == null) {
+      el("text", { class: "nodata-note", x: labelW, y: cy + 4 }, svg).textContent = s ? "No figures by income" : noFigures(g);
+    } else {
+      cols.forEach((c, j) => {
+        const v = c.get(s) ?? 0, n = Math.ceil(v - 1e-9);
+        for (let k = 0; k < n; k++) dot(svg, xs[j] + (k + .5) * pitch, cy, r, c.cls, Math.min(1, v - k));
+        el("text", { class: "row-value", x: xs[j] + n * pitch + 4, y: cy + 4, "data-col": j }, svg).textContent = pp(c.get(s));
+      });
+      el("text", { class: "row-value total" + (hl ? " hl" : "") + (isEU ? " eu" : ""), x: W, y: cy + 4, "text-anchor": "end" }, svg)
+        .textContent = right.fmt(total);
+    }
+    if (!isEU) el("rect", { class: "row-hit", x: 0, y: top, width: W, height: ROW, "data-g": g }, svg);
+  });
+}
+const pp = v => v == null ? "–" : v.toFixed(1);
+// The EU-27 goes where its value belongs among rows sorted from high to low (unranked).
+function withEU(list, value, euValue) {
+  if (euValue == null) return list;
+  const at = list.findIndex(g => value(g) < euValue);
+  const out = [...list];
+  out.splice(at < 0 ? out.length : at, 0, "EU27");
+  return out;
+}
+
+/* ---------- Main chart: out of 100 people, by reason ---------- */
+const REASON_COLS = PARTS.map(([k, cls, head]) => ({
+  head, short: { wait: "Wait", cost: "Cost", far: "Far" }[k], cls, max: maxOf((s, q) => s[k][q]), get: s => s[k][state.q],
+}));
+function renderRank() {
+  const list = [...withEU(rows, g => val(g), EU()?.any[state.q]), ...nodata];
+  peopleTable($("rank"), REASON_COLS, list, { head: "Total", get: s => s.any[state.q], fmt: pp }, rankOf);
+}
+
+/* ---------- Second chart: poorest against richest fifth ---------- */
+// One scale for every view (care, income group, scope), so dots compare across them.
+const VMAX = Math.ceil(Math.max(...Object.values(D.areas).flatMap(a =>
+  ["med", "dent"].flatMap(c => a[c] ? a[c].any.filter(v => v != null) : []))) / 5) * 5;
+// Its geometry; the build reserves the same height for the default view (gap_height).
+const GAXIS = 58, GROW = 32, GBOTTOM = 8, GR = 7;
+function renderGap() {
+  const svg = $("gap");
+  svg.replaceChildren();
+  const W = svg.clientWidth || 900, narrow = W < 560, labelW = narrow ? 104 : 170;
+  const H = GAXIS + (gaps.length + gapless.length) * GROW + GBOTTOM;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("height", H);
+  // Room on both sides of the scale for a number beside each dot
+  const x0 = labelW + 44, x = v => x0 + v / VMAX * (W - x0 - 54);
+  for (let v = 0; v <= VMAX + 1e-9; v += 5) {
+    el("line", { class: "gridline", x1: x(v), x2: x(v), y1: GAXIS - 6, y2: H - GBOTTOM }, svg);
+    el("text", { class: "tick", x: x(v), y: 14, "text-anchor": "middle" }, svg).textContent = `${v}%`;
+  }
+  gaps.forEach((g, i) => {
+    const top = GAXIS + i * GROW, cy = top + GROW / 2, hl = g === state.country, s = S(g);
+    const poor = s.any[1], rich = s.any[5], poorRight = poor >= rich;
+    if (hl) el("rect", { class: "row-band", x: 0, y: top, width: W, height: GROW, rx: 4 }, svg);
+    el("line", { class: "row-rule", x1: 0, x2: W, y1: top + GROW, y2: top + GROW }, svg);
+    const label = narrow && name(g).length > 11 ? name(g).slice(0, 10) + "…" : name(g);
+    el("text", { class: "row-label" + (hl ? " hl" : ""), x: 0, y: cy + 5 }, svg).textContent = `${i + 1}. ${label}`;
+    el("line", { class: "g-span", x1: x(poor), x2: x(rich), y1: cy, y2: cy }, svg);
+    el("circle", { class: "g-poor", cx: x(poor), cy, r: GR - 1, "data-v": poor }, svg);
+    el("circle", { class: "g-rich", cx: x(rich), cy, r: GR, "data-v": rich }, svg);
+    // Each number on the outer side of its own dot
+    const vcls = "g-val" + (hl ? " hl" : "");
+    el("text", { class: vcls, x: x(poor) + (poorRight ? 12 : -12), y: cy + 5, "text-anchor": poorRight ? "start" : "end" }, svg).textContent = poor.toFixed(1);
+    el("text", { class: vcls, x: x(rich) + (poorRight ? -12 : 12), y: cy + 5, "text-anchor": poorRight ? "end" : "start" }, svg).textContent = rich.toFixed(1);
+    // The first row names its two dots, where they are
+    if (i === 0) {
+      el("text", { class: "g-lab poor", x: x(poor), y: top - 8, "text-anchor": poorRight ? "end" : "start" }, svg).textContent = poorRight ? "Poorest fifth ↓" : "↓ Poorest fifth";
+      el("text", { class: "g-lab rich", x: x(rich), y: top - 8, "text-anchor": poorRight ? "start" : "end" }, svg).textContent = poorRight ? "↓ Richest fifth" : "Richest fifth ↓";
+    }
+    el("rect", { class: "row-hit", x: 0, y: top, width: W, height: GROW, "data-g": g }, svg);
+  });
+  gapless.forEach((g, j) => {
+    const top = GAXIS + (gaps.length + j) * GROW, cy = top + GROW / 2;
+    el("text", { class: "row-label nodata", x: 0, y: cy + 5 }, svg).textContent = name(g);
+    el("text", { class: "nodata-note", x: labelW, y: cy + 5 }, svg).textContent = S(g) ? "No figures by income" : noFigures(g);
+    el("rect", { class: "row-hit", x: 0, y: top, width: W, height: GROW, "data-g": g }, svg);
+  });
+}
+
+for (const [id, show] of [["rank", rankTipFor], ["gap", gapTipFor]]) {
+  const svg = $(id);
+  const onMove = evt => {
+    const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
+    if (g) show(evt, g); else hideTip();
+  };
+  svg.addEventListener("pointermove", onMove);
+  svg.addEventListener("pointerleave", hideTip);
+  svg.addEventListener("click", evt => {
+    const g = evt.target.getAttribute && evt.target.getAttribute("data-g");
+    if (g) setCountry(g);
+    if (touch) onMove(evt);
+  });
+}
+
+/* ---------- Titles and tiles ---------- */
+function renderTitles() {
+  const who = { 0: "people", 1: "of the poorest fifth", 5: "of the richest fifth" }[state.q];
+  $("rank-title").textContent = `How many in 100 ${who} went without a ${CARE[state.care]} they needed in ${D.year}, and why`;
+  $("gap-title").textContent = `How many in 100 went without a ${CARE[state.care]} they needed in ${D.year}, from the poorest to the richest fifth`;
+}
+function setTile(n, value, sub) {
+  $(`t${n}v`).textContent = value;
+  $(`t${n}s`).textContent = sub;
+}
+function renderTiles() {
+  const q = state.q, eu = EU(), g = state.country, s = S(g), r = rankOf(g);
+  // Poorest against richest fifth: how many times as often, and the two shares
+  const times = x => x && x.any[1] != null && x.any[5] ? `${(x.any[1] / x.any[5]).toFixed(1)}×` : "–";
+  const both = x => x && x.any[1] != null && x.any[5] != null ? `${pct(x.any[1])} against ${pct(x.any[5])}` : "No figures by income";
+  setTile(1, eu ? pct(eu.any[q]) : "–", `${GROUP[q].toLowerCase()}, ${CARE_WORD[state.care]}`);
+  setTile(2, times(eu), both(eu));
+  $("t3sc").textContent = $("t4sc").textContent = name(g);
+  setTile(3, pct(val(g)), val(g) == null ? noFigures(g) : `#${r} of ${rows.length}`);
+  setTile(4, times(s), s ? both(s) : noFigures(g));
+}
+
+/* ---------- Insights under each chart ---------- */
+// Each insight highlights whose number it is: the EU-27 (or Europe, comparing all countries) or the
+// selected country. The first four show; the rest open with "Show more insights". The build writes the
+// default view's insights into the page (insights_html) and a page test checks they match.
+// The shared insight helpers (HV, in the page footer's script)
+const { r1, signed1, byName, joinNames, B, ins } = HV, EUH = HV.EU, SELH = HV.SEL;
+const areaRef = () => HV.area(state.scope);
+
+function rankInsights() {
+  const q = state.q, c = state.care, e = D.eu27[c], g = state.country, s = A(g)[c], out = [];
+  const who = { 0: "people", 1: "people in the poorest fifth", 5: "people in the richest fifth" }[q];
+  // The EU-27 (or Europe): how many, where most and least, why
+  out.push(ins(true, "In the ", EUH("EU-27"), ", ", B(`${pp(e.any[q])} in every 100`), ` ${who} went without a ${CARE[c]} they needed in ${D.year}, because it cost too much, was too far away or had a waiting list.`));
+  const hi = val(rows[0]), lo = val(rows.at(-1));
+  const at = v => rows.filter(o => val(o) === v).map(name).sort(byName);
+  out.push(ins(true, "Across ", ...areaRef(), ", this happened most often in ", B(joinNames(at(hi))), ` (${pp(hi)} in every 100) and least often in `, B(joinNames(at(lo))), ` (${pp(lo)}).`));
+  const count = k => rows.filter(o => mainReason(S(o), q) === k).length;
+  const top = ["wait", "cost", "far"].reduce((a, k) => count(k) > count(a) ? k : a, "wait");
+  out.push(ins(true, "In ", B(`${count(top)} of the ${rows.length}`), " countries of ", ...areaRef(), `, ${REASON[top]} ${top === "wait" ? "were" : "was"} the main reason people went without.`));
+  const em = mainReason(e, q);
+  if (em) out.push(ins(true, "Across the ", EUH("EU-27"), " as a whole, ", B(REASON[em]), ` kept the most people from a ${CARE[c]} they needed (${pp(e[em][q])} in every 100).`));
+  // The selected country: how many, why
+  if (s && s.any[q] != null) {
+    const v = s.any[q], cmp = v < e.any[q] ? "fewer than" : v > e.any[q] ? "more than" : "as many as";
+    out.push(ins(false, "In ", SELH(name(g)), ", ", B(`${pp(v)} in every 100`), ` ${who} went without a ${CARE[c]} they needed, ${cmp} across the EU-27 (${pp(e.any[q])}).`));
+    const m = mainReason(s, q);
+    out.push(m ? ins(false, "In ", SELH(name(g)), ", the most common reason people went without was ", B(REASON[m]), ".")
+      : ins(false, "In ", SELH(name(g)), ", almost nobody went without for any of these reasons."));
+  } else {
+    out.push(ins(false, `Eurostat has no ${D.year} figures on this for `, SELH(name(g)), "."));
+  }
+  return out;
+}
+
+function gapInsights() {
+  const c = state.care, e = D.eu27[c], g = state.country, s = A(g)[c], out = [];
+  const gp = x => x.any[1] - x.any[5];
+  // The EU-27 (or Europe): how much more often, where the gap is largest, how common, where smallest
+  out.push(e.any[5] > 0
+    ? ins(true, "In the ", EUH("EU-27"), ", people in the poorest fifth went without ", B(`${r1(e.any[1] / e.any[5])} times`), " as often as people in the richest fifth.")
+    : ins(true, "In the ", EUH("EU-27"), `, ${pp(e.any[1])} in every 100 people in the poorest fifth went without, against ${pp(e.any[5])} in the richest fifth.`));
+  const top = gaps[0];
+  out.push(ins(true, "Among the countries of ", ...areaRef(), ", the gap between the poorest and the richest fifth was largest in ", B(name(top)), `: ${pp(S(top).any[1])} against ${pp(S(top).any[5])} in every 100 went without.`));
+  const pos = gaps.filter(o => gp(S(o)) > 0).length;
+  out.push(ins(true, "In ", B(`${pos} of the ${gaps.length}`), " countries of ", ...areaRef(), ", the poorest fifth went without more often than the richest fifth."));
+  const close = [...gaps].sort((a, b) => Math.abs(gp(S(a))) - Math.abs(gp(S(b))) || byName(name(a), name(b)))[0];
+  out.push(ins(true, "Among the countries of ", ...areaRef(), ", the poorest and the richest fifth were closest in ", B(name(close)), ` (${pp(S(close).any[1])} against ${pp(S(close).any[5])} in every 100).`));
+  // The selected country: how many in each fifth, and its gap
+  if (s && s.any[1] != null && s.any[5] != null) {
+    out.push(ins(false, "In ", SELH(name(g)), ", ", B(`${pp(s.any[1])} in every 100`), " people in the poorest fifth went without, against ", B(pp(s.any[5])), " in the richest fifth."));
+    const d = gp(s), de = gp(e);
+    out.push(d < 0 ? ins(false, "In ", SELH(name(g)), ", the richest fifth actually went without more often than the poorest.")
+      : d === 0 ? ins(false, "In ", SELH(name(g)), ", the poorest and the richest fifth went without equally often.")
+      : ins(false, "So in ", SELH(name(g)), `, the gap between the poorest and the richest fifth is ${d > de ? "larger than" : d < de ? "smaller than" : "the same as"} across the EU-27.`));
+  } else {
+    out.push(ins(false, `Eurostat has no ${D.year} figures by income for `, SELH(name(g)), "."));
+  }
+  return out;
+}
+
+/* ---------- Table view ---------- */
+function renderTable() {
+  if (!$("table-card").open) return;
+  const tb = $("tbody");
+  tb.replaceChildren();
+  for (const g of [...rows, ...nodata]) {
+    const tr = html("tr", g === state.country ? "hl" : "", null, tb), s = S(g), q = state.q, r = rankOf(g);
+    html("td", "r", r ? `#${r}` : "", tr);
+    const btn = html("button", "", name(g), html("td", "", null, tr));
+    btn.type = "button";
+    btn.addEventListener("click", () => setCountry(g));
+    if (r == null) {
+      const td = html("td", "", noFigures(g), tr);
+      td.colSpan = 6;
+      continue;
+    }
+    html("td", "r", pct(s.any[q]) + (s.flag ? ` (${s.flag})` : ""), tr);
+    for (const k of ["cost", "wait", "far"]) html("td", "r", pct(s[k][q]), tr);
+    html("td", "r", pct(s.any[1]), tr);
+    html("td", "r", pct(s.any[5]), tr);
+  }
+}
+$("table-card").addEventListener("toggle", renderTable);
+
+/* ---------- Controls ---------- */
+function render() {
+  computeRows();
+  for (const [id, v] of [["care", state.care], ["income", String(state.q)], ["scope", state.scope]])
+    for (const b of $(id).children) b.setAttribute("aria-pressed", b.dataset.v === v);
+  renderTitles(); renderRank(); renderGap(); renderTiles(); renderTable();
+  HV.render("rank-ins", rankInsights()); HV.render("gap-ins", gapInsights());
+}
+function setCountry(g) { state.country = g; $("country").value = g; render(); }
+function fillCountries() {
+  const s = $("country");
+  s.replaceChildren();
+  Object.keys(D.areas).filter(inScope).sort((a, b) => name(a).localeCompare(name(b)))
+    .forEach(g => { const o = html("option", "", name(g), s); o.value = g; });
+  s.value = state.country;
+}
+for (const [id, key, conv] of [["care", "care", v => v], ["income", "q", Number], ["scope", "scope", v => v]]) {
+  $(id).addEventListener("click", e => {
+    const v = e.target.dataset?.v;
+    if (v == null) return;
+    state[key] = conv(v);
+    if (!inScope(state.country)) state.country = "DE";
+    if (key === "scope") fillCountries();
+    render();
+  });
+}
+$("country").addEventListener("change", e => setCountry(e.target.value));
+
+let lastW = 0;
+new ResizeObserver(() => {
+  const w = $("rank").clientWidth + $("gap").clientWidth / 10000; // either chart (one may be full screen)
+  if (Math.abs(w - lastW) < 1e-4) return;
+  lastW = w;
+  renderRank(); renderGap();
+}).observe(document.querySelector("main"));
+
+fillCountries();
+render();
+</script>
+</body>
+</html>

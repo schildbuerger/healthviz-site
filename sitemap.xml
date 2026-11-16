@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://healthviz.eu/</loc><lastmod>2026-10-23</lastmod></url>
-  <url><loc>https://healthviz.eu/retiring-doctors/</loc><lastmod>2026-07-13</lastmod></url>
-  <url><loc>https://healthviz.eu/healthy-retirement/</loc><lastmod>2026-07-17</lastmod></url>
-  <url><loc>https://healthviz.eu/health-spending/</loc><lastmod>2026-10-23</lastmod></url>
-  <url><loc>https://healthviz.eu/life-expectancy/</loc><lastmod>2025-06-05</lastmod></url>
+  <url><loc>https://healthviz.eu/</loc><lastmod>2026-11-16</lastmod></url>
+  <url><loc>https://healthviz.eu/unmet-care/</loc><lastmod>2026-11-16</lastmod></url>
+  <url><loc>https://healthviz.eu/retiring-doctors/</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://healthviz.eu/healthy-retirement/</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://healthviz.eu/health-spending/</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://healthviz.eu/life-expectancy/</loc><lastmod>2026-11-15</lastmod></url>
 </urlset>

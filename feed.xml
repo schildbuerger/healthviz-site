@@ -5,8 +5,16 @@
     <link>https://healthviz.eu/</link>
     <description>A playground of interactive visualisations built on open European health data. Each assessment takes one question and the public data to answer it.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 09 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 16 Nov 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://healthviz.eu/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Who can&#x27;t get the care they need, and why?</title>
+      <link>https://healthviz.eu/unmet-care/</link>
+      <guid isPermaLink="true">https://healthviz.eu/unmet-care/</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 +0000</pubDate>
+      <category>Access to care</category>
+      <description>How many people in each European country go without a medical or dental examination they need, whether it&#x27;s the cost, a waiting list or the distance, and how much that depends on income.</description>
+    </item>
     <item>
       <title>Will your doctor retire soon?</title>
       <link>https://healthviz.eu/retiring-doctors/</link>
